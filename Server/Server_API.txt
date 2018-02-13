@@ -1,6 +1,10 @@
 Authorization : localhost/api?method=Auth&login=mkovalev&password=passwd
 
 Registration : localhost/api?method=Reg&login=arassadnikov&password=pass
+Optional params:
+    witcher
+    if witcher is True -> registration witcher
+    if witcher is non True or None -> registration client
 
 Get list of contracts : 
 filter=[bounty, locate]
