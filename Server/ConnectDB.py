@@ -11,6 +11,7 @@ def connect_database():
     username = 'Nordto'
     password = 'p0@sgovno'
     driver = '{ODBC Driver 13 for SQL Server}'
-    cnxn = pyodbc.connect('DRIVER='+driver+';PORT=1433;SERVER='+server+';PORT=1443;DATABASE='+database+';UID='+username+';PWD='+password)
+    cnxn = pyodbc.connect('DRIVER={};PORT=1433;SERVER={};PORT=1443;DATABASE={};UID={};PWD={}'.format
+                          (driver, server, database, username, password))
     cursor = cnxn.cursor()
     return cursor

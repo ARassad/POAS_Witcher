@@ -1,7 +1,13 @@
 from Server.Objects import Object
 from Server.Objects import Status
 from Server.Objects import User
-from Server.Objects import EventRegistration
+from enum import Enum
+
+
+class EventRegistration(Enum):
+    SuccessRegistration = "Success"
+    LoginExist = "LoginExist"
+
 
 def registration(cursor, params):
     cursor.execute("select * from Authorization_info where login='{}'".format(params[User.Login.value]))

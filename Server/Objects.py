@@ -9,27 +9,18 @@ import json
 class ApiMethod(Enum):
     Authorization = "Auth"
     Registration = "Reg"
+    GetListContracts = "Get_list_contract"
 
 
 class ErrorMessage(Enum):
     EmptyRequest = "EmptyRequest"
     UnknownRequest = "UnknownRequest"
+    NotAuth = "NotAuthorize"
 
 
 class Status(Enum):
     Ok = "OK"
     Error = "Error"
-
-
-class EventAuth(Enum):
-    SuccessAuthorizaion = "Success"
-    LoginNotExist = "LoginNotExist"
-    PasswordIncorrect = "IncorrectPasswd"
-
-
-class EventRegistration(Enum):
-    SuccessRegistration = "Success"
-    LoginExist = "LoginExist"
 
 
 class User(Enum):

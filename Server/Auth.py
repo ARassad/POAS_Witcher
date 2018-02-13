@@ -1,10 +1,16 @@
-from Server.Objects import EventAuth
 from Server.Objects import User
 from Server.Objects import Object
 from Server.Objects import Status
+from enum import Enum
 
 
-def authorization(cursor, params):
+class EventAuth(Enum):
+    SuccessAuthorizaion = "Success"
+    LoginNotExist = "LoginNotExist"
+    PasswordIncorrect = "IncorrectPasswd"
+
+
+def authorization(cursor, params, ret_bool=False):
     cursor.execute("select * from Authorization_info where login='{}'".format(params[User.Login.value]))
     row = cursor.fetchone()
 
@@ -18,5 +24,8 @@ def authorization(cursor, params):
         obj.status = Status.Ok.value
     else:
         obj.value = EventAuth.PasswordIncorrect.value
+
+    if ret_bool:
+        return obj.status == Status.Ok.value
 
     return obj.toJSON()

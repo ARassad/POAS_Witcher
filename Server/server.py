@@ -1,6 +1,7 @@
 from Server.ConnectDB import connect_database
 from Server.Auth import authorization
 from Server.Registration import registration
+from Server.Get_List_Contracts import get_list_contracts
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from Server.Objects import Object
 from Server.Objects import Status
@@ -30,9 +31,13 @@ class HttpServer(BaseHTTPRequestHandler):
             self.wfile.write(str.encode(authorization(cursor, dct)))
         elif mymethod == ApiMethod.Registration.value:
             self.wfile.write(str.encode(registration(cursor, dct)))
+        elif authorization(cursor, dct, True):
+            if mymethod == ApiMethod.GetListContracts.value:
+                self.wfile.write(str.encode(get_list_contracts(cursor, dct)))
+            else:
+                HttpServer.error_request(self, ErrorMessage.UnknownRequest.value)
         else:
-            HttpServer.error_request(self, ErrorMessage.UnknownRequest.value)
-
+            HttpServer.error_request(self, ErrorMessage.NotAuth.value)
 
     def do_HEAD(self):
         self._set_headers()
