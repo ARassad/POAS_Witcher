@@ -26,6 +26,7 @@ class Status(Enum):
 class User(Enum):
     Login = "login"
     Password = "password"
+    IsWitcher = "witcher"
 
 
 class Object:

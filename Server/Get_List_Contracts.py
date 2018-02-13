@@ -12,7 +12,7 @@ class EventGetListContracts(Enum):
 
 
 def get_list_contracts(cursor, params):
-    with params['filter']
+    #with params['filter']
     cursor.execute("select * from Contract")
 
     obj = Object()
