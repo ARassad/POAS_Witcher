@@ -68,9 +68,17 @@ def get_list_contracts(cursor, params):
 
     if status.status == Status.Ok.value:
         cursor.execute(req)
-        obj.contracts = []
-        for i in cursor.fetchall():
-            obj.contracts.append(list(i))
+        contracts = cursor.fetchall()
+
+        cursor.execute("select name from sys.columns where object_id = OBJECT_ID('dbo.Contract')")
+        headers = cursor.fetchall()
+
+        obj.contracts = {}
+        for i in range(len(headers)):
+            head = str(headers[i])[2:-4]
+            obj.contracts[head] = []
+            for j in range(len(contracts)):
+                obj.contracts[head].append(contracts[j][i])
 
     status.object = obj
     return status.toJSON()
