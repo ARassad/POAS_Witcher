@@ -9,7 +9,7 @@ class EventGetListContracts(Enum):
     MaxParamMiss = "ParamMaxMissing"
     TownParamMiss = "townParamMissing"
     FilterLocateErr = "MissingTownandKingdomParams"
-
+    SortErr = "ParamsSortError"
 
 class Params:
 
@@ -17,7 +17,17 @@ class Params:
         Name = "filter"
         Bounty = "bounty"
         Locate = "locate"
-        allValues = [Bounty, Locate]
+
+    class Sort:
+        Name = "sort"
+        Alph = "alph"
+        Locate = "locate"
+        LastUpdate = "LastUpdate"
+
+    class SortType:
+        Name = "sortype"
+        Asc = "asc"
+        Desc = "desc"
 
     Min = "min"
     Max = "max"
@@ -43,7 +53,7 @@ def get_list_contracts(cursor, params):
                 obj.value = "ERROR:{}{}".format(EventGetListContracts.MinParamMiss if min is None else "",
                                                 EventGetListContracts.MaxParamMiss if max is None else "").value
             else:
-                req += "Bounty > {} and Bounty < {}".format(min, max)
+                req += " Bounty > {} and Bounty < {}".format(min, max)
 
         elif filtr == Params.Filter.Locate:
             town = params.get(Params.Town)
@@ -65,6 +75,23 @@ def get_list_contracts(cursor, params):
 
                 if kingdom is not None:
                     req += " Town.id_kingdom in (select id from Kingdom where Kingdom.name = '{}'))".format(kingdom)
+
+    sort = params.get(Params.Sort.Name)
+    if sort is not None:
+        req += " order by"
+        if sort == Params.Sort.Alph:
+            req += " text"
+        elif sort == Params.Sort.Locate:
+            req += " id_task_located"
+        elif sort == Params.Sort.LastUpdate:
+            req += " last_update"
+        else:
+            status.status = Status.Error.value
+            obj.value = EventGetListContracts.SortErr.value
+
+        sort_type = params.get(Params.SortType.Name)
+        if sort_type is not None and sort_type == Params.SortType.Desc:
+            req += " desc"
 
     if status.status == Status.Ok.value:
         cursor.execute(req)
