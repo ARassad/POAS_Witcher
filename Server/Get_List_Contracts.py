@@ -22,7 +22,7 @@ class Params:
         Name = "sort"
         Alph = "alph"
         Locate = "locate"
-        LastUpdate = "LastUpdate"
+        LastUpdate = "lastupdate"
 
     class SortType:
         Name = "sortype"
