@@ -6,6 +6,9 @@ Optional params:
     if witcher is True -> registration witcher
     if witcher is non True or None -> registration client
 
+GetProfile : http://localhost/api?method=GetProfile&login=mkovalev&password=passwd&id=9
+id - id profile
+
 Get list of contracts : 
 filter=[bounty, locate]
 if filter=bounty

@@ -2,6 +2,7 @@ from Server.ConnectDB import connect_database
 from Server.Auth import authorization
 from Server.Registration import registration
 from Server.Get_List_Contracts import get_list_contracts
+from Server.Profile import get_profile
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from Server.Objects import Object
 from Server.Objects import Status
@@ -34,6 +35,8 @@ class HttpServer(BaseHTTPRequestHandler):
         elif authorization(cursor, dct, True):
             if mymethod == ApiMethod.GetListContracts.value:
                 self.wfile.write(str.encode(get_list_contracts(cursor, dct)))
+            elif mymethod == ApiMethod.GetProfile.value:
+                self.wfile.write(str.encode(get_profile(cursor, dct)))
             else:
                 HttpServer.error_request(self, ErrorMessage.UnknownRequest.value)
         else:

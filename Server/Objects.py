@@ -10,6 +10,7 @@ class ApiMethod(Enum):
     Authorization = "Auth"
     Registration = "Reg"
     GetListContracts = "Get_list_contract"
+    GetProfile = "GetProfile"
 
 
 class ErrorMessage(Enum):
