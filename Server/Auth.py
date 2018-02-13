@@ -14,18 +14,20 @@ def authorization(cursor, params, ret_bool=False):
     cursor.execute("select * from Authorization_info where login='{}'".format(params[User.Login.value]))
     row = cursor.fetchone()
 
+    status = Object()
     obj = Object()
-    obj.status = Status.Error.value
+    status.status = Status.Error.value
 
     if row is None:
-        obj.value = EventAuth.LoginNotExist.value
+        obj.message = EventAuth.LoginNotExist.value
     elif row[2] == params[User.Password.value]:
-        obj.value = EventAuth.SuccessAuthorizaion.value
-        obj.status = Status.Ok.value
+        obj.message = EventAuth.SuccessAuthorizaion.value
+        status.status = Status.Ok.value
     else:
-        obj.value = EventAuth.PasswordIncorrect.value
+        obj.message = EventAuth.PasswordIncorrect.value
 
     if ret_bool:
-        return obj.status == Status.Ok.value
+        return status.status == Status.Ok.value
 
-    return obj.toJSON()
+    status.object = obj
+    return status.toJSON()
