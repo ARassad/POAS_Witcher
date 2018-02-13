@@ -8,6 +8,7 @@ import json
 
 class ApiMethod(Enum):
     Authorization = "Auth"
+    Registration = "Reg"
 
 
 class ErrorMessage(Enum):
@@ -24,6 +25,11 @@ class EventAuth(Enum):
     SuccessAuthorizaion = "Success"
     LoginNotExist = "LoginNotExist"
     PasswordIncorrect = "IncorrectPasswd"
+
+
+class EventRegistration(Enum):
+    SuccessRegistration = "Success"
+    LoginExist = "LoginExist"
 
 
 class User(Enum):

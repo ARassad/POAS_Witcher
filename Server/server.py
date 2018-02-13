@@ -1,10 +1,11 @@
-from ConnectDB import connect_database
-from Auth import authorization
+from Server.ConnectDB import connect_database
+from Server.Auth import authorization
+from Server.Registration import registration
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from Objects import Object
-from Objects import Status
-from Objects import ErrorMessage
-from Objects import ApiMethod
+from Server.Objects import Object
+from Server.Objects import Status
+from Server.Objects import ErrorMessage
+from Server.Objects import ApiMethod
 
 cursor = connect_database()
 
@@ -27,6 +28,8 @@ class HttpServer(BaseHTTPRequestHandler):
             HttpServer.error_request(self, ErrorMessage.EmptyRequest.value)
         elif mymethod == ApiMethod.Authorization.value:
             self.wfile.write(str.encode(authorization(cursor, dct)))
+        elif mymethod == ApiMethod.Registration.value:
+            self.wfile.write(str.encode(registration(cursor, dct)))
         else:
             HttpServer.error_request(self, ErrorMessage.UnknownRequest.value)
 

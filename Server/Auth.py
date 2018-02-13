@@ -1,7 +1,7 @@
-from Objects import EventAuth
-from Objects import User
-from Objects import Object
-from Objects import Status
+from Server.Objects import EventAuth
+from Server.Objects import User
+from Server.Objects import Object
+from Server.Objects import Status
 
 
 def authorization(cursor, params):
