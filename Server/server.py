@@ -3,12 +3,17 @@ from Server.Auth import authorization
 from Server.Registration import registration
 from Server.Get_List_Contracts import get_list_contracts
 from Server.Profile import get_profile
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from Server.Profile import update_profile
+from http.server import BaseHTTPRequestHandler
+from http.server import HTTPServer
+from cgi import parse_header
+from cgi import parse_multipart
+import json
+from urllib.parse import parse_qs
 from Server.Objects import Object
 from Server.Objects import Status
 from Server.Objects import ErrorMessage
 from Server.Objects import ApiMethod
-
 cursor = connect_database()
 
 
@@ -28,8 +33,6 @@ class HttpServer(BaseHTTPRequestHandler):
 
         if mymethod is None:
             HttpServer.error_request(self, ErrorMessage.EmptyRequest.value)
-        elif mymethod == ApiMethod.Authorization.value:
-            self.wfile.write(str.encode(authorization(cursor, dct)))
         elif mymethod == ApiMethod.Registration.value:
             self.wfile.write(str.encode(registration(cursor, dct)))
         elif authorization(cursor, dct, True):
@@ -46,9 +49,34 @@ class HttpServer(BaseHTTPRequestHandler):
         self._set_headers()
 
     def do_POST(self):
-        # Doesn't do anything with posted data
         self._set_headers()
-        self.wfile.write(b"<html><body><h1>POST!</h1></body></html>")
+        postvars = self.parse_POST()
+        for key, val in postvars.items():
+            mstr = key
+        dct = json.loads(mstr)
+        mymethod = self.requestline[10:-9]
+
+        if mymethod is None:
+            HttpServer.error_request(self, ErrorMessage.EmptyRequest.value)
+        elif mymethod == ApiMethod.Authorization.value:
+            self.wfile.write(str.encode(authorization(cursor, dct)))
+        else:
+            HttpServer.error_request(self, ErrorMessage.NotAuth.value)
+
+    def parse_POST(self):
+        ctype, pdict = parse_header(self.headers['content-type'])
+        if ctype == 'multipart/form-data':
+            postvars = parse_multipart(self.rfile, pdict)
+        elif ctype == 'application/x-www-form-urlencoded':
+            length = int(self.headers['content-length'])
+            s = self.rfile.read(length)
+            s = s.decode()
+            postvars = parse_qs(
+                s,
+                keep_blank_values=1)
+        else:
+            postvars = {}
+        return postvars
 
     def error_request(self, message):
         obj = Object()

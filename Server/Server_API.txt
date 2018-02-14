@@ -1,4 +1,19 @@
-Authorization : localhost/api?method=Auth&login=mkovalev&password=passwd
+Авторизация:
+localhost/api/Auth
+Отправляемые данные:
+{'login': 'mkovalev', 'password': 'passwd'} json format
+Возвращаемые данные:
+status: OK / Error
+object:
+    message - поясняющее сообщение запроса
+    token - в случае успешной авторизации.
+
+Про токены
+Токен позволит вам отсылать запросы к серверу без передачи конфедициальных данных
+Срок жизни токена надо обсудить, N часов (если в течении этих N часов был запрос с данным токеном, то срок жизни токена обновляется)
+Если токен неактивен, то необходима повторная авторизация клиента
+Токен для дебага: b5ad4e9f2bdedb278dd91ce0e8043fce
+
 
 Registration : localhost/api?method=Reg&login=arassadnikov&password=pass
 Optional params:
