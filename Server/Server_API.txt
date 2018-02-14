@@ -25,8 +25,31 @@ object:
     message - поясняющее сообщение запроса.
     isWitcher - флаг ведьмака
 
-GetProfile : http://localhost/api?method=GetProfile&login=mkovalev&password=passwd&id=9
-id - id profile
+Запросить профиль:
+http://localhost/api?method=GetProfile&token=b5ad4e9f2bdedb278dd91ce0e8043fce&id=9
+token - токен пользователя, отправивший запрос
+id - идентификатор запрашиваемого профиля
+Возвращаемые данные:
+status: OK / Error
+object:
+    about
+    id
+    name
+    photo
+    commentsProfile:
+        count - количество профилей
+        comments - словарь профилей
+            create_date
+            order
+            text - в unicode кодировке
+
+Обновить профиль:
+localhost/api/EditProfile
+Отправляемые данные:
+{'about': 'text', 'name': 'text', 'photo': 'photo', 'password': 'md5'} json format
+Передавайте только те данные, которые необходимо обновить, не нужно отправлять абсолютно все параметры
+Возвращаемые данные:
+status: OK / Error
 
 Get list of contracts : 
 filter=[bounty, locate]

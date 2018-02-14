@@ -11,6 +11,7 @@ class ApiMethod(Enum):
     Registration = "Reg"
     GetListContracts = "Get_list_contract"
     GetProfile = "GetProfile"
+    EditProfile = "EditProfile"
 
 
 class ErrorMessage(Enum):
@@ -28,6 +29,7 @@ class User(Enum):
     Login = "login"
     Password = "password"
     IsWitcher = "witcher"
+    Token = "token"
 
 
 class Object:
