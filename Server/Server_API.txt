@@ -46,8 +46,15 @@ object:
 Обновить профиль:
 localhost/api/EditProfile
 Отправляемые данные:
-{'about': 'text', 'name': 'text', 'photo': 'photo', 'password': 'md5'} json format
+{'token', 'md5', 'about': 'text', 'name': 'text', 'photo': 'base64(?)', 'password': 'md5'} json format
 Передавайте только те данные, которые необходимо обновить, не нужно отправлять абсолютно все параметры
+Возвращаемые данные:
+status: OK / Error
+
+Оставить комментарий к профилю:
+localhost/api/AddCommentProfile
+Отправляемые данные:
+{'token': 'md', 'text': 'text', 'order': int, 'id': int} json format
 Возвращаемые данные:
 status: OK / Error
 

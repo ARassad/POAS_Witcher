@@ -12,6 +12,12 @@ class ApiMethod(Enum):
     GetListContracts = "Get_list_contract"
     GetProfile = "GetProfile"
     EditProfile = "EditProfile"
+    AddCommentProfile = "AddCommentProfile"
+
+
+class Comment(Enum):
+    TextComment = "text"
+    OrderID = "order"
 
 
 class ErrorMessage(Enum):

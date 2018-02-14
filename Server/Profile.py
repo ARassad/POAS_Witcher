@@ -1,7 +1,9 @@
 from Server.Objects import Status
 from Server.Objects import Object
 from Server.Objects import User
+from Server.Objects import Comment
 from enum import Enum
+import time
 
 
 class Profile(Enum):
@@ -78,6 +80,20 @@ def update_profile(cursor, params):
 
     if params.get(Profile.Password.value, None) is not None:
         cursor.execute("update Authorization_info set password={} where id={}".format(params[Profile.Password.value], id_auth))
+
+    status = Object()
+    status.status = Status.Ok.value
+
+    return status.toJSON()
+
+
+def write_comment_profile(cursor, params):
+    cursor.execute("select id_list_comments from Profile where id={}".format(params[Profile.ID.value]))
+    id_lcomment = cursor.fetchone()[0]
+
+    cursor.execute("insert into Comment (id_list_comment, text, [order], create_date) values({}, N'{}', {}, {})"
+                   .format(id_lcomment, params[Comment.TextComment.value],
+                           params[Comment.OrderID.value], time.time().__int__()))
 
     status = Object()
     status.status = Status.Ok.value

@@ -5,6 +5,7 @@ from Server.Registration import registration
 from Server.Get_List_Contracts import get_list_contracts
 from Server.Profile import get_profile
 from Server.Profile import update_profile
+from Server.Profile import write_comment_profile
 from http.server import BaseHTTPRequestHandler
 from http.server import HTTPServer
 from cgi import parse_header
@@ -65,6 +66,8 @@ class HttpServer(BaseHTTPRequestHandler):
         elif authUser(cursor, dct):
             if mymethod == ApiMethod.EditProfile.value:
                 self.wfile.write(str.encode(update_profile(cursor, dct)))
+            elif mymethod == ApiMethod.AddCommentProfile.value:
+                self.wfile.write(str.encode(write_comment_profile(cursor, dct)))
             else:
                 HttpServer.error_request(self, ErrorMessage.UnknownRequest.value)
         else:
