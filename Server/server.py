@@ -1,5 +1,6 @@
 from Server.ConnectDB import connect_database
 from Server.Auth import authorization
+from Server.Auth import authUser
 from Server.Registration import registration
 from Server.Get_List_Contracts import get_list_contracts
 from Server.Profile import get_profile
@@ -33,10 +34,11 @@ class HttpServer(BaseHTTPRequestHandler):
 
         if mymethod is None:
             HttpServer.error_request(self, ErrorMessage.EmptyRequest.value)
-        elif authorization(cursor, dct, True):
+        elif authUser(cursor, dct):
             if mymethod == ApiMethod.GetListContracts.value:
                 self.wfile.write(str.encode(get_list_contracts(cursor, dct)))
             elif mymethod == ApiMethod.GetProfile.value:
+                dct['id'] = int(dct['id'])
                 self.wfile.write(str.encode(get_profile(cursor, dct)))
             else:
                 HttpServer.error_request(self, ErrorMessage.UnknownRequest.value)
@@ -60,6 +62,11 @@ class HttpServer(BaseHTTPRequestHandler):
             self.wfile.write(str.encode(authorization(cursor, dct)))
         elif mymethod == ApiMethod.Registration.value:
             self.wfile.write(str.encode(registration(cursor, dct)))
+        elif authUser(cursor, dct):
+            if mymethod == ApiMethod.EditProfile.value:
+                self.wfile.write(str.encode(update_profile(cursor, dct)))
+            else:
+                HttpServer.error_request(self, ErrorMessage.UnknownRequest.value)
         else:
             HttpServer.error_request(self, ErrorMessage.NotAuth.value)
 

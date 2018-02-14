@@ -23,10 +23,7 @@ localhost/api/Reg
 status: OK / Error
 object:
     message - поясняющее сообщение запроса.
-    idAuth - идентификатор авторизации
-    idLComment - идентификатор листа комментариев
-    idProf - идентификатор профиля
-    isWitcher - флг ведьмака
+    isWitcher - флаг ведьмака
 
 GetProfile : http://localhost/api?method=GetProfile&login=mkovalev&password=passwd&id=9
 id - id profile

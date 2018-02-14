@@ -12,7 +12,7 @@ class EventAuth(Enum):
     PasswordIncorrect = "IncorrectPasswd"
 
 
-def authorization(cursor, params, ret_bool=False):
+def authorization(cursor, params):
     cursor.execute("select * from Authorization_info where login='{}'".format(params[User.Login.value]))
     row = cursor.fetchone()
 
@@ -31,8 +31,10 @@ def authorization(cursor, params, ret_bool=False):
     else:
         obj.message = EventAuth.PasswordIncorrect.value
 
-    if ret_bool:
-        return status.status == Status.Ok.value
-
     status.object = obj
     return status.toJSON()
+
+def authUser(cursor, params):
+    cursor.execute("select * from Token_Table where token='{}'".format(params[User.Token.value]))
+    row = cursor.fetchone()
+    return row is not None
