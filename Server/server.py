@@ -33,8 +33,6 @@ class HttpServer(BaseHTTPRequestHandler):
 
         if mymethod is None:
             HttpServer.error_request(self, ErrorMessage.EmptyRequest.value)
-        elif mymethod == ApiMethod.Registration.value:
-            self.wfile.write(str.encode(registration(cursor, dct)))
         elif authorization(cursor, dct, True):
             if mymethod == ApiMethod.GetListContracts.value:
                 self.wfile.write(str.encode(get_list_contracts(cursor, dct)))
@@ -60,6 +58,8 @@ class HttpServer(BaseHTTPRequestHandler):
             HttpServer.error_request(self, ErrorMessage.EmptyRequest.value)
         elif mymethod == ApiMethod.Authorization.value:
             self.wfile.write(str.encode(authorization(cursor, dct)))
+        elif mymethod == ApiMethod.Registration.value:
+            self.wfile.write(str.encode(registration(cursor, dct)))
         else:
             HttpServer.error_request(self, ErrorMessage.NotAuth.value)
 

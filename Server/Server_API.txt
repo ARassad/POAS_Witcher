@@ -14,12 +14,19 @@ object:
 Если токен неактивен, то необходима повторная авторизация клиента
 Токен для дебага: b5ad4e9f2bdedb278dd91ce0e8043fce
 
-
-Registration : localhost/api?method=Reg&login=arassadnikov&password=pass
-Optional params:
-    witcher
-    if witcher is True -> registration witcher
-    if witcher is non True or None -> registration client
+Регистрация:
+localhost/api/Reg
+Отправляемые данные:
+{'login': 'mkovalev', 'password': 'passwd', 'witcher': 1} json format
+Параметр witcher не обязателен, без него будет регистрироваться клиент
+Возвращаемые данные:
+status: OK / Error
+object:
+    message - поясняющее сообщение запроса.
+    idAuth - идентификатор авторизации
+    idLComment - идентификатор листа комментариев
+    idProf - идентификатор профиля
+    isWitcher - флг ведьмака
 
 GetProfile : http://localhost/api?method=GetProfile&login=mkovalev&password=passwd&id=9
 id - id profile

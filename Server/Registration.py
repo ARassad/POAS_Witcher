@@ -37,7 +37,7 @@ def registration(cursor, params):
         row = cursor.fetchone()
         obj.idProf = row[0]
 
-        if params.get(User.IsWitcher.value, None) == 'True':
+        if params.get(User.IsWitcher.value, None) == 1:
             cursor.execute("insert into Witcher (id_profile) values({})".format(obj.idProf))
             obj.isWitcher = True
         else:
