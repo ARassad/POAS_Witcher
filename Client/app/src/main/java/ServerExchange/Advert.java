@@ -41,19 +41,26 @@ public class Advert implements ICommented {
     public final static int MAX_IMAGES = 10;
     LinkedList <Bitmap> images;
     public ArrayList<Bitmap> getImages(){
-        
-        throw new RuntimeException("Пока не запилили _/\\о/\\_");
-        //return null;
-        //return new ArrayList<>(images)
-        //TODO clone image
+
+        ArrayList<Bitmap> imgs = new ArrayList<>();
+        for (Bitmap img : imgs) {
+            imgs.add( (Bitmap) img.copy(img.getConfig(), false) );
+        }
+        return imgs;
     }
-    public void addImage(Bitmap img){
+    ArrayList<Bitmap> addImage(Bitmap img, int index){
         if (images.size() >= MAX_IMAGES){
             throw new RuntimeException("Не пихайте больше " + MAX_IMAGES + " картинок");
         }
-        throw new RuntimeException("Пока не запилили _/\\о/\\_");
-        
-        //TODO clone image
+
+        images.add(index, img.copy(img.getConfig(), false));
+
+        return getImages();
+    }
+
+    ArrayList<Bitmap> addImage(Bitmap img){
+
+        return addImage(img, images.size());
         //this.images.addLast(img);
     }
     
@@ -87,19 +94,19 @@ public class Advert implements ICommented {
         return new ArrayList<>(subscribedWitchers);
     }
     public ArrayList<Profile> addSubscribedWitcher( Profile witcher){
-    //    if ( witcher.getType() != Profile.WITCHER){
-    //        throw RuntimeException("Попытка подписать на объявление не Ведьмака") 
-    //    }
+        if ( witcher.getType() != Profile.ProfileType.WITCHER){
+           throw new RuntimeException("Попытка подписать на объявление не Ведьмака");
+        }
         return getSubscribedWitchers();
     }
     
     Profile executor;
     public void setExecutor( Profile witcher){
-    //    if ( witcher.getType() != Profile.WITCHER){
-    //        throw RuntimeException("Попытка назначить исполнителем не Ведьмака") 
-    //    }
+        if ( witcher.getType() != Profile.ProfileType.WITCHER){
+            throw new RuntimeException("Попытка назначить исполнителем не Ведьмака");
+        }
         if ( ! subscribedWitchers.contains(witcher)){
-            throw new RuntimeException("Попытка назначить на исполнение Ведьмака, не отликнувшегося на это объявлние");
+            throw new RuntimeException("Попытка назначить на исполнение Ведьмака, не отликнувшегося на это объявление");
         }
         
         executor = witcher;

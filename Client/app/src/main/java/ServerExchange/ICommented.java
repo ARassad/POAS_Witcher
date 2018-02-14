@@ -12,8 +12,8 @@ import java.util.ArrayList;
  * @author dryush
  */
 interface ICommented {
+
     public ArrayList<Comment> getComments();
-    
+
     public ArrayList<Comment> addComment(Comment com);
-    
 }

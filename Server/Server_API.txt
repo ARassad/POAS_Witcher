@@ -59,10 +59,23 @@ localhost/api/AddCommentProfile
 status: OK / Error
 
 Get list of contracts : 
-filter=[bounty, locate]
-if filter=bounty
-	need params min, max
-elif filter=locate:
-	need param town or kingdom
+Params: login, password
+Optional params: 
+filter = { 
+	locate => town OR kingdom
+	bounty => min AND max
+	}
+sort = {
+	alph,
+	locate,
+	lastupdate
+	
+	Optional => sortype => [asc, desc]
+}
+
+Samples
 localhost/api?method=Get_list_contract&login=arassadnikov&password=pass&filter=bounty&min=0&max=100
 localhost/api?method=Get_list_contract&login=arassadnikov&password=pass&filter=locate&town=Vizima&kingdom=Temeria
+localhost/api?method=Get_list_contract&login=arassadnikov&password=pass&filter=locate&town=Vizima
+localhost/api?method=Get_list_contract&login=arassadnikov&password=pass&filter=locate&kingdom=Temeria
+localhost/api?method=Get_list_contract&login=arassadnikov&password=pass&sort=lastupdate&sortype=desc
