@@ -7,6 +7,7 @@ from Server.Profile import update_profile
 from Server.Profile import write_comment_profile
 from Server.Advert import create_advert
 from Server.Advert import edit_advert
+from Server.Advert import delete_advert
 from http.server import BaseHTTPRequestHandler
 from http.server import HTTPServer
 from cgi import parse_header
@@ -28,6 +29,8 @@ api_methods_post[ApiMethod.EditProfile.value] = update_profile
 api_methods_post[ApiMethod.AddCommentProfile.value] = write_comment_profile
 api_methods_post[ApiMethod.CreateAdvert.value] = create_advert
 api_methods_post[ApiMethod.EditAdvert.value] = edit_advert
+api_methods_get[ApiMethod.DeleteAdvert.value] = delete_advert
+
 
 class HttpServer(BaseHTTPRequestHandler):
     def _set_headers(self):
@@ -45,7 +48,6 @@ class HttpServer(BaseHTTPRequestHandler):
 
         if mymethod is None:
             HttpServer.error_request(self, ErrorMessage.EmptyRequest.value)
-        #elif authUser(cursor, dct):
         elif api_methods_get.get(mymethod, None) is not None:
             if dct.get('id', None) is not None:
                 dct['id'] = int(dct['id'])

@@ -10,6 +10,7 @@ import time
 
 class EventAdvert(Enum):
     WitcherCreator = "AdvertActivityWitcher"
+    AlienDelete = "AlienClientDeleteContract"
     Success = "Success"
 
 class Advert(Enum):
@@ -19,7 +20,7 @@ class Advert(Enum):
     Photo = "photo"
     NewPhoto = "new_photo"
     DelPhoto = "del_photo"
-    ID = "id_advert"
+    ID = "id"
     Status = "status"
     Witcher = "id_witcher"
 
@@ -106,6 +107,33 @@ def edit_advert(cursor, params):
 
         status.status = Status.Ok.value
         obj.message = EventAdvert.Success.value
+    else:
+        status.status = Status.Error.value
+        obj.message = EventAdvert.WitcherCreator.value
+
+    status.object = obj
+    return status.toJSON()
+
+def delete_advert(cursor, params):
+    cursor.execute("select * from Client where id_profile=(select id_profile from Token_Table where token='{}')"
+                   .format(params[User.Token.value]))
+    row = cursor.fetchone()
+
+    obj = Object()
+    status = Object()
+
+    if row is not None:
+        id_client = row[1]
+        cursor.execute("select id_client from Contract where id={}".format(params[Advert.ID.value]))
+        id_cont_client = cursor.fetchone()[0]
+
+        if id_client == id_cont_client:
+            cursor.execute("delete Contract where id={}".format(params[Advert.ID.value]))
+            status.status = Status.Ok.value
+            obj.message = EventAdvert.Success.value
+        else:
+            status.status = Status.Error.value
+            obj.message = EventAdvert.AlienDelete.value
     else:
         status.status = Status.Error.value
         obj.message = EventAdvert.WitcherCreator.value

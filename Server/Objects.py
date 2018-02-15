@@ -15,6 +15,7 @@ class ApiMethod(Enum):
     AddCommentProfile = "AddCommentProfile"
     CreateAdvert = "CreateAdvert"
     EditAdvert = "EditAdvert"
+    DeleteAdvert = "DeleteAdvert"
 
 
 class Comment(Enum):

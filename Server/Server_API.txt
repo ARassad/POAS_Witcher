@@ -66,18 +66,24 @@ localhost/api/CreateAdvert
 status: OK / Error
 object:
     message
-    id_advert
+    id
 
 Редактировать объявление:
 localhost/api/EditAdvert
 Отправляемые данные:
-{'token': 'md5', 'id_advert': int, 'id_witcher': int, 'status': int, 'id_task_located': int,
+{'token': 'md5', 'id': int, 'id_witcher': int, 'status': int, 'id_task_located': int,
 'text': 'text', 'bounty': int, 'photo_del': ['base64', ..., 'base64'], 'photo_new': ['base64', ..., 'base64']} json format
 Возвращаемые данные:
 status: OK / Error
 object:
     message
-    id_advert
+
+Удалить объявление:
+localhost/api?method=DeleteAdvert&token=b5ad4e9f2bdedb278dd91ce0e8043fce&id=4
+Возвращаемые данные:
+status: OK / Error
+object:
+    message
 
 
 Get list of contracts : 
