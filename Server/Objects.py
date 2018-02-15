@@ -16,6 +16,7 @@ class ApiMethod(Enum):
     CreateAdvert = "CreateAdvert"
     EditAdvert = "EditAdvert"
     DeleteAdvert = "DeleteAdvert"
+    GetAdvert = "GetAdvert"
 
 
 class Comment(Enum):

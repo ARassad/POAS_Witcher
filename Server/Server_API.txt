@@ -79,11 +79,18 @@ object:
     message
 
 Удалить объявление:
-localhost/api?method=DeleteAdvert&token=b5ad4e9f2bdedb278dd91ce0e8043fce&id=4
+localhost/api?method=DeleteAdvert&token=b5ad4e9f2bdedb278dd91ce0e8043fce&id=3
 Возвращаемые данные:
 status: OK / Error
 object:
     message
+
+Получить объявление:
+localhost/api?method=GetAdvert&token=b5ad4e9f2bdedb278dd91ce0e8043fce&id=3
+Возвращаемые данные:
+status: OK / Error
+contract
+
 
 
 Get list of contracts : 

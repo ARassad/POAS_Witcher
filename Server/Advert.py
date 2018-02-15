@@ -140,3 +140,70 @@ def delete_advert(cursor, params):
 
     status.object = obj
     return status.toJSON()
+
+def get_advert(cursor, params):
+    cursor.execute("select * from Contract where id={}".format(params[Advert.ID.value]))
+    status = Object()
+    obj = Object()
+
+    row = cursor.fetchone()
+    obj.id = row[0]
+    obj.text = row[6]
+    obj.bounty = row[7]
+    obj.status = row[8]
+    obj.last_update_status = row[9]
+    obj.last_update = row[10]
+    id_witcher = row[1]
+    id_client = row[2]
+    id_list_comments = row[3]
+    id_task_located = row[4]
+    id_list_photos = row[5]
+
+    if id_witcher is not None:
+        cursor.execute("select id, name from Profile where id=(select id_profile from Witcher where id={})".format(id_witcher))
+        row = cursor.fetchone()
+        witcher = Object()
+        witcher.id = row[0]
+        witcher.name = row[1]
+        status.witcher = witcher
+
+    cursor.execute(
+        "select id, name from Profile where id=(select id_profile from Client where id={})".format(id_client))
+    row = cursor.fetchone()
+    client = Object()
+    client.id = row[0]
+    client.name = row[1]
+    status.client = client
+
+    cursor.execute("select b.text, b.create_date from Contract as a inner join Comment as b on a.id_list_comments = b.id_list_comment where a.id={}"
+                   .format(id_list_comments))
+    row = cursor.fetchall()
+    obj.commentsContract = Object()
+    obj.commentsContract.comments = {}
+    obj.commentsContract.count = len(row)
+    for line in row:
+        comm = Object()
+        comm.text = line[0]
+        comm.create_date = line[1]
+        obj.commentsContract.comments[len(obj.commentsContract.comments)] = comm
+
+    cursor.execute("select a.name, b.name from Town as a inner join Kingdom as b on a.id_kingdom=b.id where a.id={}"
+                   .format(id_task_located))
+    row = cursor.fetchone()
+    obj.town = row[0]
+    obj.kingdom = row[1]
+
+    cursor.execute(
+        "select b.photo from Contract as a inner join Photo as b on a.id_list_photos = b.id_list_photos where a.id={}"
+        .format(id_list_photos))
+    row = cursor.fetchall()
+    obj.photoContract = Object()
+    obj.photoContract.photo = {}
+    obj.photoContract.count = len(row)
+    for i in range(len(row)):
+        ph = Object()
+        ph.photo = row[i][0]
+        obj.photoContract.photo[len(obj.photoContract.photo)] = ph
+
+    status.object = obj
+    return status.toJSON()
