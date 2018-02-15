@@ -132,8 +132,8 @@ public abstract class ServerRequest <AnswerType> {
             //ObjectOutputStream objectOut = new ObjectOutputStream( out);
             //objectOut.writeUTF(jsonRequest);
 
-         //   objectOut.flush();
-         //   objectOut.close();
+            out.flush();
+            out.close();
 
 
             InputStream in = urlConnection.getInputStream();
