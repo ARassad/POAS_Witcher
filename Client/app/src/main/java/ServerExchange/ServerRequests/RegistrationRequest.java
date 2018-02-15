@@ -35,9 +35,18 @@ public class RegistrationRequest extends ServerRequest<Boolean>{
         return sm;
     }
 
+    class JsonRegServerAnswer extends JsonServerAnswer{
+
+
+        @Override
+        public Boolean convert() {
+            return status.equals("OK");
+        }
+    }
+
     @Override
     protected Class<? extends JsonServerAnswer> getJsonAnswerClass() {
-        return JsonServerAnswer.class;
+        return JsonRegServerAnswer.class;
     }
 
 

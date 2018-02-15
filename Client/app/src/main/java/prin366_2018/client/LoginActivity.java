@@ -74,8 +74,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     protected void onAppStart(){
         SharedPreferences params = getSharedPreferences("settings", MODE_PRIVATE);
-        if (params.contains("server_address")){
-            ServerRequest.setDefaultAddress( params.getString("server_adderess", "localhost"));
+        ServerRequest.setDefaultAddress( params.getString("server_address", "localhost"));
+
+        if (!params.contains("server_address")){
+            params.edit().putString("server_address", "localhost");
         }
     }
 
@@ -84,6 +86,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        onAppStart();
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
