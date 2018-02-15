@@ -68,6 +68,18 @@ object:
     message
     id_advert
 
+Редактировать объявление:
+localhost/api/EditAdvert
+Отправляемые данные:
+{'token': 'md5', 'id_advert': int, 'id_witcher': int, 'status': int, 'id_task_located': int,
+'text': 'text', 'bounty': int, 'photo_del': ['base64', ..., 'base64'], 'photo_new': ['base64', ..., 'base64']} json format
+Возвращаемые данные:
+status: OK / Error
+object:
+    message
+    id_advert
+
+
 Get list of contracts : 
 Params: login, password
 Optional params: 

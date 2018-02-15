@@ -6,6 +6,7 @@ from Server.Profile import get_profile
 from Server.Profile import update_profile
 from Server.Profile import write_comment_profile
 from Server.Advert import create_advert
+from Server.Advert import edit_advert
 from http.server import BaseHTTPRequestHandler
 from http.server import HTTPServer
 from cgi import parse_header
@@ -26,7 +27,7 @@ api_methods_get[ApiMethod.GetProfile.value] = get_profile
 api_methods_post[ApiMethod.EditProfile.value] = update_profile
 api_methods_post[ApiMethod.AddCommentProfile.value] = write_comment_profile
 api_methods_post[ApiMethod.CreateAdvert.value] = create_advert
-
+api_methods_post[ApiMethod.EditAdvert.value] = edit_advert
 
 class HttpServer(BaseHTTPRequestHandler):
     def _set_headers(self):
