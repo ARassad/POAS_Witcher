@@ -1,6 +1,5 @@
 from Server.ConnectDB import connect_database
 from Server.Auth import authorization
-from Server.Auth import authUser
 from Server.Registration import registration
 from Server.Get_List_Contracts import get_list_contracts
 from Server.Profile import get_profile
@@ -19,6 +18,15 @@ from Server.Objects import ErrorMessage
 from Server.Objects import ApiMethod
 cursor = connect_database()
 
+api_methods_get, api_methods_post = {}, {}
+api_methods_post[ApiMethod.Authorization.value] = authorization
+api_methods_post[ApiMethod.Registration.value] = registration
+api_methods_get[ApiMethod.GetListContracts.value] = get_list_contracts
+api_methods_get[ApiMethod.GetProfile.value] = get_profile
+api_methods_post[ApiMethod.EditProfile.value] = update_profile
+api_methods_post[ApiMethod.AddCommentProfile.value] = write_comment_profile
+api_methods_post[ApiMethod.CreateAdvert.value] = create_advert
+
 
 class HttpServer(BaseHTTPRequestHandler):
     def _set_headers(self):
@@ -36,16 +44,14 @@ class HttpServer(BaseHTTPRequestHandler):
 
         if mymethod is None:
             HttpServer.error_request(self, ErrorMessage.EmptyRequest.value)
-        elif authUser(cursor, dct):
-            if mymethod == ApiMethod.GetListContracts.value:
-                self.wfile.write(str.encode(get_list_contracts(cursor, dct)))
-            elif mymethod == ApiMethod.GetProfile.value:
+        #elif authUser(cursor, dct):
+        elif api_methods_get.get(mymethod, None) is not None:
+            if dct.get('id', None) is not None:
                 dct['id'] = int(dct['id'])
-                self.wfile.write(str.encode(get_profile(cursor, dct)))
-            else:
-                HttpServer.error_request(self, ErrorMessage.UnknownRequest.value)
+
+            self.wfile.write(str.encode(api_methods_get[mymethod](cursor, dct)))
         else:
-            HttpServer.error_request(self, ErrorMessage.NotAuth.value)
+            HttpServer.error_request(self, ErrorMessage.UnknownRequest.value)
 
     def do_HEAD(self):
         self._set_headers()
@@ -60,21 +66,10 @@ class HttpServer(BaseHTTPRequestHandler):
 
         if mymethod is None:
             HttpServer.error_request(self, ErrorMessage.EmptyRequest.value)
-        elif mymethod == ApiMethod.Authorization.value:
-            self.wfile.write(str.encode(authorization(cursor, dct)))
-        elif mymethod == ApiMethod.Registration.value:
-            self.wfile.write(str.encode(registration(cursor, dct)))
-        elif authUser(cursor, dct):
-            if mymethod == ApiMethod.EditProfile.value:
-                self.wfile.write(str.encode(update_profile(cursor, dct)))
-            elif mymethod == ApiMethod.AddCommentProfile.value:
-                self.wfile.write(str.encode(write_comment_profile(cursor, dct)))
-            elif mymethod == ApiMethod.CreateAdvert.value:
-                self.wfile.write(str.encode(create_advert(cursor, dct)))
-            else:
-                HttpServer.error_request(self, ErrorMessage.UnknownRequest.value)
+        elif api_methods_post.get(mymethod, None) is not None:
+            self.wfile.write(str.encode(api_methods_post[mymethod](cursor, dct)))
         else:
-            HttpServer.error_request(self, ErrorMessage.NotAuth.value)
+            HttpServer.error_request(self, ErrorMessage.UnknownRequest.value)
 
     def parse_POST(self):
         ctype, pdict = parse_header(self.headers['content-type'])

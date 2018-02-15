@@ -33,8 +33,3 @@ def authorization(cursor, params):
 
     status.object = obj
     return status.toJSON()
-
-def authUser(cursor, params):
-    cursor.execute("select * from Token_Table where token='{}'".format(params[User.Token.value]))
-    row = cursor.fetchone()
-    return row is not None
