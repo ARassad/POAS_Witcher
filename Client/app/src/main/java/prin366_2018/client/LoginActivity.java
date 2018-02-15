@@ -33,6 +33,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ServerExchange.ServerRequests.AuthorizationRequest;
+import ServerExchange.ServerRequests.ServerRequest;
+
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
@@ -63,16 +66,27 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
 
+
+    /**
+     * В этот метод пихать всё, что должно произойти при загрузке приложения
+     * Проследите, что была защита от затирания т.к. этот метод будет заупскаться каждый раз,
+     * Когда будет открываться экран Входа в приложуху
+     */
+    protected void onAppStart(){
+        SharedPreferences params = getSharedPreferences("settings", MODE_PRIVATE);
+        ServerRequest.setDefaultAddress( params.getString("server_address", "localhost"));
+
+        if (!params.contains("server_address")){
+            params.edit().putString("server_address", "localhost");
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //Пробуем мутить файл настроек
-        Settings.setSettings( this);
-
-
-
+        onAppStart();
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -192,8 +206,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            new AuthorizationRequest().login(email, password, null);
+            //mAuthTask = new UserLoginTask(email, password);
+            //mAuthTask.execute((Void) null);
         }
     }
 
