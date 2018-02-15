@@ -33,6 +33,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ServerExchange.ServerRequests.AuthorizationRequest;
+
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
@@ -63,13 +65,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
 
+
+    /**
+     * В этот метод пихать всё, что должно произойти при загрузке приложения
+     * Проследите, что была защита от затирания т.к. этот метод будет заупскаться каждый раз,
+     * Когда будет открываться экран Входа в приложуху
+     */
+    protected void onAppStart(){
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //Пробуем мутить файл настроек
-        Settings.setSettings( this);
 
 
 
@@ -192,8 +202,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            AuthorizationRequest authRequet = new AuthorizationRequest("192.168.0.4/",email, password);
+            authRequet.startRequest();
+            //mAuthTask = new UserLoginTask(email, password);
+            //mAuthTask.execute((Void) null);
         }
     }
 
