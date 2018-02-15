@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ServerExchange.ServerRequests.AuthorizationRequest;
+import ServerExchange.ServerRequests.ServerRequest;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -72,16 +73,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Когда будет открываться экран Входа в приложуху
      */
     protected void onAppStart(){
-
+        SharedPreferences params = getSharedPreferences("settings", MODE_PRIVATE);
+        if (params.contains("server_address")){
+            ServerRequest.setDefaultAddress( params.getString("server_adderess", "localhost"));
+        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-
-
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -202,8 +203,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            AuthorizationRequest authRequet = new AuthorizationRequest("192.168.0.4/",email, password);
-            authRequet.startRequest();
+            new AuthorizationRequest().login(email, password, null);
             //mAuthTask = new UserLoginTask(email, password);
             //mAuthTask.execute((Void) null);
         }

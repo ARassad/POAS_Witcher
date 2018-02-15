@@ -42,19 +42,29 @@ import java.util.LinkedList;
 
 
 
-abstract class ServerRequest <AnswerType> {
+public abstract class ServerRequest <AnswerType> {
     //private final String API = "api?method=";
     private final String API = "api?";
 
 
-    private String serverAddress = "localhost/";
+    private static String defaultServerAddress = "localhost/";
+    private String serverAddress;
     private final String PROTOCOL = "http://";
 
+    public static void setDefaultAddress(String address){
+        if (address.charAt( address.length() -1) != '/'){
+            address += '/';
+        }
+        defaultServerAddress = address;
+    }
 
-    protected ServerRequest(String serverAddress)
+
+    public ServerRequest(String serverAddress)
     {
         this.serverAddress = serverAddress;
     }
+    public ServerRequest(){ serverAddress = defaultServerAddress; }
+
 
 
     protected HashMap<String,String> basicMethodParams(){
@@ -208,12 +218,12 @@ abstract class ServerRequest <AnswerType> {
     }
     
     
-    public void startRequest(IServerAnswerHandler handler){
+    protected void startRequest(IServerAnswerHandler handler){
         RequestProcess rp = new RequestProcess( handler, getJsonAnswerClass());
         rp.execute();
     }
 
-    public void startRequest(){
+    protected void startRequest(){
         RequestProcess rp = new RequestProcess( null, getJsonAnswerClass());
         rp.execute();
     }

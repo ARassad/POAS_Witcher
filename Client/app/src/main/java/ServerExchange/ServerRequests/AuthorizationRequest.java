@@ -11,16 +11,17 @@ import ServerExchange.Profile;
 
 public class AuthorizationRequest extends LoginRequest<Boolean>{
 
-    public AuthorizationRequest(String serverAddress, String login, String password) {
-        super(serverAddress);
-        this.login = login;
-        this.password = password;
-
+    public AuthorizationRequest() {
+        super();
     }
+
+    public AuthorizationRequest(String address){
+        super(address);
+    }
+
 
     private String login;
     private String password;
-
 
     private final String AUTH_METHOD_NAME = "Auth";
     @Override
@@ -46,34 +47,10 @@ public class AuthorizationRequest extends LoginRequest<Boolean>{
         return AuthJsonServeAnswer.class;
     }
 
-    class AuthServerAnswer{
-        AuthServerAnswer(){}
-
+    public void login(String login, String password, IServerAnswerHandler onLoginHandler){
+        this.login = login;
+        this.password = password;
+        startRequest(onLoginHandler);
     }
 
-
-    private final String REGISTR_METHOD_NAME = "Reg";
-
-
-
-    class regServerAnswer{
-        regServerAnswer(){}
-
-    }
-    public boolean tryRegistration(String login, String password, Profile.ProfileType type) throws IOException {
-        String names[] = new String[3];
-        names[0] = "login";
-        names[1] = "password";
-        names[2] = "witcher";
-
-        String params[] = new String[3];
-        params[0] = login;
-        params[1] = password;
-        params[2] = type == Profile.ProfileType.WITCHER ? "True" : "False";
-
-        AuthServerAnswer answer = new AuthServerAnswer();
-
-
-        return false; // TODO return something else
-    }
 }

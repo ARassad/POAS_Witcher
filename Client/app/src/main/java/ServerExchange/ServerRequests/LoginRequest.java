@@ -10,6 +10,7 @@ public abstract class LoginRequest<AnswerType> extends ServerRequest<AnswerType>
     public LoginRequest(String serverAddress) {
         super(serverAddress);
     }
+    public LoginRequest() {super();}
 
     abstract class LoginJsonServerAnswer extends JsonServerAnswer{
         public String token;
