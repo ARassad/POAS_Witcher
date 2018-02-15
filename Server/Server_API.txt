@@ -54,9 +54,19 @@ status: OK / Error
 Оставить комментарий к профилю:
 localhost/api/AddCommentProfile
 Отправляемые данные:
-{'token': 'md', 'text': 'text', 'order': int, 'id': int} json format
+{'token': 'md5', 'text': 'text', 'order': int, 'id': int} json format
 Возвращаемые данные:
 status: OK / Error
+
+Создать объявление:
+localhost/api/CreateAdvert
+Отправляемые данные:
+{'token': 'md5', 'id_task_located': int, 'text': 'text', 'bounty': int, 'photo': ['base64', ..., 'base64']} json format
+Возвращаемые данные:
+status: OK / Error
+object:
+    message
+    id_advert
 
 Get list of contracts : 
 Params: login, password

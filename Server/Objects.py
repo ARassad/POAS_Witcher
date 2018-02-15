@@ -13,6 +13,7 @@ class ApiMethod(Enum):
     GetProfile = "GetProfile"
     EditProfile = "EditProfile"
     AddCommentProfile = "AddCommentProfile"
+    CreateAdvert = "CreateAdvert"
 
 
 class Comment(Enum):
