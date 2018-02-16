@@ -49,7 +49,7 @@ public class AuthorizationRequest extends LoginRequest<Boolean>{
 
     public void login(String login, String password, IServerAnswerHandler onLoginHandler){
         this.login = login;
-        this.password = password;
+        this.password = ServerRequest.encryption(password);
         startRequest(onLoginHandler);
     }
 

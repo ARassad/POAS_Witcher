@@ -54,7 +54,7 @@ public class RegistrationRequest extends ServerRequest<Boolean>{
     public void registration(String login, String password, Profile.ProfileType type, IServerAnswerHandler onLoginHandler) throws IOException {
 
         this.login = login;
-        this.password = password;
+        this.password = encryption(password);
         this.isWitcher = type == Profile.ProfileType.WITCHER ? "1" : "0";
         this.startRequest();
         new AuthorizationRequest().login(login, password, onLoginHandler);
