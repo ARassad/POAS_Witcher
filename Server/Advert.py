@@ -1,6 +1,7 @@
 from Server.Objects import User
 from Server.Objects import Object
 from Server.Objects import Status
+from Server.Profile import Comment
 from enum import Enum
 import time
 # status: 0 - in_search
@@ -10,6 +11,7 @@ import time
 
 class EventAdvert(Enum):
     WitcherCreator = "AdvertActivityWitcher"
+    ClientAsWitcher = "ClientReplaceWitcher"
     AlienDelete = "AlienClientDeleteContract"
     Success = "Success"
 
@@ -65,6 +67,7 @@ def create_advert(cursor, params):
     status.object = obj
     return status.toJSON()
 
+
 def edit_advert(cursor, params):
     cursor.execute("select * from Client where id_profile=(select id_profile from Token_Table where token='{}')"
                    .format(params[User.Token.value]))
@@ -114,6 +117,7 @@ def edit_advert(cursor, params):
     status.object = obj
     return status.toJSON()
 
+
 def delete_advert(cursor, params):
     cursor.execute("select * from Client where id_profile=(select id_profile from Token_Table where token='{}')"
                    .format(params[User.Token.value]))
@@ -140,6 +144,7 @@ def delete_advert(cursor, params):
 
     status.object = obj
     return status.toJSON()
+
 
 def get_advert(cursor, params):
     cursor.execute("select * from Contract where id={}".format(params[Advert.ID.value]))
@@ -206,4 +211,64 @@ def get_advert(cursor, params):
         obj.photoContract.photo[len(obj.photoContract.photo)] = ph
 
     status.object = obj
+    return status.toJSON()
+
+
+def add_witcher_in_contract(cursor, params):
+    cursor.execute("select * from Witcher where id_profile=(select id_profile from Token_Table where token='{}')"
+                   .format(params[User.Token.value]))
+    row = cursor.fetchone()
+
+    obj = Object()
+    status = Object()
+
+    if row is not None:
+        id_witcher = row[0]
+        status.status = Status.Ok.value
+        obj.message = EventAdvert.Success.value
+
+        cursor.execute("insert into Desired_Contract (id_witcher, id_contract) values({}, {})"
+                       .format(id_witcher, params[Advert.ID.value]))
+    else:
+        status.status = Status.Error.value
+        obj.message = EventAdvert.ClientAsWitcher.value
+
+    status.object = obj
+    return status.toJSON()
+
+
+def get_profile_desired_contract(cursor, params):
+    cursor.execute("select d.id, d.name from Contract as a inner join Desired_Contract as b on a.id=b.id_contract inner join Witcher as c on b.id_witcher=c.id inner join Profile as d on c.id_profile=d.id where a.id={}"
+                   .format(params[Advert.ID.value]))
+    rows = cursor.fetchall()
+
+    status = Object()
+    obj = Object()
+
+    status.status = Status.Ok.value
+    obj.message = EventAdvert.Success.value
+    obj.witchers = Object()
+    obj.witchers.witcher = {}
+    obj.witchers.count = len(rows)
+    for prof in rows:
+        profile = Object()
+        profile.id = prof[0]
+        profile.name = prof[1]
+        obj.witchers.witcher[len(obj.witchers.witcher)] = profile
+
+    status.object = obj
+    return status.toJSON()
+
+
+def write_comment_contract(cursor, params):
+    cursor.execute("select id_list_comments from Contract where id={}".format(params[Advert.ID.value]))
+    id_lcomment = cursor.fetchone()[0]
+
+    cursor.execute("insert into Comment (id_list_comment, text, [order], create_date) values({}, N'{}', {}, {})"
+                   .format(id_lcomment, params[Comment.TextComment.value],
+                           params[Comment.OrderID.value], time.time().__int__()))
+
+    status = Object()
+    status.status = Status.Ok.value
+
     return status.toJSON()

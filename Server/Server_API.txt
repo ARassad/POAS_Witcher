@@ -91,6 +91,53 @@ localhost/api?method=GetAdvert&token=b5ad4e9f2bdedb278dd91ce0e8043fce&id=3
 status: OK / Error
 contract
 
+Добавить желающего ведьмака к контракту:
+localhost/api/AddWitcherInContract
+{token: md5, id: int} to json format
+Передать id контракта
+Возвращаемые данные:
+status: OK / Error
+object:
+    message
+
+Получить ведьмаков, согласных выполнять контракт:
+localhost/api?method=GetWitcherDesiredContract&token=b5ad4e9f2bdedb278dd91ce0e8043fce&id=3
+Передать id контракта
+Возвращаемые данные:
+status: OK / Error
+object
+    message
+    witchers
+
+
+Оставить комментарий к профилю:
+localhost/api/AddCommentContract
+Отправляемые данные:
+{'token': 'md5', 'text': 'text', 'order': int, 'id': int} json format
+Возвращаемые данные:
+status: OK / Error
+
+Выбрать ведьмака к контракту:
+localhost/api/SelectWitcherInContract
+Отправляемые данные:
+{'token': 'md5', 'id_witcher': int, 'id_contract': int} json format
+Возвращаемые данные:
+status: OK / Error
+
+Ответ ведьмака по контракту:
+localhost/api/SelectWitcherInContract
+Отправляемые данные:
+{'token': 'md5', 'status': int, 'id_contract': int} json format
+Возвращаемые данные:
+status: OK / Error
+
+Снять ведьмака в контракте:
+localhost/api/RefuseContract
+Отправляемые данные:
+{'token': 'md5', id_contract': int} json format
+Возвращаемые данные:
+status: OK / Error
+
 
 
 Get list of contracts : 

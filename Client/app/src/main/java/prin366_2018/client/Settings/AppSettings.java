@@ -3,6 +3,12 @@ package prin366_2018.client.Settings;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * Created by Dryush on 13.02.2018.
@@ -45,5 +51,28 @@ public class AppSettings{
         //Здесь прописать деффолтные настройки
     }
 
+    public String getIpServer (){
+        File sdcard = Environment.getExternalStorageDirectory();
+        File file = new File(sdcard,"file.txt");
+        //StringBuilder text = new StringBuilder();
+        String ipServer = new String();
 
+        try
+        {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            ipServer = br.readLine();
+            //String line;
+            /*while ((line = br.readLine()) != null)
+            {
+                text.append(line);
+                text.append('\n');
+            }*/
+            br.close();
+        }
+        catch (IOException e)
+        {
+            //Ошибка!!!
+        }
+        return ipServer;
+    }
 }

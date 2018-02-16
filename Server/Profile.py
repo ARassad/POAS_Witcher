@@ -32,7 +32,7 @@ def get_profile(cursor, params):
         obj.photo = row[3]
 
         cursor.execute(
-            "select b.text, b.create_date, b.[order] from Profile as a inner join Comment as b on a.id_list_comments = b.id_list_comment where a.id={}"
+            "select b.text, b.create_date, b.[order], b.id_list_comment from Profile as a inner join Comment as b on a.id_list_comments = b.id_list_comment where a.id={}"
                 .format(params[Profile.ID.value]))
 
         obj.commentsProfile = Object()
@@ -44,7 +44,62 @@ def get_profile(cursor, params):
             comm.text = line[0]
             comm.create_date = line[1]
             comm.order = line[2]
+
+            cursor.execute("select id, name from Profile where id_list_comments={}".format(line[3]))
+            prof = cursor.fetchone()
+            author = Object()
+            author.id = prof[0]
+            author.name = prof[1]
+
+            comm.author = author
             obj.commentsProfile.comments[len(obj.commentsProfile.comments)] = comm
+
+        cursor.execute("select id from Witcher where id_profile={}"
+                       .format(obj.id))
+        row = cursor.fetchone()
+
+        if row is not None:
+            cursor.execute("select c.id, c.id_witcher, c.id_client, c.header, c.status, c.last_update, c.last_update_status from Profile as a inner join Witcher as b on a.id=b.id_profile inner join Contract as c on c.id_witcher=b.id where b.id={}"
+                           .format(row[0]))
+            row = cursor.fetchall()
+            obj.history = Object()
+            obj.history.count = len(row)
+            obj.history.contract = {}
+            for line in row:
+                hist = Object()
+                hist.id_contract = line[0]
+                hist.id_witcher = line[1]
+                hist.id_client = line[2]
+                hist.header = line[3]
+                hist.status = line[4]
+                hist.last_update = line[5]
+                hist.last_update_status = line[6]
+
+                obj.history.contract[len(obj.history.contract)] = hist
+
+        else:
+            cursor.execute("select id from Client where id_profile={}"
+                           .format(obj.id))
+            row = cursor.fetchone()
+
+            cursor.execute(
+                "select c.id, c.id_witcher, c.id_client, c.header, c.status, c.last_update, c.last_update_status from Profile as a inner join Client as b on a.id=b.id_profile inner join Contract as c on c.id_witcher=b.id where b.id={}"
+                .format(row[0]))
+            row = cursor.fetchall()
+            obj.history = Object()
+            obj.history.count = len(row)
+            obj.history.contract = {}
+            for line in row:
+                hist = Object()
+                hist.id_contract = line[0]
+                hist.id_witcher = line[1]
+                hist.id_client = line[2]
+                hist.header = line[3]
+                hist.status = line[4]
+                hist.last_update = line[5]
+                hist.last_update_status = line[6]
+
+                obj.history.contract[len(obj.history.contract)] = hist
 
     status.object = obj
     return status.toJSON()

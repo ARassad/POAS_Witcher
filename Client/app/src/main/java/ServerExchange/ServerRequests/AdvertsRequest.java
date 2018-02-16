@@ -52,9 +52,8 @@ class AdvertsRequest extends ServerRequest < LinkedList<Advert>> {
 
         SORT_NAMES.put(SortType.BY_ALPHABET,    "alph");
         SORT_NAMES.put(SortType.BY_DATE,        "lastupdate");
-        SORT_NAMES.put(SortType.BY_REWARD,      "bounty");
+        //SORT_NAMES.put(SortType.BY_REWARD,      "bounty");
         SORT_NAMES.put(SortType.BY_LOCATE,      "locate");
-
     }
 
 
