@@ -234,3 +234,26 @@ def add_witcher_in_contract(cursor, params):
 
     status.object = obj
     return status.toJSON()
+
+
+def get_profile_desired_contract(cursor, params):
+    cursor.execute("select d.id, d.name from Contract as a inner join Desired_Contract as b on a.id=b.id_contract inner join Witcher as c on b.id_witcher=c.id inner join Profile as d on c.id_profile=d.id where a.id={}"
+                   .format(params[Advert.ID.value]))
+    rows = cursor.fetchall()
+
+    status = Object()
+    obj = Object()
+
+    status.status = Status.Ok.value
+    obj.message = EventAdvert.Success.value
+    obj.witchers = Object()
+    obj.witchers.witcher = {}
+    obj.witchers.count = len(rows)
+    for prof in rows:
+        profile = Object()
+        profile.id = prof[0]
+        profile.name = prof[1]
+        obj.witchers.witcher[len(obj.witchers.witcher)] = profile
+
+    status.object = obj
+    return status.toJSON()

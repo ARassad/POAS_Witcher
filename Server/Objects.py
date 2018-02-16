@@ -18,6 +18,7 @@ class ApiMethod(Enum):
     DeleteAdvert = "DeleteAdvert"
     GetAdvert = "GetAdvert"
     AddWitcherInContract = "AddWitcherInContract"
+    GetWitcherDesiredContract = "GetWitcherDesiredContract"
 
 
 class Comment(Enum):

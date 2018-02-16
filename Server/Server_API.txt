@@ -100,6 +100,15 @@ status: OK / Error
 object:
     message
 
+Получить ведьмаков, согласных выполнять контракт:
+localhost/api?method=GetWitcherDesiredContract&token=b5ad4e9f2bdedb278dd91ce0e8043fce&id=3
+Передать id контракта
+Возвращаемые данные:
+status: OK / Error
+object
+    message
+    witchers
+
 
 
 Get list of contracts : 
