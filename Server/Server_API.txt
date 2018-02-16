@@ -117,6 +117,13 @@ localhost/api/AddCommentContract
 Возвращаемые данные:
 status: OK / Error
 
+Выбрать ведьмака к контракту:
+localhost/api/SelectWitcherInContract
+Отправляемые данные:
+{'token': 'md5', 'id_witcher': int, 'id_contract': int} json format
+Возвращаемые данные:
+status: OK / Error
+
 
 
 Get list of contracts : 

@@ -12,6 +12,7 @@ from Server.Advert import get_advert
 from Server.Advert import add_witcher_in_contract
 from Server.Advert import get_profile_desired_contract
 from Server.Advert import write_comment_contract
+from Server.Witcher import select_witcher
 from http.server import BaseHTTPRequestHandler
 from http.server import HTTPServer
 from cgi import parse_header
@@ -38,6 +39,7 @@ api_methods_get[ApiMethod.GetAdvert.value] = get_advert
 api_methods_post[ApiMethod.AddWitcherInContract.value] = add_witcher_in_contract
 api_methods_get[ApiMethod.GetWitcherDesiredContract.value] = get_profile_desired_contract
 api_methods_post[ApiMethod.AddCommentContract.value] = write_comment_contract
+api_methods_post[ApiMethod.SelectWitcherInContract.value] = select_witcher
 
 
 class HttpServer(BaseHTTPRequestHandler):
