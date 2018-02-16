@@ -1,6 +1,7 @@
 from Server.Objects import User
 from Server.Objects import Object
 from Server.Objects import Status
+from Server.Profile import Comment
 from enum import Enum
 import time
 # status: 0 - in_search
@@ -256,4 +257,18 @@ def get_profile_desired_contract(cursor, params):
         obj.witchers.witcher[len(obj.witchers.witcher)] = profile
 
     status.object = obj
+    return status.toJSON()
+
+
+def write_comment_contract(cursor, params):
+    cursor.execute("select id_list_comments from Contract where id={}".format(params[Advert.ID.value]))
+    id_lcomment = cursor.fetchone()[0]
+
+    cursor.execute("insert into Comment (id_list_comment, text, [order], create_date) values({}, N'{}', {}, {})"
+                   .format(id_lcomment, params[Comment.TextComment.value],
+                           params[Comment.OrderID.value], time.time().__int__()))
+
+    status = Object()
+    status.status = Status.Ok.value
+
     return status.toJSON()

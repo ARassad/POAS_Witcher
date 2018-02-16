@@ -110,6 +110,14 @@ object
     witchers
 
 
+Оставить комментарий к профилю:
+localhost/api/AddCommentContract
+Отправляемые данные:
+{'token': 'md5', 'text': 'text', 'order': int, 'id': int} json format
+Возвращаемые данные:
+status: OK / Error
+
+
 
 Get list of contracts : 
 Params: login, password
