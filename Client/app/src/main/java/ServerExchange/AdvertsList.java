@@ -36,7 +36,14 @@ public class AdvertsList {
         BY_DATE,
         BY_REWARD,
         BY_NAME,
+        BY_LOCATION
     }
+
+    public static enum FilterType{
+        BY_REWARD,
+        BY_LOCATION
+    }
+
     // Cортировка
     public ArrayList<Advert> getSortedBy(SortType type){
         ArrayList<Advert> sortedAdverts = new ArrayList();

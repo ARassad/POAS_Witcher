@@ -36,8 +36,13 @@ class AdvertsRequest extends ServerRequest < LinkedList<Advert>> {
     private HashMap<OrderType, String> ORDER_NAMES;
     private HashMap<SortType, String> SORT_NAMES;
 
-    public AdvertsRequest(String serverAdress) {
-        super(serverAdress);
+
+    private SortType sortType;
+    private OrderType orderType;
+    private FilterType filterType;
+    private String parameters[];
+
+    public AdvertsRequest(){
 
         FILTER_TYPE_NAMES.put(FilterType.BY_LOCATE, "locate");
         FILTER_TYPE_NAMES.put(FilterType.BY_REWARD, "bounty");
@@ -47,20 +52,68 @@ class AdvertsRequest extends ServerRequest < LinkedList<Advert>> {
 
         SORT_NAMES.put(SortType.BY_ALPHABET,    "alph");
         SORT_NAMES.put(SortType.BY_DATE,        "lastupdate");
-        //SORT_NAMES.put(SortType.BY_REWARD,      "bounty");
+        SORT_NAMES.put(SortType.BY_REWARD,      "bounty");
         SORT_NAMES.put(SortType.BY_LOCATE,      "locate");
+
     }
 
 
     @Override
     protected ServerMethod getMethod() {
-        return null;
+
+        HashMap<String, String> params = new HashMap<>();
+
+        if (sortType != null){
+            params.put("sort", SORT_NAMES.get(sortType));
+            params.put("order", ORDER_NAMES.get(orderType));
+        }
+        else if (filterType != null){
+            params.put("filter", FILTER_TYPE_NAMES.get(filterType));
+
+            if (filterType == FilterType.BY_REWARD){
+                params.put("min", this.parameters[0]);
+                params.put("max", this.parameters[1]);
+            }
+            else if (filterType == FilterType.BY_LOCATE){
+                params.put("kingdom", this.parameters[0]);
+                if (this.parameters.length > 1){
+                    params.put("town", this.parameters[1]);
+                }
+            }
+
+        }
+
+        this.sortType = null;
+        this.orderType = null;
+        this.filterType = null;
+        this.parameters = null;
+
+        return new ServerMethod(GETLIST_METHOD_NAME, params);
     }
 
     @Override
     protected Class<? extends JsonServerAnswer> getJsonAnswerClass() {
-        return null;
+        return JsonServerAnswer.class;
     }
 
+    public void getSortedBy (SortType sort, OrderType order, IServerAnswerHandler onGetListHandler ){
+        this.sortType = sort;
+        this.orderType = order;
+        startRequest(onGetListHandler);
+    }
 
+    public void getFilteredByReward (FilterType type, int min, int max, IServerAnswerHandler onGetListHandler){
+        this.filterType = type;
+        parameters[0] = String.valueOf(min);
+        parameters[1] = String.valueOf(max);
+        startRequest(onGetListHandler);
+    }
+
+    public void getFilteredByLocation (FilterType type, String kingdom, String town, IServerAnswerHandler onGetListHandler){
+        this.filterType = type;
+        parameters[0] = kingdom;
+        if (town != null)
+            parameters[1] = town;
+        startRequest(onGetListHandler);
+    }
 }
