@@ -32,7 +32,7 @@ def get_profile(cursor, params):
         obj.photo = row[3]
 
         cursor.execute(
-            "select b.text, b.create_date, b.[order] from Profile as a inner join Comment as b on a.id_list_comments = b.id_list_comment where a.id={}"
+            "select b.text, b.create_date, b.[order], b.id_list_comment from Profile as a inner join Comment as b on a.id_list_comments = b.id_list_comment where a.id={}"
                 .format(params[Profile.ID.value]))
 
         obj.commentsProfile = Object()
@@ -44,6 +44,14 @@ def get_profile(cursor, params):
             comm.text = line[0]
             comm.create_date = line[1]
             comm.order = line[2]
+
+            cursor.execute("select id, name from Profile where id_list_comments={}".format(line[3]))
+            prof = cursor.fetchone()
+            author = Object()
+            author.id = prof[0]
+            author.name = prof[1]
+
+            comm.author = author
             obj.commentsProfile.comments[len(obj.commentsProfile.comments)] = comm
 
     status.object = obj
