@@ -10,6 +10,7 @@ import time
 
 class EventAdvert(Enum):
     WitcherCreator = "AdvertActivityWitcher"
+    ClientAsWitcher = "ClientReplaceWitcher"
     AlienDelete = "AlienClientDeleteContract"
     Success = "Success"
 
@@ -65,6 +66,7 @@ def create_advert(cursor, params):
     status.object = obj
     return status.toJSON()
 
+
 def edit_advert(cursor, params):
     cursor.execute("select * from Client where id_profile=(select id_profile from Token_Table where token='{}')"
                    .format(params[User.Token.value]))
@@ -114,6 +116,7 @@ def edit_advert(cursor, params):
     status.object = obj
     return status.toJSON()
 
+
 def delete_advert(cursor, params):
     cursor.execute("select * from Client where id_profile=(select id_profile from Token_Table where token='{}')"
                    .format(params[User.Token.value]))
@@ -140,6 +143,7 @@ def delete_advert(cursor, params):
 
     status.object = obj
     return status.toJSON()
+
 
 def get_advert(cursor, params):
     cursor.execute("select * from Contract where id={}".format(params[Advert.ID.value]))
@@ -204,6 +208,29 @@ def get_advert(cursor, params):
         ph = Object()
         ph.photo = row[i][0]
         obj.photoContract.photo[len(obj.photoContract.photo)] = ph
+
+    status.object = obj
+    return status.toJSON()
+
+
+def add_witcher_in_contract(cursor, params):
+    cursor.execute("select * from Witcher where id_profile=(select id_profile from Token_Table where token='{}')"
+                   .format(params[User.Token.value]))
+    row = cursor.fetchone()
+
+    obj = Object()
+    status = Object()
+
+    if row is not None:
+        id_witcher = row[0]
+        status.status = Status.Ok.value
+        obj.message = EventAdvert.Success.value
+
+        cursor.execute("insert into Desired_Contract (id_witcher, id_contract) values({}, {})"
+                       .format(id_witcher, params[Advert.ID.value]))
+    else:
+        status.status = Status.Error.value
+        obj.message = EventAdvert.ClientAsWitcher.value
 
     status.object = obj
     return status.toJSON()

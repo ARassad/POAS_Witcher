@@ -9,6 +9,7 @@ from Server.Advert import create_advert
 from Server.Advert import edit_advert
 from Server.Advert import delete_advert
 from Server.Advert import get_advert
+from Server.Advert import add_witcher_in_contract
 from http.server import BaseHTTPRequestHandler
 from http.server import HTTPServer
 from cgi import parse_header
@@ -32,6 +33,7 @@ api_methods_post[ApiMethod.CreateAdvert.value] = create_advert
 api_methods_post[ApiMethod.EditAdvert.value] = edit_advert
 api_methods_get[ApiMethod.DeleteAdvert.value] = delete_advert
 api_methods_get[ApiMethod.GetAdvert.value] = get_advert
+api_methods_post[ApiMethod.AddWitcherInContract.value] = add_witcher_in_contract
 
 
 class HttpServer(BaseHTTPRequestHandler):
