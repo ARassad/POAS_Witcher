@@ -131,6 +131,13 @@ localhost/api/SelectWitcherInContract
 Возвращаемые данные:
 status: OK / Error
 
+Снять ведьмака в контракте:
+localhost/api/RefuseContract
+Отправляемые данные:
+{'token': 'md5', id_contract': int} json format
+Возвращаемые данные:
+status: OK / Error
+
 
 
 Get list of contracts : 

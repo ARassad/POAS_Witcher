@@ -14,6 +14,7 @@ from Server.Advert import get_profile_desired_contract
 from Server.Advert import write_comment_contract
 from Server.Witcher import select_witcher
 from Server.Witcher import answer_witcher
+from Server.Witcher import refuse_contract
 from http.server import BaseHTTPRequestHandler
 from http.server import HTTPServer
 from cgi import parse_header
@@ -42,7 +43,7 @@ api_methods_get[ApiMethod.GetWitcherDesiredContract.value] = get_profile_desired
 api_methods_post[ApiMethod.AddCommentContract.value] = write_comment_contract
 api_methods_post[ApiMethod.SelectWitcherInContract.value] = select_witcher
 api_methods_post[ApiMethod.AnswerWitcherInContract.value] = answer_witcher
-
+api_methods_post[ApiMethod.RefuseContract.value] = refuse_contract
 
 class HttpServer(BaseHTTPRequestHandler):
     def _set_headers(self):
