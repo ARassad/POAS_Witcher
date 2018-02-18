@@ -117,6 +117,10 @@ public abstract class ServerRequest <AnswerType> {
     abstract protected class JsonServerAnswer{
         public String status;
         public String message;
+        public boolean isStatusOk() {
+            return status == "OK";
+        }
+
 
         abstract public AnswerType convert();
     }

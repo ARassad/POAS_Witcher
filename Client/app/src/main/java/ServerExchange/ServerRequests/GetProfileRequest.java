@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class GetProfileRequest extends TokenServerRequest {
 
-    private String GETPROFILE_METHOD_NAME = "GetProfile";
+    private String GET_PROFILE_METHOD_NAME = "GetProfile";
 
     private long id;
 
@@ -21,7 +21,7 @@ public class GetProfileRequest extends TokenServerRequest {
         HashMap<String, String> params = new HashMap<>();
         params.put("id",String.valueOf(this.id));
 
-        return new ServerMethod(GETPROFILE_METHOD_NAME, params);
+        return new ServerMethod(GET_PROFILE_METHOD_NAME, params);
     }
 
     @Override

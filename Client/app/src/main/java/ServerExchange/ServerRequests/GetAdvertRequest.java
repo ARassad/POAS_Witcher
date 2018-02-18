@@ -11,22 +11,28 @@ import ServerExchange.Comment;
 
 public class GetAdvertRequest extends TokenServerRequest<Advert> {
 
+    private String GET_ADVERT_METHOD_NAME = "GetAdvert";
+
+    private long id;
+
     public GetAdvertRequest(String serverAddress) {
         super(serverAddress);
     }
 
     @Override
     protected ServerMethod getMethod() {
-        return null;
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id",String.valueOf(this.id));
+
+        return new ServerMethod(GET_ADVERT_METHOD_NAME, params);
     }
 
     @Override
     protected Class<? extends JsonServerAnswer> getJsonAnswerClass() {
-        return null;
+
+        return JsonServerAnswer.class;
     }
-
-
-
 
 
     class AdvertJsonServerAnswer extends JsonServerAnswer{
@@ -56,6 +62,11 @@ public class GetAdvertRequest extends TokenServerRequest<Advert> {
         public Advert convert() {
             return null;
         }
+    }
+
+    public void getAdvert(long id, IServerAnswerHandler onGetAdvertHandler){
+        this.id = id;
+        startRequest(onGetAdvertHandler);
     }
 
 }
