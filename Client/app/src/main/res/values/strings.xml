@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">Client</string>
+    <string name="app_name">iWitcher</string>
+    <string name="profile_name">Профиль</string>
+    <string name="auth_name">Авторизация</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -13,4 +15,18 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <!-- Strings related to profile -->
+    <string name="your_photo">Ваше фото</string>
+    <string name="your_name">Ваше имя</string>
+    <string name="role">Роль</string>
+    <string name="about_button">О себе</string>
+    <string name="advert_story_button">История объявлений</string>
+    <string name="comment_button">Комментарии</string>
+    <string name="about">Информация Информация Информация Информация Информация Информация</string>
+    <string name="comment">Введите свой комментарий</string>
+    <string name="table_date">Дата</string>
+    <string name="table_header">Заголовок</string>
+    <string name="table_status">Статус</string>
+    <string name="send_comment">Отправить комментарий</string>
 </resources>

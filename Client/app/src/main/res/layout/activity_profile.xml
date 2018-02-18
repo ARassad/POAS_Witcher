@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="prin366_2018.client.ProfileActivity">
+
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_toolbar"
+        android:background="#808080" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:id="@+id/scroll_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:id="@+id/full_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/image_about_form"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="120dp"
+                    android:layout_height="160dp"
+                    android:contentDescription="@string/your_photo"
+                    app:srcCompat="@android:drawable/ic_menu_camera" />
+
+                <LinearLayout
+                    android:id="@+id/name_role_form"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/text_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:gravity="start"
+                        android:text="@string/your_name"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/text_role"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginRight="20dp"
+                        android:gravity="end"
+                        android:singleLine="true"
+                        android:text="@string/role"
+                        android:textAlignment="textEnd"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/form_about"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/button_about"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_gravity="start"
+                    android:text="@string/about_button"
+                    android:textSize="16sp"
+                    android:background="@drawable/frame_button">
+                </Button>
+
+                <TextView
+                    android:id="@+id/text_about"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="#000000"
+                    android:padding="5dp"
+                    android:layout_margin="3dp"
+                    android:background="@drawable/frame_text_about"
+                    android:text="@string/about"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/form_advert_story"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/button_advert_story"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_gravity="start"
+                    android:text="@string/advert_story_button"
+                    android:textSize="16sp"
+                    android:background="@drawable/frame_button">
+                </Button>
+
+                <TableLayout
+                    android:id="@+id/table_advert_story"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:stretchColumns="*">
+
+                    <ProgressBar
+                        style="?android:attr/progressBarStyleLarge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:visibility="gone" />
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:textColor="#ffffff"
+                            android:textAlignment="center"
+                            android:background="@drawable/frame_table_header"
+                            android:text="@string/table_date"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:textColor="#ffffff"
+                            android:textAlignment="center"
+                            android:background="@drawable/frame_table_header"
+                            android:text="@string/table_header"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:textColor="#ffffff"
+                            android:textAlignment="center"
+                            android:background="@drawable/frame_table_header"
+                            android:text="@string/table_status"/>
+
+                    </TableRow>
+                </TableLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/form_comments"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/button_comments"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_gravity="start"
+                    android:textSize="16sp"
+                    android:text="@string/comment_button"
+                    android:background="@drawable/frame_button">
+                </Button>
+
+                <LinearLayout
+                    android:id="@+id/comment_form"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageButton
+                        android:id="@+id/imagebutton_send_comment"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center"
+                        android:background="@android:drawable/sym_action_email"
+                        android:contentDescription="@string/send_comment" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/text_comment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="@string/comment"
+                            android:inputType="textMultiLine" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
