@@ -1,7 +1,7 @@
-from Server.Objects import Status
-from Server.Objects import Object
-from Server.Objects import User
-from Server.Objects import Comment
+from Objects import Status
+from Objects import Object
+from Objects import User
+from Objects import Comment
 from enum import Enum
 import time
 

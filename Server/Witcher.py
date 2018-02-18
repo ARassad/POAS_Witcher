@@ -1,7 +1,7 @@
-from Server.Objects import Object
-from Server.Objects import Status
-from Server.Advert import Advert
-from Server.Profile import User
+from Objects import Object
+from Objects import Status
+from Advert import Advert
+from Profile import User
 from enum import Enum
 Advert.IDpost = "id_contract"
 
