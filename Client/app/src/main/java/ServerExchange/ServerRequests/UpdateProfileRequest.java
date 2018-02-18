@@ -7,6 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
+import ServerExchange.ImageConvert;
 import ServerExchange.Password;
 
 /**
@@ -67,11 +68,7 @@ public class UpdateProfileRequest extends TokenServerRequest {
     public void updateProfile(String name, String text, Bitmap photo, IServerAnswerHandler onUpdateProfileHandler) throws IOException {
         this.name = name;
         this.text = text;
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        photo.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream .toByteArray();
-        this.photo  = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        this.photo  = ImageConvert.toBase64Str(photo);
 
         startRequest(onUpdateProfileHandler);
     }
