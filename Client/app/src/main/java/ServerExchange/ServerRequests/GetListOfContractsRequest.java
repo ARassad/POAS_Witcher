@@ -52,7 +52,7 @@ public class GetListOfContractsRequest extends ServerRequest<Boolean> {
             params.put("sort", "alph");
             params.put("sortype", this.parameters[0]);
         }
-        else if (sortType == BY_LOCATION){
+        else if (sortType == AdvertsList.SortType.BY_LOCATION){
             params.put("sort", "alph");
             params.put("sortype", this.parameters[0]);
         }
@@ -75,7 +75,7 @@ public class GetListOfContractsRequest extends ServerRequest<Boolean> {
 
     @Override
     protected Class<? extends JsonServerAnswer> getJsonAnswerClass() {
-        return JsonServerAnswer.class;
+        return GetListJsonServeAnswer.class;
     }
 
 }
