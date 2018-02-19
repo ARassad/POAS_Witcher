@@ -1,7 +1,7 @@
-from Objects import User
-from Objects import Object
-from Objects import Status
-from Profile import Comment
+from Server.Objects import User
+from Server.Objects import Object
+from Server.Objects import Status
+from Server.Profile import Comment
 from enum import Enum
 import time
 # status: 0 - in_search
@@ -37,9 +37,11 @@ def create_advert(cursor, params):
 
     if row is not None:
         id_client = row[1]
+
         cursor.execute("insert into List_Comments (empty) values(null)")
         cursor.execute("select max(id) from List_Comments")
         id_lcomment = cursor.fetchone()[0]
+
         cursor.execute("insert into List_Photos (empty) values(null)")
         cursor.execute("select max(id) from List_Photos")
         id_lphoto = cursor.fetchone()[0]
@@ -50,8 +52,10 @@ def create_advert(cursor, params):
                 cursor.execute("insert into Photo (id_list_photos, photo) values({}, '{}')"
                                .format(id_lphoto, photo))
 
-        cur_time = time.time().__int__()
-        cursor.execute("insert into Contract (id_witcher, id_client, id_list_comments, id_task_located, id_list_photos, text, bounty, status, last_update_status, last_update) values(null, {}, {}, {}, {}, N'{}', {}, {}, {}, {})"
+        cur_time = int(time.time())
+        cursor.execute("insert into Contract (id_witcher, id_client, id_list_comments, id_task_located, \
+                        id_list_photos, text, bounty, status, last_update_status, last_update) \
+                         values(null, {}, {}, {}, {}, N'{}', {}, {}, {}, {})"
                        .format(id_client, id_lcomment, params[Advert.TaskLocated.value], id_lphoto,
                                params[Advert.Text.value], params[Advert.Bounty.value], 0, cur_time, cur_time))
 
@@ -80,7 +84,7 @@ def edit_advert(cursor, params):
         cursor.execute("select * from Contract where id={}".format(params[Advert.ID.value]))
         row = cursor.fetchone()
         update_string = ""
-        last_update = time.time().__int__()
+        last_update = int(time.time())
         id_lphoto = row[5]
 
         if params.get(Advert.Witcher.value, None) is not None:
@@ -180,18 +184,6 @@ def get_advert(cursor, params):
     client.name = row[1]
     status.client = client
 
-    #cursor.execute("select b.text, b.create_date from Contract as a inner join Comment as b on a.id_list_comments = b.id_list_comment where a.id={}"
-    #               .format(id_list_comments))
-    #row = cursor.fetchall()
-    #obj.commentsContract = Object()
-    #obj.commentsContract.comments = {}
-    #obj.commentsContract.count = len(row)
-    #for line in row:
-    #    comm = Object()
-    #    comm.text = line[0]
-    #    comm.create_date = line[1]
-    #    obj.commentsContract.comments[len(obj.commentsContract.comments)] = comm
-
     cursor.execute("select a.name, b.name from Town as a inner join Kingdom as b on a.id_kingdom=b.id where a.id={}"
                    .format(id_task_located))
     row = cursor.fetchone()
@@ -238,8 +230,9 @@ def add_witcher_in_contract(cursor, params):
 
 
 def get_profile_desired_contract(cursor, params):
-    cursor.execute("select d.id, d.name from Contract as a inner join Desired_Contract as b on a.id=b.id_contract inner join Witcher as c on b.id_witcher=c.id inner join Profile as d on c.id_profile=d.id where a.id={}"
-                   .format(params[Advert.ID.value]))
+    cursor.execute("select d.id, d.name from Contract as a inner join Desired_Contract as b on a.id=b.id_contract \
+                    inner join Witcher as c on b.id_witcher=c.id inner \
+                    join Profile as d on c.id_profile=d.id where a.id={}".format(params[Advert.ID.value]))
     rows = cursor.fetchall()
 
     status = Object()
@@ -264,9 +257,8 @@ def write_comment_contract(cursor, params):
     cursor.execute("select id_list_comments from Contract where id={}".format(params[Advert.ID.value]))
     id_lcomment = cursor.fetchone()[0]
 
-    cursor.execute("insert into Comment (id_list_comment, text, [order], create_date) values({}, N'{}', {}, {})"
-                   .format(id_lcomment, params[Comment.TextComment.value],
-                           params[Comment.OrderID.value], time.time().__int__()))
+    cursor.execute("insert into Comment (id_list_comment, text, create_date) values({}, N'{}', {})"
+                   .format(id_lcomment, params[Comment.TextComment.value], int(time.time())))
 
     status = Object()
     status.status = Status.Ok.value

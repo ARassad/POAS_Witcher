@@ -31,7 +31,7 @@ public class GetAdvertRequest extends TokenServerRequest<Advert> {
     @Override
     protected Class<? extends JsonServerAnswer> getJsonAnswerClass() {
 
-        return JsonServerAnswer.class;
+        return AdvertJsonServerAnswer.class;
     }
 
 
