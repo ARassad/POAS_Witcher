@@ -12,6 +12,8 @@ class Profile(Enum):
     Photo = "photo"
     About = "about"
     Password = "password"
+    Witcher = "witcher"
+    Client = "client"
 
 
 def get_profile(cursor, params):
@@ -35,6 +37,7 @@ def get_profile(cursor, params):
         row = cursor.fetchone()
 
         if row is not None:
+            obj.type = Profile.Witcher.value
             cursor.execute("select c.id, c.id_witcher, c.id_client, c.header, c.status, c.last_update,  \
                             c.last_update_status from Profile as a inner join Witcher as b on a.id=b.id_profile \
                             inner join Contract as c on c.id_witcher=b.id where b.id={}".format(row[0]))
@@ -55,6 +58,7 @@ def get_profile(cursor, params):
                 obj.history.contract[len(obj.history.contract)] = hist
 
         else:
+            obj.type = Profile.Client.value
             cursor.execute("select id from Client where id_profile={}"
                            .format(obj.id))
             row = cursor.fetchone()
