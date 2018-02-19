@@ -52,7 +52,7 @@ def get_list_contracts(cursor, params):
             if min is None or max is None:
                 status.status = Status.Error.value
                 obj.value = "ERROR:{}{}".format(EventGetListContracts.MinParamMiss if min is None else "",
-                                                EventGetListContracts.MaxParamMiss if max is None else "").value
+                                                EventGetListContracts.MaxParamMiss if max is None else "")
             else:
                 req += " Bounty > {} and Bounty < {}".format(min, max)
 
@@ -98,15 +98,24 @@ def get_list_contracts(cursor, params):
         cursor.execute(req)
         contracts = cursor.fetchall()
 
-        cursor.execute("select name from sys.columns where object_id = OBJECT_ID('dbo.Contract')")
-        headers = cursor.fetchall()
-
         obj.contracts = {}
-        for i in range(len(headers)):
-            head = str(headers[i])[2:-4]
-            obj.contracts[head] = []
-            for j in range(len(contracts)):
-                obj.contracts[head].append(contracts[j][i])
+        for n, i in enumerate(contracts):
+            contr = Object()
+
+            contr.id = i[0]
+            contr.id_witcher = i[1]
+            contr.id_client = i[2]
+            contr.id_list_comments = i[3]
+            contr.id_task_located = i[4]
+            contr.id_list_photos = i[5]
+            contr.text = i[6]
+            contr.bounty = i[7]
+            contr.status = i[8]
+            contr.last_update_status = i[9]
+            contr.last_update = i[10]
+            contr.header = i[11]
+
+            obj.contracts[n] = contr
 
     status.object = obj
     return status.toJSON()

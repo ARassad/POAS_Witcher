@@ -15,9 +15,6 @@ public class Comment {
 
     private long id;
 
-    private long order;
-    public long getOrder(){ return order;}
-
     private String text;
     public String getText(){
         return text;
@@ -32,9 +29,8 @@ public class Comment {
         return dateOfCreate;
     }
 
-    public Comment(long id, long order, String text, long id_author, Date dateOfCreate) {
+    public Comment(long id, String text, long id_author, Date dateOfCreate) {
         this.id = id;
-        this.order = order;
         this.text = text;
         //this.author = author;
         this.id_author = id_author;
