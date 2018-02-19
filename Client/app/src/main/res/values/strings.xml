@@ -2,6 +2,8 @@
     <string name="app_name">iWitcher</string>
     <string name="profile_name">Профиль</string>
     <string name="auth_name">Авторизация</string>
+    <string name="menu">Меню</string>
+    <string name="edit">Редактировать</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

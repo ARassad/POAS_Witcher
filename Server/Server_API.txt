@@ -40,7 +40,6 @@ object:
         count - количество профилей
         comments - словарь профилей
             create_date
-            order
             text - в unicode кодировке
 
 Обновить профиль:
@@ -54,7 +53,7 @@ status: OK / Error
 Оставить комментарий к профилю:
 localhost/api/AddCommentProfile
 Отправляемые данные:
-{'token': 'md5', 'text': 'text', 'order': int, 'id': int} json format
+{'token': 'md5', 'text': 'text', 'id': int} json format
 Возвращаемые данные:
 status: OK / Error
 
@@ -112,7 +111,7 @@ object
 Оставить комментарий к профилю:
 localhost/api/AddCommentContract
 Отправляемые данные:
-{'token': 'md5', 'text': 'text', 'order': int, 'id': int} json format
+{'token': 'md5', 'text': 'text', 'id': int} json format
 Возвращаемые данные:
 status: OK / Error
 

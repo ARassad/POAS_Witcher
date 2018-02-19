@@ -257,9 +257,8 @@ def write_comment_contract(cursor, params):
     cursor.execute("select id_list_comments from Contract where id={}".format(params[Advert.ID.value]))
     id_lcomment = cursor.fetchone()[0]
 
-    cursor.execute("insert into Comment (id_list_comment, text, [order], create_date) values({}, N'{}', {}, {})"
-                   .format(id_lcomment, params[Comment.TextComment.value],
-                           params[Comment.OrderID.value], int(time.time())))
+    cursor.execute("insert into Comment (id_list_comment, text, create_date) values({}, N'{}', {})"
+                   .format(id_lcomment, params[Comment.TextComment.value], int(time.time())))
 
     status = Object()
     status.status = Status.Ok.value
