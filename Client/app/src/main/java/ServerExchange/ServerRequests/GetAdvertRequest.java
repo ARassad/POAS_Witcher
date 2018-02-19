@@ -37,26 +37,40 @@ public class GetAdvertRequest extends TokenServerRequest<Advert> {
 
     class AdvertJsonServerAnswer extends JsonServerAnswer{
 
-        class CommentsProfilesJson{
-            String count;
-            HashMap<String, CommentJson> commentsProfile;
-
-            class CommentJson{
-                String create_date;
-                String order;
-                String text;
-                //Comment convert(){
-                    //Comment com = new Comment()
-                //}
-
-            }
+        public class ClientJson{
+            public long id;
+            public String name;
         }
+        public ClientJson client;
 
-        public String about;
-        public String id;
-        public String name;
-        public String photo;
-        CommentsProfilesJson commentsProfile;
+        public class AdvertJson{
+            public long bounty;
+            class Comments{
+                public long count;
+                public long comments[];
+            }
+            public Comments commentsContract;
+
+            public long id;
+            public String kingdom;
+            public long last_update;
+            public long last_update_status;
+
+            public class PhotosJson{
+                public long count;
+                public long photo[];
+            }
+            public PhotosJson photoContact;
+            public int status;
+            public String town;
+        }
+        public AdvertJson object;
+
+        public class WitcherJson{
+            public long id;
+            public String name;
+        }
+        public WitcherJson witcher;
 
         @Override
         public Advert convert() {
