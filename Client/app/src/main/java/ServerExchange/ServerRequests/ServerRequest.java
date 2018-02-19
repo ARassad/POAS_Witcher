@@ -84,8 +84,8 @@ public abstract class ServerRequest <AnswerType> {
 
 
 
-    protected HashMap<String,String> basicMethodParams(){
-        HashMap<String,String> namesAndParams = new HashMap<String,String>();
+    protected HashMap<String,Object> basicMethodParams(){
+        HashMap<String, Object> namesAndParams = new HashMap<>();
         return namesAndParams;
     }
 
@@ -101,14 +101,22 @@ public abstract class ServerRequest <AnswerType> {
 
     protected class ServerMethod{
         String methodName;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, Object> params = new HashMap<>();
 
-        
-        public ServerMethod( String methodName, HashMap<String,String> methodParams){
+
+        public ServerMethod( String methodName, HashMap<String, ? extends Object> methodParams){
             this.methodName = methodName;
             params.putAll(basicMethodParams());
             params.putAll(methodParams);
         }
+
+        /*
+        public ServerMethod( String methodName, HashMap<String, String> methodParams){
+            this.methodName = methodName;
+            params.putAll(basicMethodParams());
+            params.putAll(methodParams);
+        }
+        */
     }
 
     abstract protected ServerMethod getMethod();
