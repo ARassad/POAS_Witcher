@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import ServerExchange.Advert;
-import ServerExchange.AdvertsList;
 import ServerExchange.Location;
 
 /**
