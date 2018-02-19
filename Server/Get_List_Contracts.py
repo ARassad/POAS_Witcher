@@ -1,4 +1,4 @@
-from Objects import Object, Status
+from Server.Objects import Object, Status
 from enum import Enum
 
 
@@ -10,6 +10,7 @@ class EventGetListContracts(Enum):
     TownParamMiss = "townParamMissing"
     FilterLocateErr = "MissingTownandKingdomParams"
     SortErr = "ParamsSortError"
+
 
 class Params:
 

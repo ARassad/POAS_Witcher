@@ -1,7 +1,7 @@
-from Objects import Status
-from Objects import Object
-from Objects import User
-from Objects import Comment
+from Server.Objects import Status
+from Server.Objects import Object
+from Server.Objects import User
+from Server.Objects import Comment
 from enum import Enum
 import time
 
@@ -16,8 +16,8 @@ class Profile(Enum):
 
 def get_profile(cursor, params):
     cursor.execute(
-        "select a.id, a.name, a.about, b.photo from Profile as a left join Photo as b on a.id_photo = b.id where a.id={}"
-            .format(params[Profile.ID.value]))
+        "select a.id, a.name, a.about, b.photo from Profile as a left \
+          join Photo as b on a.id_photo = b.id where a.id={}".format(params[Profile.ID.value]))
     row = cursor.fetchone()
 
     status = Object()
@@ -31,36 +31,13 @@ def get_profile(cursor, params):
         obj.about = row[2]
         obj.photo = row[3]
 
-        cursor.execute(
-            "select b.text, b.create_date, b.[order], b.id_list_comment from Profile as a inner join Comment as b on a.id_list_comments = b.id_list_comment where a.id={}"
-                .format(params[Profile.ID.value]))
-
-        #obj.commentsProfile = Object()
-        #row = cursor.fetchall()
-        #obj.commentsProfile.comments = {}
-        #obj.commentsProfile.count = len(row)
-        #or line in row:
-        #    comm = Object()
-        #    comm.text = line[0]
-        #    comm.create_date = line[1]
-        #    comm.order = line[2]
-
-        #    cursor.execute("select id, name from Profile where id_list_comments={}".format(line[3]))
-        #    prof = cursor.fetchone()
-        #    author = Object()
-        #    author.id = prof[0]
-        #    author.name = prof[1]#z
-
-        #    comm.author = author
-        #    obj.commentsProfile.comments[len(obj.commentsProfile.comments)] = comm
-
-        cursor.execute("select id from Witcher where id_profile={}"
-                       .format(obj.id))
+        cursor.execute("select id from Witcher where id_profile={}".format(obj.id))
         row = cursor.fetchone()
 
         if row is not None:
-            cursor.execute("select c.id, c.id_witcher, c.id_client, c.header, c.status, c.last_update, c.last_update_status from Profile as a inner join Witcher as b on a.id=b.id_profile inner join Contract as c on c.id_witcher=b.id where b.id={}"
-                           .format(row[0]))
+            cursor.execute("select c.id, c.id_witcher, c.id_client, c.header, c.status, c.last_update,  \
+                            c.last_update_status from Profile as a inner join Witcher as b on a.id=b.id_profile \
+                            inner join Contract as c on c.id_witcher=b.id where b.id={}".format(row[0]))
             row = cursor.fetchall()
             obj.history = Object()
             obj.history.count = len(row)
@@ -83,7 +60,9 @@ def get_profile(cursor, params):
             row = cursor.fetchone()
 
             cursor.execute(
-                "select c.id, c.id_witcher, c.id_client, c.header, c.status, c.last_update, c.last_update_status from Profile as a inner join Client as b on a.id=b.id_profile inner join Contract as c on c.id_witcher=b.id where b.id={}"
+                "select c.id, c.id_witcher, c.id_client, c.header, c.status, c.last_update, c.last_update_status \
+                from Profile as a inner join Client as b on a.id=b.id_profile \
+                inner join Contract as c on c.id_witcher=b.id where b.id={}"
                 .format(row[0]))
             row = cursor.fetchall()
             obj.history = Object()
@@ -126,7 +105,8 @@ def update_profile(cursor, params):
 
     if params.get(Profile.Photo.value, None) is not None:
         if id_photo is None:
-            cursor.execute("insert into Photo (id_list_photos, photo) values(null, {})".format(params[Profile.Photo.value]))
+            cursor.execute("insert into Photo (id_list_photos, photo) values(null, {})"
+                           .format(params[Profile.Photo.value]))
             cursor.execute("select max(id) from Photo")
             id_photo = cursor.fetchone()[0]
             cursor.execute("update Profile set id_photo={} where id={}".format(id_photo, id_prof))
@@ -134,7 +114,8 @@ def update_profile(cursor, params):
             cursor.execute("update Photo set photo={} where id={}".format(params[Profile.Photo.value], id_photo))
 
     if params.get(Profile.Password.value, None) is not None:
-        cursor.execute("update Authorization_info set password={} where id={}".format(params[Profile.Password.value], id_auth))
+        cursor.execute("update Authorization_info set password={} where id={}".format(params[Profile.Password.value],
+                                                                                      id_auth))
 
     status = Object()
     status.status = Status.Ok.value
@@ -148,7 +129,7 @@ def write_comment_profile(cursor, params):
 
     cursor.execute("insert into Comment (id_list_comment, text, [order], create_date) values({}, N'{}', {}, {})"
                    .format(id_lcomment, params[Comment.TextComment.value],
-                           params[Comment.OrderID.value], time.time().__int__()))
+                           params[Comment.OrderID.value], int(time.time())))
 
     status = Object()
     status.status = Status.Ok.value
