@@ -16,7 +16,12 @@ public class UpdateAdvertRequest extends TokenServerRequest {
 
     private String name;
     private String text;
-    private ArrayList<Base64> photo = new ArrayList();
+    private String id;
+    private String id_witcher;
+    private String status;
+    private String id_task_located;
+    private String bounty;
+    private String photo_del;
 
     public UpdateAdvertRequest(String address) {super(address);}
 
@@ -47,15 +52,12 @@ public class UpdateAdvertRequest extends TokenServerRequest {
 
     @Override
     protected Class<? extends JsonServerAnswer> getJsonAnswerClass() {
-
-
-        return JsonServerAnswer.class;
+        return JsonUpdateAdvertServerAnswer.class;
     }
 
-    public void updateAdvert(String name, String text, ArrayList<Base64> photo, IServerAnswerHandler onUpdateAdvertHandler) throws IOException {
+    public void updateAdvert(String name, String text, IServerAnswerHandler onUpdateAdvertHandler) throws IOException {
         this.name = name;
         this.text = text;
-        this.photo = photo;
         startRequest(onUpdateAdvertHandler);
     }
 }
