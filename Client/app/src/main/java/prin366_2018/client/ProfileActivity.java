@@ -1,5 +1,6 @@
 package prin366_2018.client;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +35,14 @@ public class ProfileActivity extends AppCompatActivity {
         Button buttonEdit = (Button)findViewById(R.id.button_edit);
         buttonEdit.setTypeface(typeface);
         buttonEdit.setText("\uf303");
+
+        buttonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setButton(Button button, final View v) {
