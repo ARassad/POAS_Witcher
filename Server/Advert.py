@@ -180,17 +180,17 @@ def get_advert(cursor, params):
     client.name = row[1]
     status.client = client
 
-    cursor.execute("select b.text, b.create_date from Contract as a inner join Comment as b on a.id_list_comments = b.id_list_comment where a.id={}"
-                   .format(id_list_comments))
-    row = cursor.fetchall()
-    obj.commentsContract = Object()
-    obj.commentsContract.comments = {}
-    obj.commentsContract.count = len(row)
-    for line in row:
-        comm = Object()
-        comm.text = line[0]
-        comm.create_date = line[1]
-        obj.commentsContract.comments[len(obj.commentsContract.comments)] = comm
+    #cursor.execute("select b.text, b.create_date from Contract as a inner join Comment as b on a.id_list_comments = b.id_list_comment where a.id={}"
+    #               .format(id_list_comments))
+    #row = cursor.fetchall()
+    #obj.commentsContract = Object()
+    #obj.commentsContract.comments = {}
+    #obj.commentsContract.count = len(row)
+    #for line in row:
+    #    comm = Object()
+    #    comm.text = line[0]
+    #    comm.create_date = line[1]
+    #    obj.commentsContract.comments[len(obj.commentsContract.comments)] = comm
 
     cursor.execute("select a.name, b.name from Town as a inner join Kingdom as b on a.id_kingdom=b.id where a.id={}"
                    .format(id_task_located))

@@ -35,24 +35,24 @@ def get_profile(cursor, params):
             "select b.text, b.create_date, b.[order], b.id_list_comment from Profile as a inner join Comment as b on a.id_list_comments = b.id_list_comment where a.id={}"
                 .format(params[Profile.ID.value]))
 
-        obj.commentsProfile = Object()
-        row = cursor.fetchall()
-        obj.commentsProfile.comments = {}
-        obj.commentsProfile.count = len(row)
-        for line in row:
-            comm = Object()
-            comm.text = line[0]
-            comm.create_date = line[1]
-            comm.order = line[2]
+        #obj.commentsProfile = Object()
+        #row = cursor.fetchall()
+        #obj.commentsProfile.comments = {}
+        #obj.commentsProfile.count = len(row)
+        #or line in row:
+        #    comm = Object()
+        #    comm.text = line[0]
+        #    comm.create_date = line[1]
+        #    comm.order = line[2]
 
-            cursor.execute("select id, name from Profile where id_list_comments={}".format(line[3]))
-            prof = cursor.fetchone()
-            author = Object()
-            author.id = prof[0]
-            author.name = prof[1]
+        #    cursor.execute("select id, name from Profile where id_list_comments={}".format(line[3]))
+        #    prof = cursor.fetchone()
+        #    author = Object()
+        #    author.id = prof[0]
+        #    author.name = prof[1]#z
 
-            comm.author = author
-            obj.commentsProfile.comments[len(obj.commentsProfile.comments)] = comm
+        #    comm.author = author
+        #    obj.commentsProfile.comments[len(obj.commentsProfile.comments)] = comm
 
         cursor.execute("select id from Witcher where id_profile={}"
                        .format(obj.id))
