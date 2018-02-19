@@ -28,7 +28,6 @@ class ApiMethod(Enum):
 
 class Comment(Enum):
     TextComment = "text"
-    OrderID = "order"
 
 
 class ErrorMessage(Enum):
