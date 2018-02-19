@@ -11,12 +11,18 @@ package ServerExchange;
  */
 public class Location {
     String kingdom;
-    String getKingdom(){
+    public String getKingdom(){
         return kingdom;
     }
     
     String city;
-    String getCity(){
+    public String getCity(){
         return city;
     }
+
+    public Location(String kingdom, String city){
+        this.kingdom = kingdom;
+        this.city = city;
+    }
+
 }
