@@ -5,6 +5,8 @@
  */
 package ServerExchange;
 
+import android.graphics.Bitmap;
+
 import java.util.Date;
 
 /**
@@ -28,6 +30,17 @@ public class Comment {
     public Date getDateOfCreate(){
         return dateOfCreate;
     }
+
+    private Bitmap authorAvatar;
+    public Bitmap getAuthorAvatar(){
+        return authorAvatar;
+    }
+
+    private String authorName;
+    public String getAuthorNmae(){
+        return authorName;
+    }
+
 
     public Comment(long id, String text, long id_author, Date dateOfCreate) {
         this.id = id;
