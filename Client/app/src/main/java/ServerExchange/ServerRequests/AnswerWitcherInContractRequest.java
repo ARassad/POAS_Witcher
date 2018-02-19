@@ -10,7 +10,10 @@ import java.util.HashMap;
 
 public class AnswerWitcherInContractRequest extends TokenServerRequest {
 
-    private String ANSWER_WITCHER_IN_CONTRACT_METHOD_NAME = "AnswerWitcherInContract";
+    @Override
+    protected RequestType getRequestType(){ return RequestType.POST; }
+	
+	private String ANSWER_WITCHER_IN_CONTRACT_METHOD_NAME = "AnswerWitcherInContract";
 
     private int status;
     private long id_contract;

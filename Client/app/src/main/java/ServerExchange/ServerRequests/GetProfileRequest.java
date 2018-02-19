@@ -9,7 +9,10 @@ import java.util.HashMap;
 
 public class GetProfileRequest extends TokenServerRequest {
 
-    private String GET_PROFILE_METHOD_NAME = "GetProfile";
+   @Override
+    protected RequestType getRequestType(){ return RequestType.GET; }
+	
+	private String GET_PROFILE_METHOD_NAME = "GetProfile";
 
     private long id;
 

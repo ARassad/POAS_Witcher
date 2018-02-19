@@ -10,7 +10,10 @@ import java.util.HashMap;
 
 public class RefuseContractRequest extends TokenServerRequest {
 
-    private String REFUSE_CONTRACT_METHOD_NAME = "RefuseContract";
+    @Override
+    protected RequestType getRequestType(){ return RequestType.POST; }
+	
+	private String REFUSE_CONTRACT_METHOD_NAME = "RefuseContract";
 
     private long id_contract;
 

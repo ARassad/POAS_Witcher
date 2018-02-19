@@ -11,7 +11,10 @@ import ServerExchange.Comment;
 
 public class GetAdvertRequest extends TokenServerRequest<Advert> {
 
-    private String GET_ADVERT_METHOD_NAME = "GetAdvert";
+    @Override
+    protected RequestType getRequestType(){ return RequestType.GET; }
+	
+	private String GET_ADVERT_METHOD_NAME = "GetAdvert";
 
     private long id;
 

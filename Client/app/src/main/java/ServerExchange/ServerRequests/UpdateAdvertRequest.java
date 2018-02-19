@@ -12,7 +12,10 @@ import java.util.HashMap;
 
 public class UpdateAdvertRequest extends TokenServerRequest {
 
-    private String UPDATE_ADVERT_METHOD_NAME = "EditAdvert";
+    @Override
+    protected RequestType getRequestType(){ return RequestType.POST; }
+	
+	private String UPDATE_ADVERT_METHOD_NAME = "EditAdvert";
 
     private String name;
     private String text;

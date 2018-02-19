@@ -12,7 +12,10 @@ import ServerExchange.Profile;
 
 public class AuthorizationRequest extends LoginRequest<Boolean>{
 
-    public AuthorizationRequest() {
+    @Override
+    protected RequestType getRequestType(){ return RequestType.POST; }
+	
+	public AuthorizationRequest() {
         super();
     }
 
