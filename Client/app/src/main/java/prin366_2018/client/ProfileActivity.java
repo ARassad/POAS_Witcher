@@ -34,7 +34,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         Button buttonEdit = (Button)findViewById(R.id.button_edit);
         buttonEdit.setTypeface(typeface);
-        buttonEdit.setText("\uf303");
+        buttonEdit.setText("\uf044");
+
+        Button buttonSendComment = (Button)findViewById(R.id.imagebutton_send_comment);
+        buttonSendComment.setTypeface(typeface);
+        buttonSendComment.setText("\uf1d8");
 
         buttonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,6 +47,11 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
     }
 
     private void setButton(Button button, final View v) {
