@@ -52,7 +52,7 @@ def get_list_contracts(cursor, params):
             if min is None or max is None:
                 status.status = Status.Error.value
                 obj.value = "ERROR:{}{}".format(EventGetListContracts.MinParamMiss if min is None else "",
-                                                EventGetListContracts.MaxParamMiss if max is None else "").value
+                                                EventGetListContracts.MaxParamMiss if max is None else "")
             else:
                 req += " Bounty > {} and Bounty < {}".format(min, max)
 
