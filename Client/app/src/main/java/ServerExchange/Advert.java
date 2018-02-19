@@ -17,29 +17,29 @@ import java.util.LinkedList;
  */
 public class Advert implements ICommented {
     
-    long id;
+    private long id;
     public long getId(){
         return id;
     }
     
-    String name;
+    private String name;
     public String getName(){
         return name;
     }
-    void setName(String name){
+    public void setName(String name){
         this.name = name;
     }
     
-    String info;
+    private String info;
     public String getInfo(){
         return info;
     }
-    void setInfo(String info){
+    public void setInfo(String info){
         this.info = info;
     }
     
     public final static int MAX_IMAGES = 10;
-    LinkedList <Bitmap> images;
+    private LinkedList <Bitmap> images;
     public ArrayList<Bitmap> getImages(){
 
         ArrayList<Bitmap> imgs = new ArrayList<>();
@@ -48,7 +48,7 @@ public class Advert implements ICommented {
         }
         return imgs;
     }
-    ArrayList<Bitmap> addImage(Bitmap img, int index){
+    public ArrayList<Bitmap> addImage(Bitmap img, int index){
         if (images.size() >= MAX_IMAGES){
             throw new RuntimeException("Не пихайте больше " + MAX_IMAGES + " картинок");
         }
@@ -58,21 +58,21 @@ public class Advert implements ICommented {
         return getImages();
     }
 
-    ArrayList<Bitmap> addImage(Bitmap img){
+    public ArrayList<Bitmap> addImage(Bitmap img){
 
         return addImage(img, images.size());
         //this.images.addLast(img);
     }
     
-    void removeImage(int index){
+    public void removeImage(int index){
     
     }
     
-    Location location;
+    private Location location;
     public Location getLovation(){
         return location;
     }
-    void setLocation(Location loc){
+    public void setLocation(Location loc){
         this.location = loc;
     }
     
@@ -84,36 +84,31 @@ public class Advert implements ICommented {
         this.reward = reward;
     }
     
-    Profile author;
-    public Profile getAuthor(){
-        return author;
+    //Profile author;
+    private long id_author;
+    public long getAuthorId(){
+        return id_author;
     }
     
-    LinkedList<Profile> subscribedWitchers;
-    public ArrayList<Profile> getSubscribedWitchers(){
-        return new ArrayList<>(subscribedWitchers);
+    private LinkedList<Long> idSubscribedWitchersList;
+    public ArrayList<Long> getIdSubscribedWitchersList(){
+        return new ArrayList<>(idSubscribedWitchersList);
     }
-    public ArrayList<Profile> addSubscribedWitcher( Profile witcher){
-        if ( witcher.getType() != Profile.ProfileType.WITCHER){
-           throw new RuntimeException("Попытка подписать на объявление не Ведьмака");
-        }
-        return getSubscribedWitchers();
+    public ArrayList<Long> addIdSubscribedWitcher( long id_witcher){
+        idSubscribedWitchersList.add(id_witcher);
+        return getIdSubscribedWitchersList();
     }
     
-    Profile executor;
-    public void setExecutor( Profile witcher){
-        if ( witcher.getType() != Profile.ProfileType.WITCHER){
-            throw new RuntimeException("Попытка назначить исполнителем не Ведьмака");
-        }
-        if ( ! subscribedWitchers.contains(witcher)){
-            throw new RuntimeException("Попытка назначить на исполнение Ведьмака, не отликнувшегося на это объявление");
-        }
-        
-        executor = witcher;
-        
+    //Profile executor;
+    private long id_executor;
+
+    public void setExecutorId( long id_witcher){
+        id_executor = id_witcher;
+    }
+    public long getExecutorId(){
+        return id_executor;
     }
 
-    
     public static enum AdvertStatus{
         FREE,
         ASSIGNED_WITCHER,
@@ -123,27 +118,28 @@ public class Advert implements ICommented {
         CUSTOMER_REFUSED;
     };
     
-    AdvertStatus status;
+    private AdvertStatus status;
     public AdvertStatus getStatus(){
         return status;
     }
     
-    Date dateOfCreate;
+    private Date dateOfCreate;
     public Date getDateOfCreate() {
         return dateOfCreate;
     }
 
-    public Advert(String name, String info, Location location, int reward, Profile author, Profile executor, AdvertStatus status, Date dateOfCreate) {
+    public Advert(String name, String info, Location location, int reward, long id_author,
+                  AdvertStatus status, Date dateOfCreate) {
         this.name = name;
         this.info = info;
         this.location = location;
         this.reward = reward;
-        this.author = author;
+        this.id_author = id_author;
         this.status = AdvertStatus.FREE;
         this.dateOfCreate = dateOfCreate;
     }
     
-    CommentsContainer comments;
+    private CommentsContainer comments;
     @Override
     public ArrayList<Comment> getComments() {
         return comments.getComments();
@@ -153,16 +149,18 @@ public class Advert implements ICommented {
         return comments.addComment(com);
     }
 
-    Advert(long id, String name, String info, LinkedList<Bitmap> images, Location location, int reward, Profile author, LinkedList<Profile> subscribedWitchers, Profile executor, AdvertStatus status, Date dateOfCreate, CommentsContainer comments) {
+    public Advert(long id, String name, String info, LinkedList<Bitmap> images, Location location, int reward,
+                  long id_author, LinkedList<Long> idSubscribedWitchersList, long id_executor, AdvertStatus status,
+                  Date dateOfCreate, CommentsContainer comments) {
         this.id = id;
         this.name = name;
         this.info = info;
         this.images = images;
         this.location = location;
         this.reward = reward;
-        this.author = author;
-        this.subscribedWitchers = subscribedWitchers;
-        this.executor = executor;
+        this.id_author = id_author;
+        this.idSubscribedWitchersList = idSubscribedWitchersList;
+        this.id_executor = id_executor;
         this.status = status;
         this.dateOfCreate = dateOfCreate;
         this.comments = comments;
@@ -172,7 +170,8 @@ public class Advert implements ICommented {
     @Override
     public Object clone(){
         
-    return new Advert(id, name, info, images, location, reward, author, subscribedWitchers, executor, status, dateOfCreate, comments);
+    return new Advert(id, name, info, images, location, reward, id_author, idSubscribedWitchersList,
+            id_executor, status, dateOfCreate, comments);
         
     }
 }
