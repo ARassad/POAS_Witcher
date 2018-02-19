@@ -1,7 +1,7 @@
-from Server.Objects import User
-from Server.Objects import Object
-from Server.Objects import Status
-from Server.Profile import Comment
+from Objects import User
+from Objects import Object
+from Objects import Status
+from Profile import Comment
 from enum import Enum
 import time
 # status: 0 - in_search

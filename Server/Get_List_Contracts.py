@@ -1,4 +1,4 @@
-from Server.Objects import Object, Status
+from Objects import Object, Status
 from enum import Enum
 
 

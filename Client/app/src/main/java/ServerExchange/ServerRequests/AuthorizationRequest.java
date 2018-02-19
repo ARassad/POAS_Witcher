@@ -3,6 +3,7 @@ package ServerExchange.ServerRequests;
 import java.io.IOException;
 import java.util.HashMap;
 
+import ServerExchange.Password;
 import ServerExchange.Profile;
 
 /**
@@ -49,7 +50,7 @@ public class AuthorizationRequest extends LoginRequest<Boolean>{
 
     public void login(String login, String password, IServerAnswerHandler onLoginHandler){
         this.login = login;
-        this.password = password;
+        this.password = Password.encode(password);
         startRequest(onLoginHandler);
     }
 

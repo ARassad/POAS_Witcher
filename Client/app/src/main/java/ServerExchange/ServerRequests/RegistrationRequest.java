@@ -3,6 +3,7 @@ package ServerExchange.ServerRequests;
 import java.io.IOException;
 import java.util.HashMap;
 
+import ServerExchange.Password;
 import ServerExchange.Profile;
 
 /**
@@ -51,12 +52,13 @@ public class RegistrationRequest extends ServerRequest<Boolean>{
 
 
 
-    public void registration(String login, String password, Profile.ProfileType type, IServerAnswerHandler onRegisteredHandler) throws IOException {
+    public void registration(String login, String password, Profile.ProfileType type, IServerAnswerHandler onLoginHandler) throws IOException {
 
         this.login = login;
-        this.password = password;
+        this.password = Password.encode(password);
         this.isWitcher = type == Profile.ProfileType.WITCHER ? "1" : "0";
-        this.startRequest(onRegisteredHandler);
+        this.startRequest();
+        new AuthorizationRequest().login(login, password, onLoginHandler);
 
     }
 }

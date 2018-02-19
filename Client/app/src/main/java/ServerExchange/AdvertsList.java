@@ -32,7 +32,7 @@ public class AdvertsList {
         advertsList.add(_advert);
     }   
     
-    public static enum SortType{
+    public enum SortType{
         BY_DATE,
         BY_REWARD,
         BY_NAME,

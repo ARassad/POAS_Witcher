@@ -52,9 +52,8 @@ class AdvertsRequest extends ServerRequest < LinkedList<Advert>> {
 
         SORT_NAMES.put(SortType.BY_ALPHABET,    "alph");
         SORT_NAMES.put(SortType.BY_DATE,        "lastupdate");
-        SORT_NAMES.put(SortType.BY_REWARD,      "bounty");
+        //SORT_NAMES.put(SortType.BY_REWARD,      "bounty");
         SORT_NAMES.put(SortType.BY_LOCATE,      "locate");
-
     }
 
 
@@ -93,7 +92,15 @@ class AdvertsRequest extends ServerRequest < LinkedList<Advert>> {
 
     @Override
     protected Class<? extends JsonServerAnswer> getJsonAnswerClass() {
-        return JsonServerAnswer.class;
+        return AdvertServerAnswer.class;
+    }
+
+    class AdvertServerAnswer extends JsonServerAnswer{
+
+        @Override
+        public LinkedList<Advert> convert() {
+            return null;
+        }
     }
 
     public void getSortedBy (SortType sort, OrderType order, IServerAnswerHandler onGetListHandler ){

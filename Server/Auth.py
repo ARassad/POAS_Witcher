@@ -1,6 +1,6 @@
-from Server.Objects import User
-from Server.Objects import Object
-from Server.Objects import Status
+from Objects import User
+from Objects import Object
+from Objects import Status
 from enum import Enum
 from hashlib import md5
 import time

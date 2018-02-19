@@ -12,13 +12,18 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.Authenticator;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Set;
+import java.util.function.BiConsumer;
 
 /**
  * Created by Dryush on 13.02.2018.
@@ -32,6 +37,7 @@ import java.util.LinkedList;
  * Реализуешь метод основного класса getMethod,
  *      в котором создаешь объект метода, указывая его имя, имена параметров и значения и возвращаешь его
  * Реализуешь метод основного класса getJsonAnswerClass() его код: {JSC.getClass()}
+ * Реализуешь метод getRequestType(), возвращающий тип запроса GET или POST
  *
  * На этом должно взлететь
  *
@@ -47,9 +53,20 @@ public abstract class ServerRequest <AnswerType> {
     private final String API = "api?";
 
 
+
     private static String defaultServerAddress = "localhost/";
     private String serverAddress;
     private final String PROTOCOL = "http://";
+
+    enum RequestType{
+        GET,
+        POST
+    }
+
+    protected RequestType getRequestType(){
+        return RequestType.POST;
+    }
+
 
     public static void setDefaultAddress(String address){
         if (address.charAt( address.length() -1) != '/'){
@@ -67,10 +84,12 @@ public abstract class ServerRequest <AnswerType> {
 
 
 
-    protected HashMap<String,String> basicMethodParams(){
-        HashMap<String,String> namesAndParams = new HashMap<String,String>();
+    protected HashMap<String,Object> basicMethodParams(){
+        HashMap<String, Object> namesAndParams = new HashMap<>();
         return namesAndParams;
     }
+
+
 
     /*
     protected void setBasicMethodParams(ServerMethod met,  String paramsNames[], String paramsValues[]) {
@@ -82,14 +101,22 @@ public abstract class ServerRequest <AnswerType> {
 
     protected class ServerMethod{
         String methodName;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, Object> params = new HashMap<>();
 
-        
-        public ServerMethod( String methodName, HashMap<String,String> methodParams){
+
+        public ServerMethod( String methodName, HashMap<String, ? extends Object> methodParams){
             this.methodName = methodName;
             params.putAll(basicMethodParams());
             params.putAll(methodParams);
         }
+
+        /*
+        public ServerMethod( String methodName, HashMap<String, String> methodParams){
+            this.methodName = methodName;
+            params.putAll(basicMethodParams());
+            params.putAll(methodParams);
+        }
+        */
     }
 
     abstract protected ServerMethod getMethod();
@@ -98,6 +125,10 @@ public abstract class ServerRequest <AnswerType> {
     abstract protected class JsonServerAnswer{
         public String status;
         public String message;
+        public boolean isStatusOk() {
+            return status == "OK";
+        }
+
 
         abstract public AnswerType convert();
     }
@@ -110,11 +141,17 @@ public abstract class ServerRequest <AnswerType> {
 
     protected AnswerType doRequest(ServerMethod method, Class< ? extends JsonServerAnswer> JsonServerAnswerClass) throws IOException {
 
-        String request = PROTOCOL + serverAddress + API + method.methodName;
-
-        Gson gson = new Gson();
-
-        String jsonRequest = gson.toJson(method.params);
+        String request = PROTOCOL + serverAddress + API;
+        if ( getRequestType() == RequestType.POST ) {
+            request = request + method.methodName;
+        }
+        else if ( getRequestType() == RequestType.GET){
+            request += "method=" + method.methodName;
+            Set<String> names = method.params.keySet();
+            for (String name : names){
+                request = request + '&' + name + "=" + method.params.get(name);
+            }
+        }
 
         try {
             URL requestURL = new URL(request);
@@ -123,18 +160,24 @@ public abstract class ServerRequest <AnswerType> {
 
             urlConnection.setDoOutput(true);
             urlConnection.setDoInput(true);
-            urlConnection.setRequestMethod("POST");
+            String strRequestMethod = "";
+            if (getRequestType() == RequestType.POST) { strRequestMethod = "POST"; }
+            else if ( getRequestType() == RequestType.GET) {strRequestMethod = "GET";}
+            urlConnection.setRequestMethod(strRequestMethod);
 
             urlConnection.connect();
+            Gson gson = new Gson();
 
-            OutputStream out = urlConnection.getOutputStream();
-            out.write(jsonRequest.getBytes());
-            //ObjectOutputStream objectOut = new ObjectOutputStream( out);
-            //objectOut.writeUTF(jsonRequest);
+            if (getRequestType() == RequestType.POST) {
 
-            out.flush();
-            out.close();
-
+                String jsonRequest = gson.toJson(method.params);
+                OutputStream out = urlConnection.getOutputStream();
+                out.write(jsonRequest.getBytes());
+                //ObjectOutputStream objectOut = new ObjectOutputStream( out);
+                //objectOut.writeUTF(jsonRequest);
+                   out.flush();
+                out.close();
+            }
 
             InputStream in = urlConnection.getInputStream();
             InputStreamReader inReader = new InputStreamReader(in);
@@ -227,4 +270,5 @@ public abstract class ServerRequest <AnswerType> {
         RequestProcess rp = new RequestProcess( null, getJsonAnswerClass());
         rp.execute();
     }
+
 }
