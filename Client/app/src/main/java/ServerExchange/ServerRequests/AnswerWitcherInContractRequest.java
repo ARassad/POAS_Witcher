@@ -38,11 +38,10 @@ public class AnswerWitcherInContractRequest extends TokenServerRequest {
 
     @Override
     protected Class<? extends JsonServerAnswer> getJsonAnswerClass() {
-
-
-        return JsonServerAnswer.class;
+        return JsonAnswerWitcherInContractServerAnswer.class;
     }
 
+    //TODO: определить возможные статусы? Поговорить с Мишей
     public void AnswerWitcherInContract(int status, long id_contract, IServerAnswerHandler onAnswerWitcherInContractHandler) throws IOException {
         this.status = status;
         this.id_contract = id_contract;
