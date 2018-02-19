@@ -1,9 +1,5 @@
 import pyodbc
 
-"""
-    Функция присоединения к БД на azure
-"""
-
 
 def connect_database():
     server = 'poaswitcher.database.windows.net'

@@ -1,6 +1,6 @@
-from Objects import User
-from Objects import Object
-from Objects import Status
+from Server.Objects import User
+from Server.Objects import Object
+from Server.Objects import Status
 from enum import Enum
 from hashlib import md5
 import time
@@ -25,9 +25,10 @@ def authorization(cursor, params):
     elif row[2] == params[User.Password.value]:
         obj.message = EventAuth.SuccessAuthorizaion.value
         status.status = Status.Ok.value
-        tok = params[User.Login.value] + time.time().__str__()
+        tok = params[User.Login.value] + str(time.time())
         obj.token = md5(tok.encode('utf-8')).hexdigest()
-        cursor.execute("insert into Token_Table (token, last_update) values('{}', {})".format(obj.token, time.time().__int__()))
+        cursor.execute("insert into Token_Table (token, last_update) values('{}', {})".format(obj.token,
+                                                                                              int(time.time())))
     else:
         obj.message = EventAuth.PasswordIncorrect.value
 

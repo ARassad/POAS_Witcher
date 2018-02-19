@@ -13,19 +13,18 @@ public class AddCommentProfileRequest extends TokenServerRequest {
     private String ADD_COMMENT_PROFILE_METHOD_NAME = "AddCommentProfile";
 
     private String text;
-    private int order;
-    private long id;
+    private long profile_id;
 
     public AddCommentProfileRequest(String address) {super(address);}
+    public AddCommentProfileRequest() {super();}
 
 
     @Override
     protected ServerMethod getMethod() {
 
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, Object> params = new HashMap<>();
         params.put("text", text);
-        params.put("order", String.valueOf(order));
-        params.put("id", String.valueOf(id));
+        params.put("id", profile_id);
 
         return new ServerMethod(ADD_COMMENT_PROFILE_METHOD_NAME, params);
     }
@@ -42,13 +41,12 @@ public class AddCommentProfileRequest extends TokenServerRequest {
     protected Class<? extends JsonServerAnswer> getJsonAnswerClass() {
 
 
-        return JsonServerAnswer.class;
+        return JsonAddCommentProfileServerAnswer.class;
     }
 
-    public void addCommentProfile(String text, int order, long id, IServerAnswerHandler onAddCommentProfileHandler) throws IOException {
+    public void addCommentProfile(String text, long id, IServerAnswerHandler onAddCommentProfileHandler) throws IOException {
         this.text = text;
-        this.order = order;
-        this.id = id;
+        this.profile_id = id;
         startRequest(onAddCommentProfileHandler);
     }
 

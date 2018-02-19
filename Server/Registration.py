@@ -1,6 +1,6 @@
-from Objects import Object
-from Objects import Status
-from Objects import User
+from Server.Objects import Object
+from Server.Objects import Status
+from Server.Objects import User
 from enum import Enum
 
 
@@ -32,7 +32,8 @@ def registration(cursor, params):
         row = cursor.fetchone()
         id_lcomment = row[0]
 
-        cursor.execute("insert into Profile (id_authorization_info, id_list_comments, id_photo, name, about) values({}, {}, null, null, null)".format(id_auth, id_lcomment))
+        cursor.execute("insert into Profile (id_authorization_info, id_list_comments, id_photo, name, about) \
+                        values({}, {}, null, null, null)".format(id_auth, id_lcomment))
         cursor.execute("select max(id) from Profile;")
         row = cursor.fetchone()
         id_prof = row[0]

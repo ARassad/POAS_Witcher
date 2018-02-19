@@ -6,6 +6,8 @@ import android.util.Base64;
 
 import java.util.HashMap;
 
+import ServerExchange.ImageConvert;
+
 /**
  * Created by Dryush on 17.02.2018.
  */
@@ -29,9 +31,7 @@ public class GetImageRequest extends TokenServerRequest<Bitmap> {
         String image;
         @Override
         public Bitmap convert() {
-            byte[] rawBitmap = Base64.decode(image.getBytes(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(rawBitmap, 0, rawBitmap.length);
-            return bitmap;
+            return ImageConvert.fromBase64Str(image);
         }
     }
 

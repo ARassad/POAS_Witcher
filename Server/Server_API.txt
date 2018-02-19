@@ -9,7 +9,7 @@ object:
     token - в случае успешной авторизации.
 
 Про токены
-Токен позволит вам отсылать запросы к серверу без передачи конфедициальных данных
+Токен позволит вам отсылать запросы к серверу без передачи конфиденциальных данных
 Срок жизни токена надо обсудить, N часов (если в течении этих N часов был запрос с данным токеном, то срок жизни токена обновляется)
 Если токен неактивен, то необходима повторная авторизация клиента
 Токен для дебага: b5ad4e9f2bdedb278dd91ce0e8043fce
@@ -40,7 +40,6 @@ object:
         count - количество профилей
         comments - словарь профилей
             create_date
-            order
             text - в unicode кодировке
 
 Обновить профиль:
@@ -54,7 +53,7 @@ status: OK / Error
 Оставить комментарий к профилю:
 localhost/api/AddCommentProfile
 Отправляемые данные:
-{'token': 'md5', 'text': 'text', 'order': int, 'id': int} json format
+{'token': 'md5', 'text': 'text', 'id': int} json format
 Возвращаемые данные:
 status: OK / Error
 
@@ -109,11 +108,10 @@ object
     message
     witchers
 
-
 Оставить комментарий к профилю:
 localhost/api/AddCommentContract
 Отправляемые данные:
-{'token': 'md5', 'text': 'text', 'order': int, 'id': int} json format
+{'token': 'md5', 'text': 'text', 'id': int} json format
 Возвращаемые данные:
 status: OK / Error
 
@@ -125,7 +123,7 @@ localhost/api/SelectWitcherInContract
 status: OK / Error
 
 Ответ ведьмака по контракту:
-localhost/api/SelectWitcherInContract
+localhost/api/AnswerWitcherInContract
 Отправляемые данные:
 {'token': 'md5', 'status': int, 'id_contract': int} json format
 Возвращаемые данные:
@@ -137,6 +135,13 @@ localhost/api/RefuseContract
 {'token': 'md5', id_contract': int} json format
 Возвращаемые данные:
 status: OK / Error
+
+Получить список объявлений
+localhost/api?method=GetListComments&token=b5ad4e9f2bdedb278dd91ce0e8043fce&type=profile&id=3
+type=profile - профиль
+type=contract - контракт
+
+Получить информацию о комментарии
 
 
 

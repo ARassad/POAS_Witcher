@@ -84,8 +84,8 @@ public abstract class ServerRequest <AnswerType> {
 
 
 
-    protected HashMap<String,String> basicMethodParams(){
-        HashMap<String,String> namesAndParams = new HashMap<String,String>();
+    protected HashMap<String,Object> basicMethodParams(){
+        HashMap<String, Object> namesAndParams = new HashMap<>();
         return namesAndParams;
     }
 
@@ -101,14 +101,22 @@ public abstract class ServerRequest <AnswerType> {
 
     protected class ServerMethod{
         String methodName;
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, Object> params = new HashMap<>();
 
-        
-        public ServerMethod( String methodName, HashMap<String,String> methodParams){
+
+        public ServerMethod( String methodName, HashMap<String, ? extends Object> methodParams){
             this.methodName = methodName;
             params.putAll(basicMethodParams());
             params.putAll(methodParams);
         }
+
+        /*
+        public ServerMethod( String methodName, HashMap<String, String> methodParams){
+            this.methodName = methodName;
+            params.putAll(basicMethodParams());
+            params.putAll(methodParams);
+        }
+        */
     }
 
     abstract protected ServerMethod getMethod();
@@ -261,31 +269,6 @@ public abstract class ServerRequest <AnswerType> {
     protected void startRequest(){
         RequestProcess rp = new RequestProcess( null, getJsonAnswerClass());
         rp.execute();
-    }
-
-    static MessageDigest md;
-
-    static String encryption(String str){
-        String res = str;
-        try {
-            if (md == null)
-                md = MessageDigest.getInstance("MD5");
-            md.update(str.getBytes());
-
-            byte byteData[] = md.digest();
-
-            //конвертируем байт в шестнадцатеричный формат
-            StringBuffer sb = new StringBuffer();
-            for (byte aByteData : byteData) {
-                sb.append(Integer.toString((aByteData & 0xff) + 0x100, 16).substring(1));
-            }
-
-            res = sb.toString();
-
-        } catch (NoSuchAlgorithmException except){
-            //Не может быть такого
-        }
-        return res;
     }
 
 }
