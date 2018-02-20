@@ -45,7 +45,7 @@ public class AddWitcherInContractRequest extends TokenServerRequest<Boolean> {
         return AddWitcherInContractRequest.JsonAddWitcherInContractServerAnswer.class;
     }
 
-    public void addWitcherInContract(long id_contract, IServerAnswerHandler onAddWitcherInContractHandler) throws IOException {
+    public void addWitcherInContract(long id_contract, IServerAnswerHandler onAddWitcherInContractHandler) {
         this.id_contract = id_contract;
         startRequest(onAddWitcherInContractHandler);
     }

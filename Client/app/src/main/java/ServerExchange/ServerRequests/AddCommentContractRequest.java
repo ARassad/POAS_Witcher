@@ -47,7 +47,7 @@ public class AddCommentContractRequest extends TokenServerRequest {
         return AddCommentContractRequest.JsonAddCommentContractServerAnswer.class;
     }
 
-    public void addCommentContract(String text, long id, IServerAnswerHandler onAddCommentContractHandler) throws IOException {
+    public void addCommentContract(String text, long id, IServerAnswerHandler onAddCommentContractHandler)  {
         this.text = text;
         this.profile_id = id;
         startRequest(onAddCommentContractHandler);

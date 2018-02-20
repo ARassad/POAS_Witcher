@@ -45,7 +45,7 @@ public class RefuseContractRequest extends TokenServerRequest<Boolean> {
         return JsonRefuseContractServerAnswer.class;
     }
 
-    public void RefuseContract(long id_contract, IServerAnswerHandler onRefuseContractHandler) throws IOException {
+    public void RefuseContract(long id_contract, IServerAnswerHandler onRefuseContractHandler)  {
         this.id_contract = id_contract;
         startRequest(onRefuseContractHandler);
     }

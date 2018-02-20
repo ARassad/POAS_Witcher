@@ -27,6 +27,7 @@ public class UpdateProfileRequest extends TokenServerRequest<Boolean> {
     private String password = null;
 
     public UpdateProfileRequest(String address) {super(address);}
+    public UpdateProfileRequest() {super();}
 
 
     @Override
@@ -68,7 +69,7 @@ public class UpdateProfileRequest extends TokenServerRequest<Boolean> {
         return JsonUpdateProfileServerAnswer.class;
     }
 
-    public void updateProfile(String name, String text, Bitmap photo, IServerAnswerHandler onUpdateProfileHandler) throws IOException {
+    public void updateProfile(String name, String text, Bitmap photo, IServerAnswerHandler onUpdateProfileHandler) {
         this.name = name;
         this.text = text;
         if (photo != null) {

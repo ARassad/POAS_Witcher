@@ -72,7 +72,7 @@ public class GetWithcerDesiredContractRequest extends TokenServerRequest<ArrayLi
         return JsonGetWithcerDesiredContractServerAnswer.class;
     }
 
-    public void addCommentContract(long id_contract, IServerAnswerHandler onGetWithcerDesiredContractHandler) throws IOException {
+    public void addCommentContract(long id_contract, IServerAnswerHandler onGetWithcerDesiredContractHandler) {
         this.id_contract = id_contract;
         startRequest(onGetWithcerDesiredContractHandler);
     }

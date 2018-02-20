@@ -47,7 +47,7 @@ public class AddCommentProfileRequest extends TokenServerRequest<Boolean> {
         return JsonAddCommentProfileServerAnswer.class;
     }
 
-    public void addCommentProfile(String text, long id, IServerAnswerHandler onAddCommentProfileHandler) throws IOException {
+    public void addCommentProfile(String text, long id, IServerAnswerHandler onAddCommentProfileHandler) {
         this.text = text;
         this.profile_id = id;
         startRequest(onAddCommentProfileHandler);
