@@ -1,9 +1,14 @@
 package ServerExchange.ServerRequests;
 
+import android.graphics.Bitmap;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.LinkedList;
+
+import ServerExchange.ImageConvert;
 
 
 /**
@@ -17,28 +22,39 @@ public class UpdateAdvertRequest extends TokenServerRequest<Boolean> {
 	
 	private String UPDATE_ADVERT_METHOD_NAME = "EditAdvert";
 
-    private int id;
-    private int id_witcher;
-    private int status;
-    private int id_task_located;
+    private Integer id;
+    //private int id_witcher;
+    //private int status;
+    private Integer id_task_located;
+    private String header;
     private String text;
-    private int bounty;
-    private String photo_del;
-    private String photo_new;
+    private Integer bounty;
+    private LinkedList<String> photo_del;
+    private LinkedList<String> photo_new;
 
     public UpdateAdvertRequest(String address) {super(address);}
+    public UpdateAdvertRequest() {super();}
 
 
     @Override
     protected ServerMethod getMethod() {
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("id",String.valueOf(this.id));
-        params.put("id_witcher",String.valueOf(this.id_witcher));
-        params.put("status",String.valueOf(this.status));
-        params.put("id_task_located",String.valueOf(this.id_task_located));
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("id",this.id);
+        this.id = null;
+        //params.put("id_witcher",this.id_witcher);
+        //params.put("status",this.status);
+        params.put("id_task_located",this.id_task_located);
+        this.id_task_located = null;
         params.put("text", text);
-        params.put("bounty",String.valueOf(this.bounty));
+        this.text = null;
+
+        params.put("bounty",this.bounty);
+        this.bounty = null;
+        params.put("photo_del", this.photo_del);
+        this.photo_del = null;
+        params.put("photo_new", this.photo_new);
+        this.photo_new = null;
 
         return new ServerMethod(UPDATE_ADVERT_METHOD_NAME, params);
     }
@@ -56,14 +72,56 @@ public class UpdateAdvertRequest extends TokenServerRequest<Boolean> {
         return JsonUpdateAdvertServerAnswer.class;
     }
 
-    public void updateAdvert( int id, int id_witcher, int status, int id_task_located, String text,
-                              int bounty, IServerAnswerHandler onUpdateAdvertHandler) throws IOException {
+    public void updateAdvert( int id, int id_task_located, String text, String header,
+                              int bounty, IServerAnswerHandler onUpdateAdvertHandler){
         this.id = id;
-        this.id_witcher = id_witcher;
-        this.status = status;
+        //this.status = status;
+        this.header = header;
         this.id_task_located = id_task_located;
         this.text = text;
         this.bounty = bounty;
         startRequest(onUpdateAdvertHandler);
+    }
+
+    public void updateAdvert(int id, int id_task_located, String text, String header,
+                             int bounty, LinkedList<Bitmap> imgsToAdd, LinkedList<Bitmap> imgsToRemove, IServerAnswerHandler onUpdateAdvertHandler){
+        this.id = id;
+        //this.status = status;
+        this.header = header;
+        this.id_task_located = id_task_located;
+        this.text = text;
+        this.bounty = bounty;
+
+        LinkedList <String> _imgsToDel = new LinkedList<>();
+        for (Bitmap img : imgsToRemove){
+            _imgsToDel.addLast(ImageConvert.toBase64Str(img));
+        }
+        this.photo_del = _imgsToDel;
+
+        LinkedList <String> _imgsToAdd = new LinkedList<>();
+        for (Bitmap img : imgsToAdd){
+            _imgsToAdd.addLast(ImageConvert.toBase64Str(img));
+        }
+        this.photo_new = _imgsToAdd;
+
+        startRequest(onUpdateAdvertHandler);
+    }
+
+    public void addPhotos(int id, LinkedList<Bitmap> imgsToAdd){
+        this.id = id;
+        LinkedList <String> _imgsToAdd = new LinkedList<>();
+        for (Bitmap img : imgsToAdd){
+            _imgsToAdd.addLast(ImageConvert.toBase64Str(img));
+        }
+        this.photo_new = _imgsToAdd;
+    }
+
+    public void removePhotos(int id, LinkedList<Bitmap> imgsToRemove){
+        this.id = id;
+        LinkedList <String> _imgsToRemove = new LinkedList<>();
+        for (Bitmap img : imgsToRemove){
+            _imgsToRemove.addLast(ImageConvert.toBase64Str(img));
+        }
+        this.photo_del = _imgsToRemove;
     }
 }
