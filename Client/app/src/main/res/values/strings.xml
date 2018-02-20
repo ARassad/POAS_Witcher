@@ -2,6 +2,7 @@
     <string name="app_name">iWitcher</string>
     <string name="profile_name">Профиль</string>
     <string name="auth_name">Авторизация</string>
+    <string name="edit_name">Редактировать профиль</string>
     <string name="menu">Меню</string>
     <string name="edit">Редактировать</string>
 
@@ -31,4 +32,12 @@
     <string name="table_header">Заголовок</string>
     <string name="table_status">Статус</string>
     <string name="send_comment">Отправить комментарий</string>
+
+    <!-- Strings related to profile -->
+    <string name="witcher_radio">Ведьмак</string>
+    <string name="customer_radio">Заказчик</string>
+    <string name="about_edit">Расскажите здесь о себе</string>
+    <string name="name_edit">Введите здесь ваше имя</string>
+    <string name="photo_edit">Нажмите, чтобы загрузить новый аватар</string>
+    <string name="save_edit">Сохранить!</string>
 </resources>

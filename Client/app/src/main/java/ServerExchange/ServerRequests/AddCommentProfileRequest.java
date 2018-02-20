@@ -10,7 +10,10 @@ import java.util.HashMap;
 
 public class AddCommentProfileRequest extends TokenServerRequest {
 
-    private String ADD_COMMENT_PROFILE_METHOD_NAME = "AddCommentProfile";
+    @Override
+    protected RequestType getRequestType(){ return RequestType.POST; }
+	
+	private String ADD_COMMENT_PROFILE_METHOD_NAME = "AddCommentProfile";
 
     private String text;
     private long profile_id;

@@ -9,7 +9,10 @@ import java.util.HashMap;
 
 public class SelectWitcherInContractRequest extends TokenServerRequest {
 
-    private String SELECT_WITCHER_IN_CONTRACT_METHOD_NAME = "SelectWitcherInContract";
+    @Override
+    protected RequestType getRequestType(){ return RequestType.POST; }
+	
+	private String SELECT_WITCHER_IN_CONTRACT_METHOD_NAME = "SelectWitcherInContract";
 
     private long id_witcher;
     private long id_contract;

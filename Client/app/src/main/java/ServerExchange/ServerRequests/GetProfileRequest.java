@@ -15,7 +15,10 @@ import ServerExchange.Profile;
 
 public class GetProfileRequest extends TokenServerRequest<Profile> {
 
-    private String GET_PROFILE_METHOD_NAME = "GetProfile";
+   @Override
+    protected RequestType getRequestType(){ return RequestType.GET; }
+	
+	private String GET_PROFILE_METHOD_NAME = "GetProfile";
 
     private long id;
 

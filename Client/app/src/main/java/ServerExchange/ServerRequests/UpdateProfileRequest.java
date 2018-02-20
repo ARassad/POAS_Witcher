@@ -16,7 +16,10 @@ import ServerExchange.Password;
 
 public class UpdateProfileRequest extends TokenServerRequest {
 
-    private String UPDATE_PROFILE_METHOD_NAME = "EditProfile";
+    @Override
+    protected RequestType getRequestType(){ return RequestType.POST; }
+	
+	private String UPDATE_PROFILE_METHOD_NAME = "EditProfile";
 
     private String name = null;
     private String text = null;
