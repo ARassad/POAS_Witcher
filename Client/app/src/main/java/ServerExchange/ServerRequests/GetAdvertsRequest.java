@@ -106,7 +106,7 @@ public class GetAdvertsRequest extends ServerRequest < LinkedList<Advert>> {
             long id_witcher; //Иcполнитель
             long last_update;
             long last_update_status;
-            long status;
+            int status;
             String text;
         }
 
@@ -116,8 +116,8 @@ public class GetAdvertsRequest extends ServerRequest < LinkedList<Advert>> {
             LinkedList<Advert> adverts = new LinkedList<>();
             for (OneContractJson contract : contracts){
                 java.util.Date update_time = new java.util.Date(contract.last_update); //TODO: Проверить нужно ли домножение на 1000
-                Advert.AdvertStatus status = Advert.AdvertStatus.FREE; //TODO: Перевод из инта
-                Advert advert = new Advert(contract.id, contract.header, contract.text, null, new Location(null, null), contract.bounty, contract.id_client, null, contract.id_witcher, status, update_time, null);
+                Advert.AdvertStatus st = Advert.AdvertStatus.fromInt(contract.status);
+                Advert advert = new Advert(contract.id, contract.header, contract.text, null, new Location(null, null), contract.bounty, contract.id_client, null, contract.id_witcher, st, update_time, null);
                 adverts.addLast(advert);
             }
             return adverts;

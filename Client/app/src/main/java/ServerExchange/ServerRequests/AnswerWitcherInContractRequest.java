@@ -8,7 +8,7 @@ import java.util.HashMap;
  * Created by Dima on 19.02.2018.
  */
 
-public class AnswerWitcherInContractRequest extends TokenServerRequest {
+public class AnswerWitcherInContractRequest extends TokenServerRequest<Boolean> {
 
     @Override
     protected RequestType getRequestType(){ return RequestType.POST; }
@@ -19,6 +19,7 @@ public class AnswerWitcherInContractRequest extends TokenServerRequest {
     private long id_contract;
 
     public AnswerWitcherInContractRequest(String address) {super(address);}
+    public AnswerWitcherInContractRequest() {super();}
 
 
     @Override

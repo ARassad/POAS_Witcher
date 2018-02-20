@@ -10,7 +10,7 @@ import java.util.HashMap;
  * Created by Дима on 18.02.2018.
  */
 
-public class UpdateAdvertRequest extends TokenServerRequest {
+public class UpdateAdvertRequest extends TokenServerRequest<Boolean> {
 
     @Override
     protected RequestType getRequestType(){ return RequestType.POST; }

@@ -14,7 +14,7 @@ import ServerExchange.Password;
  * Created by Дима on 16.02.2018.
  */
 
-public class UpdateProfileRequest extends TokenServerRequest {
+public class UpdateProfileRequest extends TokenServerRequest<Boolean> {
 
     @Override
     protected RequestType getRequestType(){ return RequestType.POST; }

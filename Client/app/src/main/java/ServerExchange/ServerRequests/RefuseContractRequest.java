@@ -18,13 +18,14 @@ public class RefuseContractRequest extends TokenServerRequest {
     private long id_contract;
 
     public RefuseContractRequest(String address) {super(address);}
+    public RefuseContractRequest() {super();}
 
 
     @Override
     protected ServerMethod getMethod() {
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("id_contract", String.valueOf(id_contract));
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("id_contract", id_contract);
 
         return new ServerMethod(REFUSE_CONTRACT_METHOD_NAME, params);
     }
@@ -33,7 +34,7 @@ public class RefuseContractRequest extends TokenServerRequest {
 
         @Override
         public Boolean convert() {
-            return status.equals("OK");
+            return isStatusOk();
         }
     }
 
@@ -41,7 +42,7 @@ public class RefuseContractRequest extends TokenServerRequest {
     protected Class<? extends JsonServerAnswer> getJsonAnswerClass() {
 
 
-        return JsonServerAnswer.class;
+        return JsonRefuseContractServerAnswer.class;
     }
 
     public void RefuseContract(long id_contract, IServerAnswerHandler onRefuseContractHandler) throws IOException {
