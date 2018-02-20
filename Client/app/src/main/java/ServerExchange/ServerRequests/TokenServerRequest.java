@@ -12,8 +12,9 @@ public abstract class TokenServerRequest<AnswerType> extends ServerRequest<Answe
         super(serverAddress);
     }
 
-    static private String token;
 
+    static private String debugToken = "b5ad4e9f2bdedb278dd91ce0e8043fce";
+    static private String token = debugToken;
     protected HashMap<String,Object> basicMethodParams(){
         HashMap<String, Object> params = super.basicMethodParams();
         params.put("token", token);

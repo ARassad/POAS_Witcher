@@ -13,13 +13,16 @@ public abstract class LoginRequest<AnswerType> extends ServerRequest<AnswerType>
     public LoginRequest() {super();}
 
     abstract class LoginJsonServerAnswer extends JsonServerAnswer{
-        public String token;
+        class JsonToken{
+            public String token;
+        }
+        JsonToken object;
     }
     @Override
     protected void JsonAnswerHandler(JsonServerAnswer answ) {
         LoginJsonServerAnswer answ_ = (LoginJsonServerAnswer) answ;
 
-        TokenServerRequest.setToken( answ_.token);
+        TokenServerRequest.setToken( answ_.object.token);
     }
 
 
