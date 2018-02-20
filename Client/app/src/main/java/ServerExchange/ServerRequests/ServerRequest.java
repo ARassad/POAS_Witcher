@@ -177,22 +177,14 @@ public abstract class ServerRequest <AnswerType> {
                 String jsonRequest = gson.toJson(method.params);
                 OutputStream out = urlConnection.getOutputStream();
                 out.write(jsonRequest.getBytes());
-                //ObjectOutputStream objectOut = new ObjectOutputStream( out);
-                //objectOut.writeUTF(jsonRequest);
-                   out.flush();
+
+                out.flush();
                 out.close();
             }
 
             InputStream in = urlConnection.getInputStream();
             InputStreamReader inReader = new InputStreamReader(in);
             BufferedReader reader = new BufferedReader(inReader);
-
-            //InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            //String a = reader.readLine();
-
-
-
-
 
             JsonServerAnswer serverAnswer = gson.fromJson(reader, JsonServerAnswerClass);
 
