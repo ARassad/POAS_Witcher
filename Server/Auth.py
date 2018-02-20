@@ -22,9 +22,9 @@ def authorization(cursor, params):
     status.status = Status.Error.value
 
     if row is None:
-        obj.message = EventAuth.LoginNotExist.value
+        status.message = EventAuth.LoginNotExist.value
     elif row[2] == params[User.Password.value]:
-        obj.message = EventAuth.SuccessAuthorizaion.value
+        status.message = EventAuth.SuccessAuthorizaion.value
         status.status = Status.Ok.value
         tok = params[User.Login.value] + str(time.time())
         obj.token = md5(tok.encode('utf-8')).hexdigest()
@@ -33,8 +33,8 @@ def authorization(cursor, params):
         id_profile = cursor.fetchone()[0]
         cursor.execute("insert into Token_Table (token, last_update, id_profile) values('{}', {}, {})"
                        .format(obj.token, time.time().__int__(), id_profile))
+        status.object = obj
     else:
-        obj.message = EventAuth.PasswordIncorrect.value
+        status.message = EventAuth.PasswordIncorrect.value
 
-    status.object = obj
     return status.toJSON()

@@ -18,7 +18,7 @@ def registration(cursor, params):
 
     if row is None:
         status.status = Status.Ok.value
-        obj.message = EventRegistration.SuccessRegistration.value
+        status.message = EventRegistration.SuccessRegistration.value
 
         cursor.execute("insert into Authorization_info (login, password) values('{}', '{}')"
                        .format(params[User.Login.value], params[User.Password.value])
@@ -44,10 +44,9 @@ def registration(cursor, params):
         else:
             cursor.execute("insert into Client (id_profile) values({})".format(id_prof))
             obj.is_witcher = False
-
+        status.object = obj
     else:
         status.status = Status.Error.value
-        obj.message = EventRegistration.LoginExist.value
+        status.message = EventRegistration.LoginExist.value
 
-    status.object = obj
     return status.toJSON()
