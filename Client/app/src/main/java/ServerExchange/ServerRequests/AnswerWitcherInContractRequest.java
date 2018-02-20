@@ -38,7 +38,7 @@ public class AnswerWitcherInContractRequest extends TokenServerRequest<Boolean> 
 
         @Override
         public Boolean convert() {
-            return status.equals("OK");
+            return isStatusOk();
         }
     }
 

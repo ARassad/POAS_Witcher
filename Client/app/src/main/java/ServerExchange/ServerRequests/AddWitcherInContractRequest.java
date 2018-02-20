@@ -8,7 +8,7 @@ import java.util.HashMap;
  * Created by Dima on 20.02.2018.
  */
 
-public class AddWitcherInContractRequest extends TokenServerRequest {
+public class AddWitcherInContractRequest extends TokenServerRequest<Boolean> {
 
     @Override
     protected RequestType getRequestType(){ return RequestType.POST; }
@@ -34,7 +34,7 @@ public class AddWitcherInContractRequest extends TokenServerRequest {
 
         @Override
         public Boolean convert() {
-            return status.equals("OK");
+            return isStatusOk();
         }
     }
 

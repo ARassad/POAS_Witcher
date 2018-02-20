@@ -42,7 +42,7 @@ public class AuthorizationRequest extends LoginRequest<Boolean>{
 
         @Override
         public Boolean convert() {
-            return this.status.equals("OK");
+            return isStatusOk();
         }
     }
 
