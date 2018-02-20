@@ -4,12 +4,17 @@ package ServerExchange.ServerRequests;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Map;
+
+import ServerExchange.ProfilePart;
 
 /**
  * Created by Дима on 20.02.2018.
  */
 
-public class GetWithcerDesiredContractRequest extends TokenServerRequest {
+public class GetWithcerDesiredContractRequest extends TokenServerRequest<ArrayList<ProfilePart>> {
 
     @Override
     protected RequestType getRequestType(){ return RequestType.GET; }
@@ -32,11 +37,32 @@ public class GetWithcerDesiredContractRequest extends TokenServerRequest {
     }
 
     class JsonGetWithcerDesiredContractServerAnswer extends JsonServerAnswer{
+        public class JsonObj {
+            public class JsonWitchers {
+                public long count;
 
-        public ArrayList<Integer> idWitchersList;
+                public class JsonWitcherInfo {
+                    public long id;
+                    public String name;
+                    ProfilePart convert(){
+                        return new ProfilePart(id,name);
+                    }
+                }
+
+                public HashMap<String, JsonWitcherInfo> witcher;
+            }
+
+            public JsonWitchers witchers;
+        }
+        public JsonObj object;
+
         @Override
-        public Boolean convert() {
-            return isStatusOk();
+        public ArrayList<ProfilePart> convert() {
+            LinkedList<ProfilePart> prfls = new LinkedList<>();
+            for (Map.Entry<String, JsonObj.JsonWitchers.JsonWitcherInfo> winfo : object.witchers.witcher.entrySet()){
+                prfls.addLast(winfo.getValue().convert());
+            }
+            return new ArrayList<>(prfls);
         }
     }
 
