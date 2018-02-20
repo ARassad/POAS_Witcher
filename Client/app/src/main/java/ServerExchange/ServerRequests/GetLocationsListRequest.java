@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import ServerExchange.Location;
 import ServerExchange.LocationsList;
@@ -13,7 +14,7 @@ import ServerExchange.LocationsList;
  * Created by Dryush on 20.02.2018.
  */
 
-public class GetLocationsListRequest extends TokenServerRequest< HashMap<String, HashSet<LocationsList.City>>> {
+public class GetLocationsListRequest extends TokenServerRequest<TreeMap<String, HashSet<LocationsList.City>>> {
     @Override
     protected RequestType getRequestType() {
         return RequestType.GET;
@@ -40,8 +41,8 @@ public class GetLocationsListRequest extends TokenServerRequest< HashMap<String,
         public HashMap<String, JsonTownsList> kingdoms;
 
         @Override
-        public HashMap<String, HashSet<LocationsList.City>> convert() {
-            HashMap<String, HashSet<LocationsList.City>> locs = new HashMap<>();
+        public TreeMap<String, HashSet<LocationsList.City>> convert() {
+            TreeMap<String, HashSet<LocationsList.City>> locs = new TreeMap<>();
 
             for (Map.Entry< String, JsonTownsList> kt: kingdoms.entrySet()){
                 JsonTownsList towns = kt.getValue();
