@@ -28,6 +28,7 @@ class Advert(Enum):
     ID = "id"
     Status = "status"
     Witcher = "id_witcher"
+    Header = "header"
 
 
 def create_advert(cursor, params):
@@ -57,10 +58,11 @@ def create_advert(cursor, params):
 
         cur_time = int(time.time())
         cursor.execute("insert into Contract (id_witcher, id_client, id_list_comments, id_task_located, \
-                        id_list_photos, text, bounty, status, last_update_status, last_update) \
-                         values(null, {}, {}, {}, {}, N'{}', {}, {}, {}, {})"
+                        id_list_photos, text, bounty, status, last_update_status, last_update, header) \
+                         values(null, {}, {}, {}, {}, N'{}', {}, {}, {}, {}, N'{}')"
                        .format(id_client, id_lcomment, params[Advert.TaskLocated.value], id_lphoto,
-                               params[Advert.Text.value], params[Advert.Bounty.value], 0, cur_time, cur_time))
+                               params[Advert.Text.value], params[Advert.Bounty.value], 0, cur_time,
+                               cur_time, params[Advert.Header.value]))
 
         status.status = Status.Ok.value
         status.message = EventAdvert.Success.value
@@ -100,6 +102,8 @@ def edit_advert(cursor, params):
         if params.get(Advert.Status.value, None) is not None:
             update_string += "status={},".format(params[Advert.Status.value])
             update_string += "last_update_status={},".format(last_update)
+        if params.get(Advert.Header.value, None) is not None:
+            update_string += "header={},".format(params[Advert.Header.value])
         update_string += "last_update={}".format(last_update)
 
         if params.get(Advert.DelPhoto.value, None) is not None:
