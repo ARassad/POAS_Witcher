@@ -126,7 +126,7 @@ public abstract class ServerRequest <AnswerType> {
         public String status;
         public String message;
         public boolean isStatusOk() {
-            return status == "OK";
+            return status.equalsIgnoreCase("OK");
         }
 
 

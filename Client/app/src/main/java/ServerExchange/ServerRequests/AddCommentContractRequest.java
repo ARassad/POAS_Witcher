@@ -8,7 +8,7 @@ import java.util.HashMap;
  * Created by Dima on 20.02.2018.
  */
 
-public class AddCommentContractRequest extends TokenServerRequest {
+public class AddCommentContractRequest extends TokenServerRequest<Boolean> {
 
     @Override
     protected RequestType getRequestType(){ return RequestType.POST; }

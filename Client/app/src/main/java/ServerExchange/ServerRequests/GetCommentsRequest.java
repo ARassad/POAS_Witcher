@@ -3,6 +3,7 @@ package ServerExchange.ServerRequests;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import ServerExchange.Comment;
 import ServerExchange.ImageConvert;
@@ -57,13 +58,14 @@ public class GetCommentsRequest extends TokenServerRequest<LinkedList<Comment>> 
             public long id;
             public String text;
         }
-        JsonComment comments[];
+        HashMap<String,JsonComment> comments;
 
         @Override
         public LinkedList<Comment> convert() {
             LinkedList<Comment> coms = new LinkedList<>();
-            for (JsonComment com : comments){
-                Date date = new java.util.Date(com.date_of_create); //TODO: проверить нужно ли умножаьт на 1000
+            for (Map.Entry<String, JsonComment> comEm : comments.entrySet()){
+                JsonComment com = comEm.getValue();
+                Date date = new java.util.Date(com.date_of_create * 1000);
                 coms.addLast( new Comment(com.id, com.text, com.author_id, com.author_name, date, ImageConvert.fromBase64Str(com.photo)));
             }
             return coms;
