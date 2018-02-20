@@ -154,15 +154,19 @@ public abstract class ServerRequest <AnswerType> {
         }
 
         try {
+            String strRequestMethod = "";
+            if (getRequestType() == RequestType.POST) { strRequestMethod = "POST"; }
+            else if ( getRequestType() == RequestType.GET) {strRequestMethod = "GET";}
+
             URL requestURL = new URL(request);
 
             HttpURLConnection urlConnection = (HttpURLConnection) requestURL.openConnection();
 
-            urlConnection.setDoOutput(true);
+
+            if (strRequestMethod.equals("POST")) {
+                urlConnection.setDoOutput(true);
+            }
             urlConnection.setDoInput(true);
-            String strRequestMethod = "";
-            if (getRequestType() == RequestType.POST) { strRequestMethod = "POST"; }
-            else if ( getRequestType() == RequestType.GET) {strRequestMethod = "GET";}
             urlConnection.setRequestMethod(strRequestMethod);
 
             urlConnection.connect();
@@ -191,6 +195,7 @@ public abstract class ServerRequest <AnswerType> {
 
 
             JsonServerAnswer serverAnswer = gson.fromJson(reader, JsonServerAnswerClass);
+
             if ( serverAnswer.status.equals("Error") ){
                 throw new ServerException( serverAnswer.message);
             }
@@ -198,7 +203,7 @@ public abstract class ServerRequest <AnswerType> {
 
             return (AnswerType) serverAnswer.convert();
 
-        } catch (Exception except){
+        } catch (IOException except){
             throw except;
         }
     }
