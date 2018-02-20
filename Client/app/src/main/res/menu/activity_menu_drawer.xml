@@ -9,7 +9,7 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Мой профиль" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_advert"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Объявления" />
 

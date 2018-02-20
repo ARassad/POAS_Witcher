@@ -6,7 +6,9 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -17,6 +19,9 @@ import android.widget.TextView;
 
 public class EditProfileActivity extends AppCompatActivity {
 
+    static final private int RESULT_CANCEL = 0;
+    static final private int RESULT_OK = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,11 +29,21 @@ public class EditProfileActivity extends AppCompatActivity {
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/fa-solid-900.ttf");
 
+        final AutoCompleteTextView name = (AutoCompleteTextView)findViewById(R.id.text_name);
+        name.setText(getIntent().getStringExtra("name"));
+        final AutoCompleteTextView aboutMe = (AutoCompleteTextView)findViewById(R.id.text_about);
+        aboutMe.setText(getIntent().getStringExtra("aboutMe"));
+
         Button buttonSave = (Button)findViewById(R.id.button_save_edit);
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //ШОТО ПРОИСХОДИТ ПРИ НАЖАТИИ НА КНОПКУ "СОХРАНИТЬ"
+                Intent intent = new Intent();
+                intent.putExtra("name", name.getText().toString());
+                intent.putExtra("aboutMe", aboutMe.getText().toString());
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 
