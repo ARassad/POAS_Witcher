@@ -45,7 +45,7 @@ public class RegistrationRequest extends ServerRequest<Boolean>{
 
         @Override
         public Boolean convert() {
-            return status.equals("OK");
+            return isStatusOk();
         }
     }
 

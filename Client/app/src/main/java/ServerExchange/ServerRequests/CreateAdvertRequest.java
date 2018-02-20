@@ -17,7 +17,7 @@ import ServerExchange.Location;
  * Created by Dima on 20.02.2018.
  */
 
-public class CreateAdvertRequest extends TokenServerRequest {
+public class CreateAdvertRequest extends TokenServerRequest<Boolean> {
 
     @Override
     protected RequestType getRequestType(){ return RequestType.POST; }
@@ -56,9 +56,8 @@ public class CreateAdvertRequest extends TokenServerRequest {
 
     class CreateAdvertJsonServerAnswer extends JsonServerAnswer{
 
-
         @Override
-        public Object convert() {
+        public Boolean convert() {
             return isStatusOk();
         }
     }

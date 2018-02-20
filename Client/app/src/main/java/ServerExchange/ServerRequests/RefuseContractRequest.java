@@ -8,7 +8,7 @@ import java.util.HashMap;
  * Created by Dima on 19.02.2018.
  */
 
-public class RefuseContractRequest extends TokenServerRequest {
+public class RefuseContractRequest extends TokenServerRequest<Boolean> {
 
     @Override
     protected RequestType getRequestType(){ return RequestType.POST; }
