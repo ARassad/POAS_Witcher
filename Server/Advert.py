@@ -28,6 +28,7 @@ class Advert(Enum):
     ID = "id"
     Status = "status"
     Witcher = "id_witcher"
+    Header = "header"
 
 
 def create_advert(cursor, params):
@@ -57,10 +58,11 @@ def create_advert(cursor, params):
 
         cur_time = int(time.time())
         cursor.execute("insert into Contract (id_witcher, id_client, id_list_comments, id_task_located, \
-                        id_list_photos, text, bounty, status, last_update_status, last_update) \
-                         values(null, {}, {}, {}, {}, N'{}', {}, {}, {}, {})"
+                        id_list_photos, text, bounty, status, last_update_status, last_update, header) \
+                         values(null, {}, {}, {}, {}, N'{}', {}, {}, {}, {}, N'{}')"
                        .format(id_client, id_lcomment, params[Advert.TaskLocated.value], id_lphoto,
-                               params[Advert.Text.value], params[Advert.Bounty.value], 0, cur_time, cur_time))
+                               params[Advert.Text.value], params[Advert.Bounty.value], 0, cur_time,
+                               cur_time, params[Advert.Header.value]))
 
         status.status = Status.Ok.value
         status.message = EventAdvert.Success.value
