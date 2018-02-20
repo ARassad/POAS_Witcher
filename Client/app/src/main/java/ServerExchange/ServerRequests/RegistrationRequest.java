@@ -27,13 +27,14 @@ public class RegistrationRequest extends ServerRequest<Boolean>{
 
     private String login;
     private String password;
-    private String isWitcher;
+    private int isWitcher;
 
     @Override
     protected ServerMethod getMethod() {
-        HashMap<String, String>  params = new HashMap<>();
+        HashMap<String, Object>  params = new HashMap<>();
         params.put("login", login);
         params.put("password", password);
+        params.put("isWitcher", isWitcher);
 
         ServerMethod sm = new ServerMethod(REGISTR_METHOD_NAME, params);
         return sm;
@@ -55,11 +56,11 @@ public class RegistrationRequest extends ServerRequest<Boolean>{
 
 
 
-    public void registration(String login, String password, Profile.ProfileType type, IServerAnswerHandler onLoginHandler) throws IOException {
+    public void registration(String login, String password, Profile.ProfileType type, IServerAnswerHandler onLoginHandler) {
 
         this.login = login;
         this.password = Password.encode(password);
-        this.isWitcher = type == Profile.ProfileType.WITCHER ? "1" : "0";
+        this.isWitcher = type == Profile.ProfileType.WITCHER ? 1 : 0;
         this.startRequest();
         new AuthorizationRequest().login(login, password, onLoginHandler);
 
