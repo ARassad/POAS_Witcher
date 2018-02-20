@@ -47,18 +47,17 @@ public class AnswerWitcherInContractRequest extends TokenServerRequest<Boolean> 
         return JsonAnswerWitcherInContractServerAnswer.class;
     }
 
-    //TODO: определить возможные статусы? Поговорить с Мишей
-    public void acceptToAdvert(long id_contract, IServerAnswerHandler onAnswerWitcherInContractHandler) throws IOException {
+    public void acceptToAdvert(long id_contract, IServerAnswerHandler onAnswerWitcherInContractHandler) {
         int newStatus = Advert.AdvertStatus.IN_PROCESS.toInt();
         AnswerWitcherInContract(newStatus,id_contract, onAnswerWitcherInContractHandler);
     }
 
-    public void discardAdvert(long id_contract, IServerAnswerHandler onAnswerWitcherInContractHandler) throws IOException {
+    public void discardAdvert(long id_contract, IServerAnswerHandler onAnswerWitcherInContractHandler)  {
         int newStatus = Advert.AdvertStatus.FREE.toInt();
         AnswerWitcherInContract(newStatus,id_contract, onAnswerWitcherInContractHandler);
     }
 
-    private void AnswerWitcherInContract(int status, long id_contract, IServerAnswerHandler onAnswerWitcherInContractHandler) throws IOException {
+    private void AnswerWitcherInContract(int status, long id_contract, IServerAnswerHandler onAnswerWitcherInContractHandler) {
         this.status = status;
         this.id_contract = id_contract;
         startRequest(onAnswerWitcherInContractHandler);
