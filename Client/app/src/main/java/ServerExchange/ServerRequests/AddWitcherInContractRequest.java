@@ -10,6 +10,9 @@ import java.util.HashMap;
 
 public class AddWitcherInContractRequest extends TokenServerRequest {
 
+    @Override
+    protected RequestType getRequestType(){ return RequestType.POST; }
+
     private String ADD_WITCHER_IN_CONTRACT_METHOD_NAME = "AddWitcherInContract";
 
     private long id_contract;
