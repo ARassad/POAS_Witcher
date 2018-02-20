@@ -12,25 +12,12 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_toolbar"
+        android:layout_height="wrap_content"
         android:background="@color/colorMain">
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp">
-
-            <Button
-                android:id="@+id/button_menu"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@color/colorMain"
-                android:textSize="20sp"
-                android:textColor="@color/colorHeader"
-                android:contentDescription="@string/menu" />
+            android:layout_height="match_parent">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -38,13 +25,10 @@
                 android:text="@string/edit_name"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
                 android:textColor="@color/colorHeader"/>
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
-
 
     <ProgressBar
         style="?android:attr/progressBarStyleLarge"
