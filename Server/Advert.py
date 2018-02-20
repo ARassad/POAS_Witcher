@@ -162,6 +162,7 @@ def get_advert(cursor, params):
     obj.status = row[8]
     obj.last_update_status = row[9]
     obj.last_update = row[10]
+    obj.header = row[11]
     id_witcher = row[1]
     id_client = row[2]
     id_list_comments = row[3]
