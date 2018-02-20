@@ -44,17 +44,29 @@ public class UpdateAdvertRequest extends TokenServerRequest<Boolean> {
         this.id = null;
         //params.put("id_witcher",this.id_witcher);
         //params.put("status",this.status);
-        params.put("id_task_located",this.id_task_located);
-        this.id_task_located = null;
-        params.put("text", text);
-        this.text = null;
+        if (id_task_located!= null) {
+            params.put("id_task_located", this.id_task_located);
+            this.id_task_located = null;
+        }
+        if (text != null) {
+            params.put("text", text);
+            this.text = null;
+        }
 
-        params.put("bounty",this.bounty);
-        this.bounty = null;
-        params.put("photo_del", this.photo_del);
-        this.photo_del = null;
-        params.put("photo_new", this.photo_new);
-        this.photo_new = null;
+        if (bounty != null) {
+            params.put("bounty", this.bounty);
+            this.bounty = null;
+        }
+
+        if ( photo_del!= null) {
+            params.put("photo_del", this.photo_del);
+            this.photo_del = null;
+        }
+
+        if (photo_new != null) {
+            params.put("photo_new", this.photo_new);
+            this.photo_new = null;
+        }
 
         return new ServerMethod(UPDATE_ADVERT_METHOD_NAME, params);
     }

@@ -71,8 +71,9 @@ public class UpdateProfileRequest extends TokenServerRequest<Boolean> {
     public void updateProfile(String name, String text, Bitmap photo, IServerAnswerHandler onUpdateProfileHandler) throws IOException {
         this.name = name;
         this.text = text;
-        this.photo  = ImageConvert.toBase64Str(photo);
-
+        if (photo != null) {
+            this.photo = ImageConvert.toBase64Str(photo);
+        }
         startRequest(onUpdateProfileHandler);
     }
 
