@@ -192,7 +192,7 @@ public abstract class ServerRequest <AnswerType> {
 
             JsonServerAnswer serverAnswer = gson.fromJson(reader, JsonServerAnswerClass);
             if ( serverAnswer.status.equals("Error") ){
-                throw new ServerExceprion( serverAnswer.message);
+                throw new ServerException( serverAnswer.message);
             }
             JsonAnswerHandler(serverAnswer);
 

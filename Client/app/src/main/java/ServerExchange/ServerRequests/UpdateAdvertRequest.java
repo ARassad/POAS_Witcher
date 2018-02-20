@@ -10,9 +10,12 @@ import java.util.HashMap;
  * Created by Дима on 18.02.2018.
  */
 
-public class UpdateAdvertRequest extends TokenServerRequest {
+public class UpdateAdvertRequest extends TokenServerRequest<Boolean> {
 
-    private String UPDATE_ADVERT_METHOD_NAME = "EditAdvert";
+    @Override
+    protected RequestType getRequestType(){ return RequestType.POST; }
+	
+	private String UPDATE_ADVERT_METHOD_NAME = "EditAdvert";
 
     private String name;
     private String text;

@@ -12,6 +12,8 @@ import ServerExchange.ImageConvert;
  * Created by Dryush on 17.02.2018.
  */
 
+
+//TODO: Уточнить а нужен ли
 public class GetImageRequest extends TokenServerRequest<Bitmap> {
 
 

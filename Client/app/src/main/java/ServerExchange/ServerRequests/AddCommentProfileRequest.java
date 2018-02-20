@@ -8,9 +8,12 @@ import java.util.HashMap;
  * Created by Дима on 18.02.2018.
  */
 
-public class AddCommentProfileRequest extends TokenServerRequest {
+public class AddCommentProfileRequest extends TokenServerRequest<Boolean> {
 
-    private String ADD_COMMENT_PROFILE_METHOD_NAME = "AddCommentProfile";
+    @Override
+    protected RequestType getRequestType(){ return RequestType.POST; }
+	
+	private String ADD_COMMENT_PROFILE_METHOD_NAME = "AddCommentProfile";
 
     private String text;
     private long profile_id;

@@ -1,9 +1,11 @@
 package ServerExchange.ServerRequests;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import ServerExchange.Advert;
 import ServerExchange.Comment;
+import ServerExchange.Location;
 
 /**
  * Created by Dryush on 16.02.2018.
@@ -11,7 +13,10 @@ import ServerExchange.Comment;
 
 public class GetAdvertRequest extends TokenServerRequest<Advert> {
 
-    private String GET_ADVERT_METHOD_NAME = "GetAdvert";
+    @Override
+    protected RequestType getRequestType(){ return RequestType.GET; }
+	
+	private String GET_ADVERT_METHOD_NAME = "GetAdvert";
 
     private long id;
 
@@ -44,12 +49,13 @@ public class GetAdvertRequest extends TokenServerRequest<Advert> {
         public ClientJson client;
 
         public class AdvertJson{
-            public long bounty;
+            public int bounty;
             class Comments{
                 public long count;
                 public long comments[];
             }
             public Comments commentsContract;
+            //TODO: Напомнить про заголовок
 
             public long id;
             public String kingdom;
@@ -62,6 +68,7 @@ public class GetAdvertRequest extends TokenServerRequest<Advert> {
             }
             public PhotosJson photoContact;
             public int status;
+            public String text;
             public String town;
         }
         public AdvertJson object;
@@ -74,7 +81,12 @@ public class GetAdvertRequest extends TokenServerRequest<Advert> {
 
         @Override
         public Advert convert() {
-            return null;
+            java.util.Date dateOfLastUpdate = new java.util.Date(object.last_update);
+            //TODO: Узнать, как приходят фотки
+            Advert advert = new Advert(object.id, "fix it", object.text, null, new Location(object.kingdom, object.town),
+                    object.bounty, client.id, null/*other method*/, witcher.id, Advert.AdvertStatus.fromInt(object.status),
+                    dateOfLastUpdate, null);
+            return advert;
         }
     }
 

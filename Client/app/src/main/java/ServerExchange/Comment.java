@@ -42,9 +42,11 @@ public class Comment {
     }
 
 
-    public Comment(long id, String text, long id_author, Date dateOfCreate) {
+    public Comment(long id, String text, long id_author, String authorName, Date dateOfCreate, Bitmap photo) {
         this.id = id;
         this.text = text;
+        this.authorAvatar = photo;
+        this.authorName = authorName;
         //this.author = author;
         this.id_author = id_author;
         this.dateOfCreate = dateOfCreate;

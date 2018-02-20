@@ -12,7 +12,10 @@ import ServerExchange.Profile;
 
 public class RegistrationRequest extends ServerRequest<Boolean>{
 
-    public RegistrationRequest() {
+    @Override
+    protected RequestType getRequestType(){ return RequestType.POST; }
+	
+	public RegistrationRequest() {
         super();
     }
 

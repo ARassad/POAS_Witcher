@@ -18,8 +18,13 @@ public class Profile implements ICommented{
     
     private long id;
     
-    Profile(){
-        
+    public Profile( long id, String name, String about, ProfileType type, LinkedList<AdvertCard> history, Bitmap avatar){
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.info = about;
+        this.history = history;
+        this.image = avatar;
     }
     
     public long getId(){
@@ -36,7 +41,7 @@ public class Profile implements ICommented{
         return name;
     }
 
-    CommentsContainer comments;
+    private CommentsContainer comments;
     @Override
     public ArrayList<Comment> getComments() {
         return comments.getComments();

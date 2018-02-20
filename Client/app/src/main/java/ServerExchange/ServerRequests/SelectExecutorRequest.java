@@ -7,22 +7,23 @@ import java.util.HashMap;
  * Created by Dima on 19.02.2018.
  */
 
-public class SelectWitcherInContractRequest extends TokenServerRequest {
+public class SelectExecutorRequest extends TokenServerRequest<Boolean> {
 
     private String SELECT_WITCHER_IN_CONTRACT_METHOD_NAME = "SelectWitcherInContract";
 
     private long id_witcher;
     private long id_contract;
 
-    public SelectWitcherInContractRequest(String address) {super(address);}
+    public SelectExecutorRequest(String address) {super(address);}
+    public SelectExecutorRequest() {super();}
 
 
     @Override
     protected ServerMethod getMethod() {
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("id_witcher", String.valueOf(id_witcher));
-        params.put("id_contract", String.valueOf(id_contract));
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("id_witcher", id_witcher);
+        params.put("id_contract", id_contract);
 
         return new ServerMethod(SELECT_WITCHER_IN_CONTRACT_METHOD_NAME, params);
     }
@@ -39,7 +40,7 @@ public class SelectWitcherInContractRequest extends TokenServerRequest {
     protected Class<? extends JsonServerAnswer> getJsonAnswerClass() {
 
 
-        return JsonServerAnswer.class;
+        return JsonSelectWitcherInContractServerAnswer.class;
     }
 
     public void SelectWitcherInContract(long id_witcher, long id_contract, IServerAnswerHandler onSelectWitcherInContractHandler) throws IOException {

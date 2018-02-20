@@ -1,9 +1,11 @@
 package ServerExchange.ServerRequests;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 import ServerExchange.Comment;
+import ServerExchange.ImageConvert;
 import ServerExchange.Profile;
 
 /**
@@ -45,27 +47,46 @@ public class GetCommentsRequest extends TokenServerRequest<LinkedList<Comment>> 
 
 
 
+    //TODO: уточнить ответ от сервера
     class JsonCommentsAnswer extends JsonServerAnswer{
-
+        class JsonComment{
+            public String photo;
+            public String author_name;
+            public long author_id;
+            public long date_of_create;
+            public long id;
+            public String text;
+        }
+        JsonComment comments[];
 
         @Override
         public LinkedList<Comment> convert() {
-            return null;
+            LinkedList<Comment> coms = new LinkedList<>();
+            for (JsonComment com : comments){
+                Date date = new java.util.Date(com.date_of_create); //TODO: проверить нужно ли умножаьт на 1000
+                coms.addLast( new Comment(com.id, com.text, com.author_id, com.author_name, date, ImageConvert.fromBase64Str(com.photo)));
+            }
+            return coms;
         }
     }
 
 
     @Override
     protected Class<? extends JsonServerAnswer> getJsonAnswerClass() {
-        return null;
+        return JsonCommentsAnswer.class;
     }
 
-    /* TODO:
-    public LinkedList<Comment> getAdvertComments(long id){
+
+    public void getAdvertComments(long id, IServerAnswerHandler onGetCommentsHandler){
         type = Type.ADVERT;
+        this.id = id;
+        startRequest(onGetCommentsHandler);
     }
-    public LinkedList<Comment> getProfileComments(long id){
+    public void getProfileComments(long id, IServerAnswerHandler onGetCommentsHandler){
         type = Type.PROFILE;
+        this.id = id;
+        startRequest(onGetCommentsHandler);
+
     }
-*/
+
 }

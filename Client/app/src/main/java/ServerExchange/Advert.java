@@ -116,6 +116,28 @@ public class Advert implements ICommented {
         COMPLETED,
         WITCHER_LEAVE,
         CUSTOMER_REFUSED;
+        public static AdvertStatus fromInt(int i){
+            switch (i){
+                case 0: return FREE;
+                case 1: return ASSIGNED_WITCHER;
+                case 2: return IN_PROCESS;
+                case 3: return COMPLETED;
+                case 4: return WITCHER_LEAVE;
+                case 5: return CUSTOMER_REFUSED;
+                default: throw new RuntimeException("Number must be between 0 and 5 [0;5], not " + i);
+            }
+        }
+        public int toInt(){
+            switch (this){
+                case FREE:              return 0;
+                case ASSIGNED_WITCHER:  return 1;
+                case IN_PROCESS:        return 2;
+                case COMPLETED:         return 3;
+                case WITCHER_LEAVE:     return 4;
+                case CUSTOMER_REFUSED:  return 5;
+                default: throw new RuntimeException("some trash, wo don`t know how you do it");
+            }
+        }
     };
     
     private AdvertStatus status;
