@@ -31,7 +31,7 @@ public class AuthorizationRequest extends LoginRequest<Boolean>{
     @Override
     protected ServerMethod getMethod() {
 
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, Object> params = new HashMap<>();
         params.put("login", login);
         params.put("password", password);
 

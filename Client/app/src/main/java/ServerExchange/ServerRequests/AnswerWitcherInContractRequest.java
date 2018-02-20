@@ -27,9 +27,9 @@ public class AnswerWitcherInContractRequest extends TokenServerRequest<Boolean> 
     @Override
     protected ServerMethod getMethod() {
 
-        HashMap<String, String> params = new HashMap<>();
-        params.put("status", String.valueOf(status));
-        params.put("id_contract", String.valueOf(id_contract));
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("status", status);
+        params.put("id_contract", id_contract);
 
         return new ServerMethod(ANSWER_WITCHER_IN_CONTRACT_METHOD_NAME, params);
     }
