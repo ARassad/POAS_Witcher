@@ -1,10 +1,14 @@
 package ServerExchange.ServerRequests;
 
+import android.graphics.Bitmap;
+
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import ServerExchange.Advert;
 import ServerExchange.Comment;
+import ServerExchange.ImageConvert;
 import ServerExchange.Location;
 
 /**
@@ -50,12 +54,7 @@ public class GetAdvertRequest extends TokenServerRequest<Advert> {
 
         public class AdvertJson{
             public int bounty;
-            class Comments{
-                public long count;
-                public long comments[];
-            }
-            public Comments commentsContract;
-            //TODO: Напомнить про заголовок
+            public String header;
 
             public long id;
             public String kingdom;
@@ -64,7 +63,7 @@ public class GetAdvertRequest extends TokenServerRequest<Advert> {
 
             public class PhotosJson{
                 public long count;
-                public long photo[];
+                public String photo[];
             }
             public PhotosJson photoContact;
             public int status;
@@ -82,10 +81,15 @@ public class GetAdvertRequest extends TokenServerRequest<Advert> {
         @Override
         public Advert convert() {
             java.util.Date dateOfLastUpdate = new java.util.Date(object.last_update);
-            //TODO: Узнать, как приходят фотки
-            Advert advert = new Advert(object.id, "fix it", object.text, null, new Location(object.kingdom, object.town),
+
+            LinkedList<Bitmap> imgs = new LinkedList<>();
+            for (String ph : object.photoContact.photo){
+                imgs.addLast(ImageConvert.fromBase64Str(ph));
+            }
+
+            Advert advert = new Advert(object.id, object.header, object.text, imgs, new Location(object.kingdom, object.town),
                     object.bounty, client.id, null/*other method*/, witcher.id, Advert.AdvertStatus.fromInt(object.status),
-                    dateOfLastUpdate, null);
+                    dateOfLastUpdate, null/*other method*/);
             return advert;
         }
     }
