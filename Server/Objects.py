@@ -24,6 +24,7 @@ class ApiMethod(Enum):
     AnswerWitcherInContract = "AnswerWitcherInContract"
     RefuseContract = "RefuseContract"
     GetListComments = "GetListComments"
+    GetTowns = "GetTowns"
 
 
 class Comment(Enum):

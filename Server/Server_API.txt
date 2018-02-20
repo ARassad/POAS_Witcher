@@ -141,7 +141,8 @@ localhost/api?method=GetListComments&token=b5ad4e9f2bdedb278dd91ce0e8043fce&type
 type=profile - профиль
 type=contract - контракт
 
-Получить информацию о комментарии
+Получить города
+http://localhost/api?method=GetTowns&token=b5ad4e9f2bdedb278dd91ce0e8043fce
 
 
 
