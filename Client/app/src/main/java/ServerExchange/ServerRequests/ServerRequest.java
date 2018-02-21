@@ -135,11 +135,12 @@ public abstract class ServerRequest <AnswerType> {
 
     abstract protected Class<? extends JsonServerAnswer> getJsonAnswerClass();
 
-    AnswerType answer;
+    AnswerType answer = null;
+    Exception excp = null;
+    String errorMessage = null;
 
 
-
-    protected AnswerType doRequest(ServerMethod method, Class< ? extends JsonServerAnswer> JsonServerAnswerClass) throws IOException {
+    protected AnswerType doRequest(ServerMethod method, Class< ? extends JsonServerAnswer> JsonServerAnswerClass) {
 
         String request = PROTOCOL + serverAddress + API;
         if ( getRequestType() == RequestType.POST ) {
@@ -155,8 +156,11 @@ public abstract class ServerRequest <AnswerType> {
 
         try {
             String strRequestMethod = "";
-            if (getRequestType() == RequestType.POST) { strRequestMethod = "POST"; }
-            else if ( getRequestType() == RequestType.GET) {strRequestMethod = "GET";}
+            if (getRequestType() == RequestType.POST) {
+                strRequestMethod = "POST";
+            } else if (getRequestType() == RequestType.GET) {
+                strRequestMethod = "GET";
+            }
 
             URL requestURL = new URL(request);
 
@@ -187,19 +191,17 @@ public abstract class ServerRequest <AnswerType> {
             BufferedReader reader = new BufferedReader(inReader);
 
             JsonServerAnswer serverAnswer = gson.fromJson(reader, JsonServerAnswerClass);
-
-            if ( serverAnswer.status.equals("Error") ){
-                throw new ServerException( serverAnswer.message);
-            }
             JsonAnswerHandler(serverAnswer);
 
+            if (!serverAnswer.isStatusOk()){
+                errorMessage = serverAnswer.message == null ? "" : serverAnswer.message;
+            }
             return (AnswerType) serverAnswer.convert();
-
-        } catch (IOException except){
-            throw except;
+        }catch (Exception e){
+            excp = e;
+            return null;
         }
     }
-
 
     /**
      * перегрузи этот метод, если хочешь обработать JSON ответ до его конвертации
@@ -224,6 +226,7 @@ public abstract class ServerRequest <AnswerType> {
 
         IServerAnswerHandler handler;
 
+
         Class<? extends JsonServerAnswer> aClass;
 
 
@@ -236,21 +239,29 @@ public abstract class ServerRequest <AnswerType> {
         AnswerType answer;
 
         @Override
-        protected Void doInBackground(Void ... p){
-            try {
-                answer = doRequest(getMethod(), aClass);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        protected Void doInBackground(Void ... p) {
+
+
+            answer = doRequest(getMethod(), aClass);
+
             return null;
         }
 
 
         @Override
         protected void onPostExecute(Void p){
-            if (handler != null) {
-
-                handler.handle(answer);
+            if (excp != null){
+                handler.exceptionHandle(excp);
+                excp = null;
+            } else {
+                if (handler != null) {
+                    if (errorMessage != null) {
+                        handler.errorHandle(errorMessage);
+                        errorMessage = null;
+                    }
+                    handler.handle(answer);
+                    answer = null;
+                }
             }
         }
 
