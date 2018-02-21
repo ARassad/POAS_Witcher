@@ -17,15 +17,16 @@ from Server.Witcher import answer_witcher
 from Server.Witcher import refuse_contract
 from Server.Comments import get_list_comment
 from Server.Town import get_towns
+from Server.SecurityServer import security_requests
 from http.server import BaseHTTPRequestHandler
 from http.server import HTTPServer
+from urllib.parse import parse_qsl, urlsplit
 from cgi import parse_header
 from cgi import parse_multipart
 import json
 from urllib.parse import parse_qs
 from Server.Objects import Object
 from Server.Objects import Status
-from Server.Objects import ErrorMessage
 from Server.Objects import ApiMethod
 cursor = connect_database()
 
@@ -58,21 +59,17 @@ class HttpServer(BaseHTTPRequestHandler):
 
     def do_GET(self):
         self._set_headers()
-        url = self.requestline[5 + 4:-9].split('&')
-        dct = {}
-        if url[0] != '' and url[0] != 'con.ico':
-            dct = dict((val.split('=')[0], val.split('=')[1]) for val in url)
+        url = self.requestline[9:-9]
+        dct = dict(parse_qsl(urlsplit(url).path))
+        if dct.get('id', None) is not None:
+            dct['id'] = int(dct['id'])
+
         mymethod = dct.get('method', None)
-
-        if mymethod is None:
-            HttpServer.error_request(self, ErrorMessage.EmptyRequest.value)
-        elif api_methods_get.get(mymethod, None) is not None:
-            if dct.get('id', None) is not None:
-                dct['id'] = int(dct['id'])
-
+        is_ok, stat = security_requests(mymethod, dct)
+        if is_ok:
             self.wfile.write(str.encode(api_methods_get[mymethod](cursor, dct)))
         else:
-            HttpServer.error_request(self, ErrorMessage.UnknownRequest.value)
+            self.wfile.write(str.encode(stat))
 
     def do_HEAD(self):
         self._set_headers()
@@ -83,14 +80,13 @@ class HttpServer(BaseHTTPRequestHandler):
         for key, val in postvars.items():
             mstr = key
         dct = json.loads(mstr)
-        mymethod = self.requestline[10:-9]
 
-        if mymethod is None:
-            HttpServer.error_request(self, ErrorMessage.EmptyRequest.value)
-        elif api_methods_post.get(mymethod, None) is not None:
+        mymethod = self.requestline[10:-9]
+        is_ok, stat = security_requests(mymethod, dct, 0)
+        if is_ok:
             self.wfile.write(str.encode(api_methods_post[mymethod](cursor, dct)))
         else:
-            HttpServer.error_request(self, ErrorMessage.UnknownRequest.value)
+            self.wfile.write(str.encode(stat))
 
     def parse_POST(self):
         ctype, pdict = parse_header(self.headers['content-type'])
