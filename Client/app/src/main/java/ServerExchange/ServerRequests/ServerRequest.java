@@ -139,6 +139,7 @@ public abstract class ServerRequest <AnswerType> {
     Exception excp = null;
     String errorMessage = null;
 
+    boolean isErrorInServerRequest = false;
 
     protected AnswerType doRequest(ServerMethod method, Class< ? extends JsonServerAnswer> JsonServerAnswerClass) {
 
@@ -192,10 +193,9 @@ public abstract class ServerRequest <AnswerType> {
 
             JsonServerAnswer serverAnswer = gson.fromJson(reader, JsonServerAnswerClass);
             JsonAnswerHandler(serverAnswer);
+            isErrorInServerRequest = ! serverAnswer.isStatusOk();
 
-            if (!serverAnswer.isStatusOk()){
-                errorMessage = serverAnswer.message == null ? "" : serverAnswer.message;
-            }
+
             return (AnswerType) serverAnswer.convert();
         }catch (Exception e){
             excp = e;
@@ -224,7 +224,7 @@ public abstract class ServerRequest <AnswerType> {
     
     private class RequestProcess extends AsyncTask<Void, Void, Void> {
 
-        IServerAnswerHandler handler;
+        IServerAnswerHandler handler = null;
 
 
         Class<? extends JsonServerAnswer> aClass;
@@ -255,9 +255,10 @@ public abstract class ServerRequest <AnswerType> {
                 excp = null;
             } else {
                 if (handler != null) {
-                    if (errorMessage != null) {
+                    if (isErrorInServerRequest) {
                         handler.errorHandle(errorMessage);
                         errorMessage = null;
+                        isErrorInServerRequest = false;
                     }
                     handler.handle(answer);
                     answer = null;

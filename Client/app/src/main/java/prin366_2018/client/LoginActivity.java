@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ServerExchange.ServerRequests.AuthorizationRequest;
+import ServerExchange.ServerRequests.IServerAnswerHandler;
 import ServerExchange.ServerRequests.ServerRequest;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -78,9 +79,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (isFirstOpen) {
             SharedPreferences params = getSharedPreferences("settings", MODE_PRIVATE);
             //ip Андрея
-            ServerRequest.setDefaultAddress("192.168.0.4");
+            //ServerRequest.setDefaultAddress("192.168.0.4");
             //ip Хоста Миши
-            //ServerRequest.setDefaultAddress("212.237.54.117");
+            ServerRequest.setDefaultAddress("212.237.54.117");
             //ServerRequest.setDefaultAddress( params.getString("server_address", "localhost"));
 
             if (!params.contains("server_address")) {
@@ -220,7 +221,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            new AuthorizationRequest().login(email, password, null);
+            new AuthorizationRequest().login(email, password, new IServerAnswerHandler<Boolean>() {
+                @Override
+                public void handle(Boolean answ) {
+                    if (answ!= null && answ == true){
+                        startActivity( new Intent(LoginActivity.this, ProfileActivity.class));
+                    }
+                }
+
+                @Override
+                public void errorHandle(String errorMessage) {
+
+                }
+
+                @Override
+                public void exceptionHandle(Exception excp) {
+
+                }
+            });
             //mAuthTask = new UserLoginTask(email, password);
             //mAuthTask.execute((Void) null);
         }

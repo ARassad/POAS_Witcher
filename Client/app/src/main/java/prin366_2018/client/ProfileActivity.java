@@ -45,11 +45,14 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
 
         @Override
         public void handle(Profile answ) {
-            name.setText( answ.getName());
-            aboutMe.setText( answ.getInfo());
-            role.setText( answ.getType() == Profile.ProfileType.WITCHER ? "Ведьмак" : "Наниматель");
-            image.setImageBitmap( answ.getImage());
 
+            name.setText(answ.getName() != null ? answ.getName() : "NoName");
+
+            aboutMe.setText( answ.getInfo() != null ? answ.getName() : "Nobody");
+            role.setText( answ.getType() == Profile.ProfileType.WITCHER ? "Ведьмак" : "Наниматель");
+            if (answ.getImage() != null) {
+                image.setImageBitmap(answ.getImage());
+            }
         }
 
         @Override
@@ -116,6 +119,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         });
 
         //Вот здесь я пишу код (Андрей)
+        profileRequest.getProfile(9, new onGetProfile());
 
     }
 
