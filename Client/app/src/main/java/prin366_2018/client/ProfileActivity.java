@@ -1,8 +1,12 @@
 package prin366_2018.client;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,11 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TextView;
-
-import ServerExchange.Profile;
 
 /**
  * Created by Dryush on 18.02.2018.
@@ -24,6 +25,10 @@ import ServerExchange.Profile;
  */
 
 public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    static final private int RESULT_CANCEL = 0;
+    static final private int RESULT_OK = 1;
+    static final private int SAVE_DATA = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +53,6 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/fa-solid-900.ttf");
 
-        /*Button buttonMenu = (Button)findViewById(R.id.button_menu);
-        buttonMenu.setTypeface(typeface);
-        buttonMenu.setText("\uf0c9");*/
-
         Button buttonEdit = (Button)findViewById(R.id.button_edit);
         buttonEdit.setTypeface(typeface);
         buttonEdit.setText("\uf044");
@@ -61,18 +62,35 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         buttonSendComment.setText("\uf1d8");
 
         buttonEdit.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
-                startActivity(intent);
+                TextView name = (TextView) findViewById(R.id.text_name);
+                TextView aboutMe = (TextView) findViewById(R.id.text_about);
+                Bundle b = new Bundle();
+                intent.putExtra("name", name.getText().toString());
+                intent.putExtra("aboutMe", aboutMe.getText().toString());
+                startActivityForResult(intent, SAVE_DATA);
             }
         });
     }
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == SAVE_DATA) {
+            if (resultCode == RESULT_OK) {
+                TextView name = (TextView) findViewById(R.id.text_name);
+                name.setText(data.getStringExtra("name"));
+
+                TextView aboutMe = (TextView) findViewById(R.id.text_about);
+                aboutMe.setText(data.getStringExtra("aboutMe"));
+            }
+        }
     }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -80,10 +98,9 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
 
         int id = item.getItemId();
 
-        if (id == R.id.nav_profile) {
-
-        } else if (id == R.id.nav_gallery) {
-
+        if (id == R.id.nav_advert) {
+            Intent intent = new Intent(ProfileActivity.this, AdvertListActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

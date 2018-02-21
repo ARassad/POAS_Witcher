@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">iWitcher</string>
     <string name="profile_name">Профиль</string>
+    <string name="advert_name">Объявления</string>
     <string name="auth_name">Авторизация</string>
     <string name="edit_name">Редактировать профиль</string>
     <string name="menu">Меню</string>
