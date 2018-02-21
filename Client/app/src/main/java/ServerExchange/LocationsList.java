@@ -52,8 +52,17 @@ public class LocationsList {
 
         }
 
+        @Override
+        public void errorHandle(String errorMessage) {
+            //TODO: Добавить обработчик ошибок
+        }
 
+        @Override
+        public void exceptionHandle(Exception excp) {
+            //TODO: Добавить обработчик ошибок
+        }
     }
+
     static Filler filler = new Filler();
     static GetLocationsListRequest request = new GetLocationsListRequest();
     public static void refillFromServer(){
