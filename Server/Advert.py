@@ -4,9 +4,12 @@ from Server.Objects import Status
 from Server.Profile import Comment
 from enum import Enum
 import time
-# status: 0 - in_search
-# status: 1 - in_process
-# status: 2 - is_done
+#0 - FREE - Открытый / В поиске
+#1 - ASSIGNED_WITCHER - Исполнитель назначен, но ещё не подтвердил
+#2 - IN_PROCESS - Исполнитель назначен и выполняет
+#3 - COMPLETED - Исполнтель выполнил заказ
+#4 - WITCHER_LEAVE - Исполнитель отказался
+#5 - CUSTOMER_REFUSED - Заказчик отказался от Ведьмака
 
 
 class EventAdvert(Enum):
@@ -25,6 +28,7 @@ class Advert(Enum):
     ID = "id"
     Status = "status"
     Witcher = "id_witcher"
+    Header = "header"
 
 
 def create_advert(cursor, params):
@@ -54,19 +58,20 @@ def create_advert(cursor, params):
 
         cur_time = int(time.time())
         cursor.execute("insert into Contract (id_witcher, id_client, id_list_comments, id_task_located, \
-                        id_list_photos, text, bounty, status, last_update_status, last_update) \
-                         values(null, {}, {}, {}, {}, N'{}', {}, {}, {}, {})"
+                        id_list_photos, text, bounty, status, last_update_status, last_update, header) \
+                         values(null, {}, {}, {}, {}, N'{}', {}, {}, {}, {}, N'{}')"
                        .format(id_client, id_lcomment, params[Advert.TaskLocated.value], id_lphoto,
-                               params[Advert.Text.value], params[Advert.Bounty.value], 0, cur_time, cur_time))
+                               params[Advert.Text.value], params[Advert.Bounty.value], 0, cur_time,
+                               cur_time, params[Advert.Header.value]))
 
         status.status = Status.Ok.value
-        obj.message = EventAdvert.Success.value
+        status.message = EventAdvert.Success.value
         cursor.execute("select max(id) from Contract")
         obj.id_advert = cursor.fetchone()[0]
 
     else:
         status.status = Status.Error.value
-        obj.message = EventAdvert.WitcherCreator.value
+        status.message = EventAdvert.WitcherCreator.value
 
     status.object = obj
     return status.toJSON()
@@ -77,7 +82,6 @@ def edit_advert(cursor, params):
                    .format(params[User.Token.value]))
     row = cursor.fetchone()
 
-    obj = Object()
     status = Object()
 
     if row is not None:
@@ -98,6 +102,8 @@ def edit_advert(cursor, params):
         if params.get(Advert.Status.value, None) is not None:
             update_string += "status={},".format(params[Advert.Status.value])
             update_string += "last_update_status={},".format(last_update)
+        if params.get(Advert.Header.value, None) is not None:
+            update_string += "header={},".format(params[Advert.Header.value])
         update_string += "last_update={}".format(last_update)
 
         if params.get(Advert.DelPhoto.value, None) is not None:
@@ -113,12 +119,11 @@ def edit_advert(cursor, params):
         cursor.execute("update Contract set {} where id={}".format(update_string, params[Advert.ID.value]))
 
         status.status = Status.Ok.value
-        obj.message = EventAdvert.Success.value
+        status.message = EventAdvert.Success.value
     else:
         status.status = Status.Error.value
-        obj.message = EventAdvert.WitcherCreator.value
+        status.message = EventAdvert.WitcherCreator.value
 
-    status.object = obj
     return status.toJSON()
 
 
@@ -127,7 +132,6 @@ def delete_advert(cursor, params):
                    .format(params[User.Token.value]))
     row = cursor.fetchone()
 
-    obj = Object()
     status = Object()
 
     if row is not None:
@@ -138,15 +142,14 @@ def delete_advert(cursor, params):
         if id_client == id_cont_client:
             cursor.execute("delete Contract where id={}".format(params[Advert.ID.value]))
             status.status = Status.Ok.value
-            obj.message = EventAdvert.Success.value
+            status.message = EventAdvert.Success.value
         else:
             status.status = Status.Error.value
-            obj.message = EventAdvert.AlienDelete.value
+            status.message = EventAdvert.AlienDelete.value
     else:
         status.status = Status.Error.value
-        obj.message = EventAdvert.WitcherCreator.value
+        status.message = EventAdvert.WitcherCreator.value
 
-    status.object = obj
     return status.toJSON()
 
 
@@ -212,21 +215,19 @@ def add_witcher_in_contract(cursor, params):
                    .format(params[User.Token.value]))
     row = cursor.fetchone()
 
-    obj = Object()
     status = Object()
 
     if row is not None:
         id_witcher = row[0]
         status.status = Status.Ok.value
-        obj.message = EventAdvert.Success.value
+        status.message = EventAdvert.Success.value
 
         cursor.execute("insert into Desired_Contract (id_witcher, id_contract) values({}, {})"
                        .format(id_witcher, params[Advert.ID.value]))
     else:
         status.status = Status.Error.value
-        obj.message = EventAdvert.ClientAsWitcher.value
+        status.message = EventAdvert.ClientAsWitcher.value
 
-    status.object = obj
     return status.toJSON()
 
 
@@ -240,7 +241,7 @@ def get_profile_desired_contract(cursor, params):
     obj = Object()
 
     status.status = Status.Ok.value
-    obj.message = EventAdvert.Success.value
+    status.message = EventAdvert.Success.value
     obj.witchers = Object()
     obj.witchers.witcher = {}
     obj.witchers.count = len(rows)

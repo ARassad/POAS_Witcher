@@ -22,19 +22,18 @@ def select_witcher(cursor, params):
     cursor.execute("select * from Client where id_profile=(select id_profile from Token_Table where token='{}')"
                    .format(params[User.Token.value]))
     row = cursor.fetchone()
-    status, obj = Object(), Object()
+    status = Object()
 
     if row is not None:
         cursor.execute("update Contract set id_witcher={} where id={}"
                       .format(params[Witcher.IDpost.value], params[Advert.IDpost]))
 
         status.status = Status.Ok.value
-        obj.message = EventWitcher.Success.value
+        status.message = EventWitcher.Success.value
     else:
         status.status = Status.Ok.value
-        obj.message = EventWitcher.WitcherSelect.value
+        status.message = EventWitcher.WitcherSelect.value
 
-    status.object = obj
     return status.toJSON()
 
 
@@ -42,7 +41,7 @@ def answer_witcher(cursor, params):
     cursor.execute("select * from Witcher where id_profile=(select id_profile from Token_Table where token='{}')"
                    .format(params[User.Token.value]))
     row = cursor.fetchone()
-    status, obj = Object(), Object()
+    status = Object()
 
     if row is not None:
         id_answer = params[Witcher.Status.value]
@@ -53,12 +52,11 @@ def answer_witcher(cursor, params):
             cursor.execute("update Contract set id_witcher=null where id={}"
                            .format(params[Advert.IDpost]))
         status.status = Status.Ok.value
-        obj.message = EventWitcher.Success.value
+        status.message = EventWitcher.Success.value
     else:
         status.status = Status.Error.value
-        obj.message = EventWitcher.ClientSelect.value
+        status.message = EventWitcher.ClientSelect.value
 
-    status.object = obj
     return status.toJSON()
 
 
@@ -66,16 +64,15 @@ def refuse_contract(cursor, params):
     cursor.execute("select * from Client where id_profile=(select id_profile from Token_Table where token='{}')"
                    .format(params[User.Token.value]))
     row = cursor.fetchone()
-    status, obj = Object(), Object()
+    status = Object()
 
     if row is not None:
         cursor.execute("update Contract set id_witcher=null where id={}"
                        .format(params[Advert.IDpost]))
         status.status = Status.Ok.value
-        obj.message = EventWitcher.Success.value
+        status.message = EventWitcher.Success.value
     else:
         status.status = Status.Error.value
-        obj.message = EventWitcher.WitcherSelect.value
+        status.message = EventWitcher.WitcherSelect.value
 
-    status.object = obj
     return status.toJSON()

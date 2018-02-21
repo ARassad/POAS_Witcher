@@ -24,10 +24,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/fa-solid-900.ttf");
 
-        Button buttonMenu = (Button)findViewById(R.id.button_menu);
-        buttonMenu.setTypeface(typeface);
-        buttonMenu.setText("\uf0c9");
-
         Button buttonSave = (Button)findViewById(R.id.button_save_edit);
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -25,7 +25,7 @@ def get_list_comment(cursor, params):
 
     status, obj = Object(), Object()
     status.status = Status.Ok.value
-    obj.message = EventComments.Success.value
+    status.message = EventComments.Success.value
     obj.id_comments = {}
     for i in row:
         comm = Object()

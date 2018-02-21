@@ -40,4 +40,9 @@
     <string name="name_edit">Введите здесь ваше имя</string>
     <string name="photo_edit">Нажмите, чтобы загрузить новый аватар</string>
     <string name="save_edit">Сохранить!</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>
