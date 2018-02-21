@@ -30,9 +30,9 @@ def authorization(cursor, params):
         obj.token = md5(tok.encode('utf-8')).hexdigest()
 
         cursor.execute("select id from Profile where id_authorization_info={}".format(id_auth))
-        id_profile = cursor.fetchone()[0]
+        obj.id_profile = cursor.fetchone()[0]
         cursor.execute("insert into Token_Table (token, last_update, id_profile) values('{}', {}, {})"
-                       .format(obj.token, time.time().__int__(), id_profile))
+                       .format(obj.token, time.time().__int__(), obj.id_profile))
         status.object = obj
     else:
         status.message = EventAuth.PasswordIncorrect.value
