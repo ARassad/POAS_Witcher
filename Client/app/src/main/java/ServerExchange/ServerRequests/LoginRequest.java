@@ -12,18 +12,20 @@ public abstract class LoginRequest<AnswerType> extends ServerRequest<AnswerType>
     }
     public LoginRequest() {super();}
 
+    static private Long loggedUserId = null;
+    static public Long getLoggedUserId() { return loggedUserId.longValue();}
+
     abstract class LoginJsonServerAnswer extends JsonServerAnswer{
         class JsonToken{
             public String token;
         }
         JsonToken object;
+        public long id;
     }
     @Override
     protected void JsonAnswerHandler(JsonServerAnswer answ) {
         LoginJsonServerAnswer answ_ = (LoginJsonServerAnswer) answ;
-
         TokenServerRequest.setToken( answ_.object.token);
+        loggedUserId = answ_.id;
     }
-
-
 }

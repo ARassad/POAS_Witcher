@@ -87,4 +87,8 @@ public class GetProfileRequest extends TokenServerRequest<Profile> {
         this.id = id;
         startRequest(onGetProfileHandler);
     }
+
+    public void getLoggedProfile(IServerAnswerHandler onGetProfileHandler){
+        getProfile( LoginRequest.getLoggedUserId(), onGetProfileHandler);
+    }
 }
