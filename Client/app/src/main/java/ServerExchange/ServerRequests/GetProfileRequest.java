@@ -24,6 +24,7 @@ public class GetProfileRequest extends TokenServerRequest<Profile> {
     private long id;
 
     public GetProfileRequest(String address) {super(address);}
+    public GetProfileRequest() {super();}
 
     @Override
     protected ServerMethod getMethod() {

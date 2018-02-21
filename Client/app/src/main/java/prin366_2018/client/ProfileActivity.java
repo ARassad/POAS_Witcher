@@ -16,8 +16,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
+
+import ServerExchange.Profile;
+import ServerExchange.ServerRequests.GetProfileRequest;
+import ServerExchange.ServerRequests.IServerAnswerHandler;
 
 /**
  * Created by Dryush on 18.02.2018.
@@ -26,14 +31,50 @@ import android.widget.TextView;
 
 public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+
+    TextView name;
+    TextView aboutMe;
+    TextView role;
+    ImageView image;
+
     static final private int RESULT_CANCEL = 0;
     static final private int RESULT_OK = 1;
     static final private int SAVE_DATA = 2;
+
+    class onGetProfile implements IServerAnswerHandler<Profile>{
+
+        @Override
+        public void handle(Profile answ) {
+            name.setText( answ.getName());
+            aboutMe.setText( answ.getInfo());
+            role.setText( answ.getType() == Profile.ProfileType.WITCHER ? "Ведьмак" : "Наниматель");
+            image.setImageBitmap( answ.getImage());
+
+        }
+
+        @Override
+        public void errorHandle(String errorMessage) {
+            int stop = 2;
+        }
+
+        @Override
+        public void exceptionHandle(Exception excp) {
+            int stop = 2;
+        }
+    }
+
+
+    GetProfileRequest profileRequest = new GetProfileRequest();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        name = (TextView) findViewById(R.id.text_name);
+        aboutMe = (TextView) findViewById(R.id.text_about);
+        role = (TextView) findViewById(R.id.text_role);
+        image = (ImageView) findViewById(R.id.image);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -66,14 +107,16 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
-                TextView name = (TextView) findViewById(R.id.text_name);
-                TextView aboutMe = (TextView) findViewById(R.id.text_about);
+
                 Bundle b = new Bundle();
                 intent.putExtra("name", name.getText().toString());
                 intent.putExtra("aboutMe", aboutMe.getText().toString());
                 startActivityForResult(intent, SAVE_DATA);
             }
         });
+
+        //Вот здесь я пишу код (Андрей)
+
     }
 
     @Override
@@ -82,10 +125,10 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
 
         if (requestCode == SAVE_DATA) {
             if (resultCode == RESULT_OK) {
-                TextView name = (TextView) findViewById(R.id.text_name);
+                name = (TextView) findViewById(R.id.text_name);
                 name.setText(data.getStringExtra("name"));
 
-                TextView aboutMe = (TextView) findViewById(R.id.text_about);
+                aboutMe = (TextView) findViewById(R.id.text_about);
                 aboutMe.setText(data.getStringExtra("aboutMe"));
             }
         }

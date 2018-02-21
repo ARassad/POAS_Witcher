@@ -73,13 +73,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Проследите, что была защита от затирания т.к. этот метод будет заупскаться каждый раз,
      * Когда будет открываться экран Входа в приложуху
      */
+    boolean isFirstOpen = true;
     protected void onAppStart(){
-        SharedPreferences params = getSharedPreferences("settings", MODE_PRIVATE);
-        ServerRequest.setDefaultAddress( params.getString("server_address", "localhost"));
+        if (isFirstOpen) {
+            SharedPreferences params = getSharedPreferences("settings", MODE_PRIVATE);
+            //ip Андрея
+            ServerRequest.setDefaultAddress("192.168.0.4");
+            //ip Хоста Миши
+            //ServerRequest.setDefaultAddress("212.237.54.117");
+            //ServerRequest.setDefaultAddress( params.getString("server_address", "localhost"));
 
-        if (!params.contains("server_address")){
-            params.edit().putString("server_address", "localhost");
+            if (!params.contains("server_address")) {
+                params.edit().putString("server_address", "localhost");
+            }
         }
+
     }
 
     @Override
@@ -222,7 +230,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        return true;//email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
