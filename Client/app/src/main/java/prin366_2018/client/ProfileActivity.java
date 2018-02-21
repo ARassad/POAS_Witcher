@@ -10,6 +10,12 @@ import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import ServerExchange.ServerRequests.CreateAdvertRequest;
+import ServerExchange.ServerRequests.GetAdvertRequest;
+import ServerExchange.ServerRequests.GetAdvertsRequest;
+import ServerExchange.ServerRequests.IServerAnswerHandler;
+import ServerExchange.ServerRequests.UpdateProfileRequest;
+
 /**
  * Created by Dryush on 18.02.2018.
  * Edit by Alexander on 18.02.2018
@@ -21,6 +27,9 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+
+
 
         setButton((Button)findViewById(R.id.button_about), (TextView)findViewById(R.id.text_about));
         setButton((Button)findViewById(R.id.button_advert_story), (TableLayout)findViewById(R.id.table_advert_story));
@@ -47,8 +56,22 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+        new UpdateProfileRequest().updateProfile("Test Name", "Test Text", null,
+                new Debaug());
+        //new CreateAdvertRequest().createAdvert("Test Advert Name", "Test Text");
+        new GetAdvertsRequest().getSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new Debaug());
+
     }
 
+    class Debaug implements IServerAnswerHandler{
+
+        @Override
+        public void handle(Object answ) {
+            Object letslookresult = answ;
+        }
+    };
     @Override
     protected void onPostResume() {
         super.onPostResume();
