@@ -3,11 +3,13 @@ package prin366_2018.client;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
@@ -40,6 +43,8 @@ public class EditProfileActivity extends AppCompatActivity {
         name.setText(getIntent().getStringExtra("name"));
         final AutoCompleteTextView aboutMe = (AutoCompleteTextView)findViewById(R.id.text_about);
         aboutMe.setText(getIntent().getStringExtra("aboutMe"));
+        final ImageButton photo = (ImageButton)findViewById(R.id.image);
+
 
         Button buttonSave = (Button)findViewById(R.id.button_save_edit);
         buttonSave.setOnClickListener(new View.OnClickListener() {
@@ -48,6 +53,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.putExtra("name", name.getText().toString());
                 intent.putExtra("aboutMe", aboutMe.getText().toString());
+                intent.putExtra("photo", encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, 100));
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -65,10 +71,18 @@ public class EditProfileActivity extends AppCompatActivity {
         });
     }
 
+    public static String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality)
+    {
+        ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
+        image.compress(compressFormat, quality, byteArrayOS);
+        return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
+    }
+
+    Bitmap bitmap;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-        Bitmap bitmap = null;
         ImageButton imageView = (ImageButton) findViewById(R.id.image);
 
         switch(requestCode) {
@@ -76,6 +90,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 Uri selectedImage = imageReturnedIntent.getData();
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                    bitmap = Bitmap.createScaledBitmap(bitmap, 120, 160, false);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

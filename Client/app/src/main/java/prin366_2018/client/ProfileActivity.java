@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
@@ -18,9 +19,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -119,8 +122,18 @@ public class ProfileActivity extends AppCompatActivity
                 TextView aboutMe = (TextView) findViewById(R.id.text_about);
                 aboutMe.setText(data.getStringExtra("aboutMe"));
                 //Сохранить информацию "о себе" в БД
+
+                Bitmap bitmap = decodeBase64(data.getStringExtra("photo"));
+                ImageView photo = (ImageView)findViewById(R.id.image);
+                photo.setImageBitmap(bitmap);
             }
         }
+    }
+
+    public static Bitmap decodeBase64(String input)
+    {
+        byte[] decodedBytes = Base64.decode(input, 0);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
 
 
