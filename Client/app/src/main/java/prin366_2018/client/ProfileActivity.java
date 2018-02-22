@@ -30,10 +30,17 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     static final private int RESULT_OK = 1;
     static final private int SAVE_DATA = 2;
 
+    TextView name;
+    TextView aboutMe;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        name = (TextView) findViewById(R.id.text_name);
+        aboutMe = (TextView) findViewById(R.id.text_about);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -61,14 +68,13 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         buttonSendComment.setTypeface(typeface);
         buttonSendComment.setText("\uf1d8");
 
+
+
         buttonEdit.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
-                TextView name = (TextView) findViewById(R.id.text_name);
-                TextView aboutMe = (TextView) findViewById(R.id.text_about);
-                Bundle b = new Bundle();
                 intent.putExtra("name", name.getText().toString());
                 intent.putExtra("aboutMe", aboutMe.getText().toString());
                 startActivityForResult(intent, SAVE_DATA);
@@ -79,14 +85,15 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == SAVE_DATA) {
             if (resultCode == RESULT_OK) {
                 TextView name = (TextView) findViewById(R.id.text_name);
                 name.setText(data.getStringExtra("name"));
+                //Сохранить информацию о имени в БД
 
                 TextView aboutMe = (TextView) findViewById(R.id.text_about);
                 aboutMe.setText(data.getStringExtra("aboutMe"));
+                //Сохранить информацию "о себе" в БД
             }
         }
     }

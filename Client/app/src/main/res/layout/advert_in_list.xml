@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/frame_text_about">
+
+    <TextView
+        android:id="@+id/text_advert_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Заголовок"
+        android:padding="10dp"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:id="@+id/text_advert_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/about"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:padding="5dp"
+        android:textSize="18sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="7dp">
+
+        <TextView
+            android:id="@+id/text_kingdom"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Королевство, город"
+            android:textSize="20sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:gravity="end">
+
+            <TextView
+                android:id="@+id/text_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:text="9999 оренов"
+                android:textSize="20sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
