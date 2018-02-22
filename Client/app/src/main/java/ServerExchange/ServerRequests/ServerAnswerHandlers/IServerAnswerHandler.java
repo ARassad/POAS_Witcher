@@ -1,4 +1,4 @@
-package ServerExchange.ServerRequests;
+package ServerExchange.ServerRequests.ServerAnswerHandlers;
 
 /**
  * Created by Dryush on 14.02.2018.

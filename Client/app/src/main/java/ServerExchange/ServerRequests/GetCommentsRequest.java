@@ -7,7 +7,7 @@ import java.util.Map;
 
 import ServerExchange.Comment;
 import ServerExchange.ImageConvert;
-import ServerExchange.Profile;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 
 /**
  * Created by Dryush on 16.02.2018.

@@ -2,13 +2,11 @@ package ServerExchange.ServerRequests;
 
 import android.graphics.Bitmap;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 import ServerExchange.ImageConvert;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 
 
 /**
@@ -136,4 +134,5 @@ public class UpdateAdvertRequest extends TokenServerRequest<Boolean> {
         }
         this.photo_del = _imgsToRemove;
     }
+
 }

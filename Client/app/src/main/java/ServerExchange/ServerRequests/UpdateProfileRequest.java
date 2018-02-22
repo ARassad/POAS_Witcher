@@ -1,14 +1,12 @@
 package ServerExchange.ServerRequests;
 
 import android.graphics.Bitmap;
-import android.util.Base64;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 
 import ServerExchange.ImageConvert;
 import ServerExchange.Password;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 
 /**
  * Created by Дима on 16.02.2018.

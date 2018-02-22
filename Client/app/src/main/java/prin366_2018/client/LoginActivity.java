@@ -35,7 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ServerExchange.ServerRequests.AuthorizationRequest;
-import ServerExchange.ServerRequests.IServerAnswerHandler;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 import ServerExchange.ServerRequests.ServerRequest;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -221,22 +222,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            new AuthorizationRequest().login(email, password, new IServerAnswerHandler<Boolean>() {
+            new AuthorizationRequest().login(email, password, new DefaultServerAnswerHandler<Boolean>(LoginActivity.this) {
                 @Override
                 public void handle(Boolean answ) {
                     if (answ!= null && answ == true){
                         startActivity( new Intent(LoginActivity.this, ProfileActivity.class));
                     }
-                }
-
-                @Override
-                public void errorHandle(String errorMessage) {
-
-                }
-
-                @Override
-                public void exceptionHandle(Exception excp) {
-
                 }
             });
             //mAuthTask = new UserLoginTask(email, password);

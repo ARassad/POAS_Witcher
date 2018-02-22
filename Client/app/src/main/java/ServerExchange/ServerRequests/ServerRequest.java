@@ -3,27 +3,17 @@ package ServerExchange.ServerRequests;
 import android.os.AsyncTask;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.net.Authenticator;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Set;
-import java.util.function.BiConsumer;
+
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 
 /**
  * Created by Dryush on 13.02.2018.
@@ -143,6 +133,8 @@ public abstract class ServerRequest <AnswerType> {
 
     protected AnswerType doRequest(ServerMethod method, Class< ? extends JsonServerAnswer> JsonServerAnswerClass) {
 
+        HttpURLConnection urlConnection = null;
+
         String request = PROTOCOL + serverAddress + API;
         if ( getRequestType() == RequestType.POST ) {
             request = request + method.methodName;
@@ -165,7 +157,7 @@ public abstract class ServerRequest <AnswerType> {
 
             URL requestURL = new URL(request);
 
-            HttpURLConnection urlConnection = (HttpURLConnection) requestURL.openConnection();
+            urlConnection = (HttpURLConnection) requestURL.openConnection();
 
 
             if (strRequestMethod.equals("POST")) {
@@ -175,6 +167,7 @@ public abstract class ServerRequest <AnswerType> {
             urlConnection.setRequestMethod(strRequestMethod);
 
             urlConnection.connect();
+
             Gson gson = new Gson();
 
             if (getRequestType() == RequestType.POST) {
@@ -187,6 +180,11 @@ public abstract class ServerRequest <AnswerType> {
                 out.close();
             }
 
+            //TODO: Возможно это будет вызывать ошибку
+            if (urlConnection.getResponseCode() !=  HttpURLConnection.HTTP_OK){
+                throw new ServerException( urlConnection.getResponseMessage());
+            }
+
             InputStream in = urlConnection.getInputStream();
             InputStreamReader inReader = new InputStreamReader(in);
             BufferedReader reader = new BufferedReader(inReader);
@@ -194,11 +192,14 @@ public abstract class ServerRequest <AnswerType> {
             JsonServerAnswer serverAnswer = gson.fromJson(reader, JsonServerAnswerClass);
             JsonAnswerHandler(serverAnswer);
             isErrorInServerRequest = ! serverAnswer.isStatusOk();
-
+            urlConnection.disconnect();
 
             return (AnswerType) serverAnswer.convert();
         }catch (Exception e){
             excp = e;
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
             return null;
         }
     }

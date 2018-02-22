@@ -1,13 +1,12 @@
 package ServerExchange.ServerRequests;
 
-import android.widget.Switch;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
 import ServerExchange.Advert;
 import ServerExchange.Location;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 
 /**
  * Created by Dryush on 13.02.2018.

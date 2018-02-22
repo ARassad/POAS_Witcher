@@ -1,12 +1,9 @@
 package prin366_2018.client;
 
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,7 +19,8 @@ import android.widget.TextView;
 
 import ServerExchange.Profile;
 import ServerExchange.ServerRequests.GetProfileRequest;
-import ServerExchange.ServerRequests.IServerAnswerHandler;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 
 /**
  * Created by Dryush on 18.02.2018.
@@ -41,7 +39,11 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     static final private int RESULT_OK = 1;
     static final private int SAVE_DATA = 2;
 
-    class onGetProfile implements IServerAnswerHandler<Profile>{
+    class onGetProfile extends DefaultServerAnswerHandler<Profile> {
+
+        public onGetProfile(Context context) {
+            super(context);
+        }
 
         @Override
         public void handle(Profile answ) {
@@ -53,16 +55,6 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
             if (answ.getImage() != null) {
                 image.setImageBitmap(answ.getImage());
             }
-        }
-
-        @Override
-        public void errorHandle(String errorMessage) {
-            int stop = 2;
-        }
-
-        @Override
-        public void exceptionHandle(Exception excp) {
-            int stop = 2;
         }
     }
 
@@ -119,7 +111,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         });
 
         //Вот здесь я пишу код (Андрей)
-        profileRequest.getProfile(9, new onGetProfile());
+        profileRequest.getProfile(9, new onGetProfile(ProfileActivity.this));
 
     }
 

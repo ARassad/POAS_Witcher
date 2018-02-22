@@ -2,15 +2,14 @@ package ServerExchange.ServerRequests;
 
 import android.graphics.Bitmap;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
 import ServerExchange.Advert;
-import ServerExchange.Comment;
 import ServerExchange.ImageConvert;
 import ServerExchange.Location;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 
 /**
  * Created by Dryush on 16.02.2018.

@@ -2,14 +2,12 @@ package ServerExchange;
 
 import android.support.annotation.NonNull;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 import ServerExchange.ServerRequests.GetLocationsListRequest;
-import ServerExchange.ServerRequests.IServerAnswerHandler;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 
 /**
  * Created by Dryush on 20.02.2018.

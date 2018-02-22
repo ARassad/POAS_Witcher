@@ -3,15 +3,12 @@ package ServerExchange.ServerRequests;
 
 import android.graphics.Bitmap;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import ServerExchange.Advert;
 import ServerExchange.ImageConvert;
-import ServerExchange.Location;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 
 /**
  * Created by Dima on 20.02.2018.
