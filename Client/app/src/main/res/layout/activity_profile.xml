@@ -261,7 +261,7 @@
                             android:layout_height="70dp">
 
                             <AutoCompleteTextView
-                                android:id="@+id/text_comment"
+                                android:id="@+id/input_comment"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:hint="@string/comment"

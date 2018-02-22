@@ -41,16 +41,11 @@ public class TableRowStoryAdvertFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_table_row_story_advert, container, false);
-        setTableRow(view, date, title, status);
-        return view;
-    }
-
-    private void setTableRow(View view, String date, String title, String status) {
         ((TextView)view.findViewById(R.id.tablerow_date)).setText(date);
         ((TextView)view.findViewById(R.id.tablerow_title)).setText(title);
         ((TextView)view.findViewById(R.id.tablerow_status)).setText(status);
+        return view;
     }
-
 
     @Override
     public void onAttach(Context context) {
