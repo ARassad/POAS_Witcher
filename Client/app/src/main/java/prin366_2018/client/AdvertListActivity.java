@@ -1,6 +1,7 @@
 package prin366_2018.client;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -30,6 +31,9 @@ public class AdvertListActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advert_list);
+
+        ((TextView)findViewById(R.id.window_title)).setText("Объявл..");
+        ((TextView)findViewById(R.id.window_title)).setTextSize(14);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -67,6 +71,19 @@ public class AdvertListActivity extends AppCompatActivity
         AdvertFragment newRow = new AdvertFragment(title, description, kingdom, city, cost);
         ft.add(id, newRow);
         ft.commit();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            ((TextView)findViewById(R.id.window_title)).setText("Объявления");
+            ((TextView)findViewById(R.id.window_title)).setTextSize(24);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            ((TextView)findViewById(R.id.window_title)).setText("Объявл..");
+            ((TextView)findViewById(R.id.window_title)).setTextSize(14);
+        }
     }
 
     @Override
