@@ -28,7 +28,6 @@ from urllib.parse import parse_qs
 from Server.Objects import Object
 from Server.Objects import Status
 from Server.Objects import ApiMethod
-cursor = connect_database()
 
 api_methods_get, api_methods_post = {}, {}
 api_methods_post[ApiMethod.Authorization.value] = authorization
@@ -67,7 +66,10 @@ class HttpServer(BaseHTTPRequestHandler):
         mymethod = dct.get('method', None)
         is_ok, stat = security_requests(mymethod, dct)
         if is_ok:
+            cursor, connect = connect_database()
             self.wfile.write(str.encode(api_methods_get[mymethod](cursor, dct)))
+            cursor.close()
+            connect.close()
         else:
             self.wfile.write(str.encode(stat))
 
@@ -84,7 +86,10 @@ class HttpServer(BaseHTTPRequestHandler):
         mymethod = self.requestline[10:-9]
         is_ok, stat = security_requests(mymethod, dct, 0)
         if is_ok:
+            cursor, connect = connect_database()
             self.wfile.write(str.encode(api_methods_post[mymethod](cursor, dct)))
+            cursor.close()
+            connect.close()
         else:
             self.wfile.write(str.encode(stat))
 
