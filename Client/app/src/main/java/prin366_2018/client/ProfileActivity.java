@@ -3,6 +3,7 @@ package prin366_2018.client;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
@@ -10,6 +11,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -59,7 +62,7 @@ public class ProfileActivity extends AppCompatActivity
 
         setButton((Button)findViewById(R.id.button_about), (TextView)findViewById(R.id.text_about));
         setButton((Button)findViewById(R.id.button_advert_story), (TableLayout)findViewById(R.id.table_advert_story));
-        setButton((Button)findViewById(R.id.button_advert_story), (TableLayout)findViewById(R.id.table_advert_story));
+        setButton((Button)findViewById(R.id.button_comments), findViewById(R.id.comments_list));
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/fa-solid-900.ttf");
 
@@ -71,7 +74,10 @@ public class ProfileActivity extends AppCompatActivity
         buttonSendComment.setTypeface(typeface);
         buttonSendComment.setText("\uf1d8");
 
-
+        //Метод установки новой строки в таблицу
+        setTableRow("18.03.2018", "Название", "Завершено");
+        //Метод установки нового комментария
+        setNewComment(Bitmap.createBitmap(120, 160, Bitmap.Config.ARGB_8888), "Комментарий", "01.01.2001 - 19:00");
 
         buttonEdit.setOnClickListener(new View.OnClickListener() {
 
@@ -83,6 +89,22 @@ public class ProfileActivity extends AppCompatActivity
                 startActivityForResult(intent, SAVE_DATA);
             }
         });
+    }
+
+    private void setNewComment(Bitmap photo, String text, String datetime) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        CommentFragment newRow = new CommentFragment(photo, text, datetime);
+        ft.add(R.id.comments_list, newRow);
+        ft.commit();
+    }
+
+    private void setTableRow(String date, String title, String status) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        TableRowStoryAdvertFragment newRow = new TableRowStoryAdvertFragment(date, title, status);
+        ft.add(R.id.table_advert_story, newRow);
+        ft.commit();
     }
 
     @Override

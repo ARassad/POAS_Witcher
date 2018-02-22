@@ -1,5 +1,6 @@
 package prin366_2018.client;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,35 +19,36 @@ import android.widget.TextView;
 public class TableRowStoryAdvertFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    private String date;
+    private String title;
+    private String status;
 
     public TableRowStoryAdvertFragment() {
-        // Required empty public constructor
+        date = "01.01.1000";
+        title = "Без названия";
+        status = "Завершен";
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     * @return A new instance of fragment TableRowStoryAdvertFragment.
-     */
-    public static TableRowStoryAdvertFragment newInstance(String param1, String param2) {
-        TableRowStoryAdvertFragment fragment = new TableRowStoryAdvertFragment();
-        return fragment;
+    @SuppressLint("ValidFragment")
+    public TableRowStoryAdvertFragment(String _date, String _title, String _status) {
+        date = _date;
+        title = _title;
+        status = _status;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_table_row_story_advert, container, false);
-
-        ((TextView)view.findViewById(R.id.tablerow_date)).setText("01.01.2018");
-        ((TextView)view.findViewById(R.id.tablerow_title)).setText("Гавно");
-        ((TextView)view.findViewById(R.id.tablerow_status)).setText("Завершен");
+        setTableRow(view, date, title, status);
         return view;
+    }
+
+    private void setTableRow(View view, String date, String title, String status) {
+        ((TextView)view.findViewById(R.id.tablerow_date)).setText(date);
+        ((TextView)view.findViewById(R.id.tablerow_title)).setText(title);
+        ((TextView)view.findViewById(R.id.tablerow_status)).setText(status);
     }
 
 

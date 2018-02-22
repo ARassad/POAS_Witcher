@@ -215,11 +215,6 @@
 
                         </TableRow>
 
-                        <fragment
-                            class="prin366_2018.client.TableRowStoryAdvertFragment"
-                            tools:layout="@layout/fragment_table_row_story_advert">
-                        </fragment>
-
                     </TableLayout>
                 </LinearLayout>
 
@@ -238,6 +233,14 @@
                         android:text="@string/comment_button"
                         android:background="@drawable/frame_button">
                     </Button>
+
+                    <LinearLayout
+                        android:id="@+id/comments_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/comment_form"
