@@ -22,19 +22,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ProfileActivity"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden"
+            android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
-
         <activity
             android:name=".EditProfileActivity"
             android:windowSoftInputMode="stateHidden">
         </activity>
-
         <activity
             android:name=".AdvertListActivity"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
+        <activity
+            android:name=".EditAdvertActivity"
             android:windowSoftInputMode="stateHidden">
         </activity>
     </application>

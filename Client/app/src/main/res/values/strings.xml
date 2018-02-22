@@ -47,6 +47,7 @@
 
     <!-- Strings related to advert list -->
     <string name="sort">Сортировка и фильтры</string>
+    <string name="edit_advert">Объявление</string>
 
 
 </resources>
