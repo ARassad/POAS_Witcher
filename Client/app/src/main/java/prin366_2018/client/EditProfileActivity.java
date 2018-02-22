@@ -37,8 +37,7 @@ public class EditProfileActivity extends AppCompatActivity {
         Button buttonSave = (Button)findViewById(R.id.button_save_edit);
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                //ШОТО ПРОИСХОДИТ ПРИ НАЖАТИИ НА КНОПКУ "СОХРАНИТЬ"
+            public void onClick(View view)  {
                 Intent intent = new Intent();
                 intent.putExtra("name", name.getText().toString());
                 intent.putExtra("aboutMe", aboutMe.getText().toString());
@@ -52,18 +51,6 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //ШОТО ПРОИСХОДИТ ПРИ НАЖАТИИ НА КНОПКУ ФОТОЧКИ
-            }
-        });
-    }
-
-    private void setButton(Button button, final View v) {
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (v.getVisibility() == View.VISIBLE)
-                    v.setVisibility(View.GONE);
-                else
-                    v.setVisibility(View.VISIBLE);
             }
         });
     }
