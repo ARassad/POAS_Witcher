@@ -214,6 +214,12 @@
                                 android:text="@string/table_status"/>
 
                         </TableRow>
+
+                        <fragment
+                            class="prin366_2018.client.TableRowStoryAdvertFragment"
+                            tools:layout="@layout/fragment_table_row_story_advert">
+                        </fragment>
+
                     </TableLayout>
                 </LinearLayout>
 

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,7 +26,8 @@ import android.widget.TextView;
  * Edit by Alexander on 18.02.2018
  */
 
-public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class ProfileActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, TableRowStoryAdvertFragment.OnFragmentInteractionListener {
 
     static final private int RESULT_CANCEL = 0;
     static final private int RESULT_OK = 1;
@@ -127,4 +129,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
             }
         });
     }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {}
 }
