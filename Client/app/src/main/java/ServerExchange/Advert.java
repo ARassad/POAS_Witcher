@@ -138,6 +138,25 @@ public class Advert implements ICommented {
                 default: throw new RuntimeException("some trash, wo don`t know how you do it");
             }
         }
+
+        public String toRuString() {
+            switch (this) {
+                case FREE:
+                    return "Доступно";
+                case ASSIGNED_WITCHER:
+                    return "Ведьмак выбран";
+                case IN_PROCESS:
+                    return "Выполняется";
+                case COMPLETED:
+                    return "Выполнено";
+                case WITCHER_LEAVE:
+                    return "Ведьмак отказался";
+                case CUSTOMER_REFUSED:
+                    return "Заказчиак отказался";
+                default:
+                    throw new RuntimeException("some trash, wo don`t know how you do it");
+            }
+        }
     };
     
     private AdvertStatus status;
@@ -157,7 +176,7 @@ public class Advert implements ICommented {
         this.location = location;
         this.reward = reward;
         this.id_author = id_author;
-        this.status = AdvertStatus.FREE;
+        this.status = status;
         this.dateOfCreate = dateOfCreate;
     }
     
@@ -192,7 +211,7 @@ public class Advert implements ICommented {
     @Override
     public Object clone(){
         
-    return new Advert(id, name, info, images, location, reward, id_author, idSubscribedWitchersList,
+        return new Advert(id, name, info, images, location, reward, id_author, idSubscribedWitchersList,
             id_executor, status, dateOfCreate, comments);
         
     }

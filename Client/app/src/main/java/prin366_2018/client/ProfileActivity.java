@@ -36,6 +36,8 @@ import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import ServerExchange.AdvertCard;
+import ServerExchange.Comment;
 import ServerExchange.Profile;
 import ServerExchange.ServerRequests.GetProfileRequest;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
@@ -43,6 +45,7 @@ import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -79,6 +82,11 @@ public class ProfileActivity extends AppCompatActivity
             role.setText( answ.getType() == Profile.ProfileType.WITCHER ? "Ведьмак" : "Наниматель");
             if (answ.getImage() != null) {
                 image.setImageBitmap(answ.getImage());
+            }
+
+            ArrayList<AdvertCard> history = answ.getHistory();
+            for (AdvertCard historyElem : history){
+                setTableRow(historyElem.getLastStatusUpdate().toString(), historyElem.getAdvertHeader(), historyElem.getStatus().toRuString());
             }
         }
     }
