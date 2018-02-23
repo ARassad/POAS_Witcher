@@ -30,6 +30,9 @@ public class CreateAdvertRequest extends TokenServerRequest<Boolean> {
     public CreateAdvertRequest(String serverAddress) {
         super(serverAddress);
     }
+    public CreateAdvertRequest() {
+        super();
+    }
 
     @Override
     protected ServerMethod getMethod() {

@@ -69,13 +69,15 @@ public class Advert implements ICommented {
     }
     
     private Location location;
-    public Location getLovation(){
+    public Location getLocation(){
         return location;
     }
     public void setLocation(Location loc){
         this.location = loc;
     }
-    
+    public String getCity() {return this.location.getCity();}
+    public String getKingdom() {return this.location.getKingdom();}
+
     int reward;
     public int getReward(){
         return reward;

@@ -10,10 +10,18 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import ServerExchange.ServerRequests.CreateAdvertRequest;
+import ServerExchange.ServerRequests.UpdateAdvertRequest;
+import ServerExchange.ServerRequests.UpdateProfileRequest;
+
 public class EditAdvertActivity extends AppCompatActivity {
 
     private TextView title, description, cost;
     private String kingdom, city;
+
+    UpdateAdvertRequest updateRequest = new UpdateAdvertRequest();
+    CreateAdvertRequest createRequest = new CreateAdvertRequest();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +54,12 @@ public class EditAdvertActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        if (getIntent().getBooleanExtra("isCreate", false)){
+          //  createRequest.createAdvert();
+        } else {
+          //  updateRequest.updateAdvert();
+        }
 
     }
 

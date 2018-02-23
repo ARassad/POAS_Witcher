@@ -1,5 +1,6 @@
 package prin366_2018.client;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
@@ -22,11 +23,34 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.LinkedList;
+
+import ServerExchange.Advert;
+import ServerExchange.ServerRequests.GetAdvertsRequest;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
+
 public class AdvertListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SortingFragment.OnFragmentInteractionListener {
 
     private static final int NEW_ADVERT = 2222;
 
+    GetAdvertsRequest getAdvertsRequest = new GetAdvertsRequest();
+
+    class onGetAverts extends DefaultServerAnswerHandler<LinkedList<Advert>> {
+
+        public onGetAverts(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void handle( LinkedList<Advert> answ) {
+
+            for (Advert advert : answ){
+                //TODO: Возможны баги с id long  в int
+                setNewAdvert((int)advert.getId(), advert.getName(), advert.getInfo(), advert.getKingdom(), advert.getCity(), String.valueOf(advert.getReward()));
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +80,7 @@ public class AdvertListActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AdvertListActivity.this, EditAdvertActivity.class);
+                intent.putExtra("isCreate", true);
                 startActivityForResult(intent, NEW_ADVERT);
             }
         });
@@ -64,6 +89,9 @@ public class AdvertListActivity extends AppCompatActivity
         setButton((Button)findViewById(R.id.button_witcher_chosen), findViewById(R.id.form_witcher_chosen));
         setButton((Button)findViewById(R.id.button_during), findViewById(R.id.adlist_during));
         setButton((Button)findViewById(R.id.button_executed), findViewById(R.id.adlist_executed));
+
+
+        getAdvertsRequest.getSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new onGetAverts(AdvertListActivity.this));
     }
 
     private void setNewAdvert(int id, String title, String description, String kingdom, String city, String cost) {
