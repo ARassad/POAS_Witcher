@@ -1,9 +1,12 @@
 package prin366_2018.client;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,10 +25,15 @@ import android.widget.TextView;
 public class AdvertListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SortingFragment.OnFragmentInteractionListener {
 
+    private static final int NEW_ADVERT = 2222;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advert_list);
+
+        ((TextView)findViewById(R.id.window_title)).setText("Объявл..");
+        ((TextView)findViewById(R.id.window_title)).setTextSize(14);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -43,13 +51,57 @@ public class AdvertListActivity extends AppCompatActivity
         Button buttonAddAdvert = (Button)findViewById(R.id.button_add_advert);
         buttonAddAdvert.setTypeface(typeface);
         buttonAddAdvert.setText("\uf055");
+        buttonAddAdvert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AdvertListActivity.this, EditAdvertActivity.class);
+                startActivityForResult(intent, NEW_ADVERT);
+            }
+        });
 
-        setButton((Button)findViewById(R.id.button_witcher_not_chosen), findViewById(R.id.sort_1));
-        setButton((Button)findViewById(R.id.button_witcher_chosen), findViewById(R.id.sort_2));
-        setButton((Button)findViewById(R.id.button_during), findViewById(R.id.layout_simple_advert_during));
-        setButton((Button)findViewById(R.id.button_executed), findViewById(R.id.layout_simple_advert_exec));
+        setButton((Button)findViewById(R.id.button_witcher_not_chosen), findViewById(R.id.form_witcher_not_chosen));
+        setButton((Button)findViewById(R.id.button_witcher_chosen), findViewById(R.id.form_witcher_chosen));
+        setButton((Button)findViewById(R.id.button_during), findViewById(R.id.adlist_during));
+        setButton((Button)findViewById(R.id.button_executed), findViewById(R.id.adlist_executed));
     }
 
+    private void setNewAdvert(int id, String title, String description, String kingdom, String city, String cost) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        AdvertFragment newRow = new AdvertFragment(title, description, kingdom, city, cost);
+        ft.add(id, newRow);
+        ft.commit();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            ((TextView)findViewById(R.id.window_title)).setText("Объявления");
+            ((TextView)findViewById(R.id.window_title)).setTextSize(24);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            ((TextView)findViewById(R.id.window_title)).setText("Объявл..");
+            ((TextView)findViewById(R.id.window_title)).setTextSize(14);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == NEW_ADVERT) {
+            if (resultCode == RESULT_OK) {
+                data.getStringExtra("title");
+                setNewAdvert(R.id.adlist_witcher_not_chosen,
+                        data.getStringExtra("title"),
+                        data.getStringExtra("description"),
+                        data.getStringExtra("kingdom"),
+                        data.getStringExtra("city"),
+                        data.getStringExtra("cost"));
+
+            }
+        }
+    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

@@ -19,16 +19,6 @@ public class SortingFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public SortingFragment() {
-        // Required empty public constructor
-    }
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     private void setSpinner(Spinner spinner, String[] data, String title) {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, data);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -52,7 +42,7 @@ public class SortingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_sorting, null);
+        View view = inflater.inflate(R.layout.fragment_sorting, container, false);
 
         String[] sort1 = { "Награде", "Названию", "Локации", "Дате" };
         String[] sort2 = { "Возрастанию", "Убыванию" };

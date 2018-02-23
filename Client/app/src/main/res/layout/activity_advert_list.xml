@@ -25,10 +25,9 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/window_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/advert_name"
-                    android:textSize="24sp"
                     android:textStyle="bold"
                     android:textColor="@color/colorHeader"/>
             </LinearLayout>
@@ -37,6 +36,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="end">
+
+                <Switch
+                    android:id="@+id/switch_advert"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:textSize="8sp"
+                    android:checked="true"
+                    android:textOff="Все"
+                    android:textOn="Свои"/>
 
                 <Button
                     android:id="@+id/button_add_advert"
@@ -79,7 +89,6 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/form_witcher_not_chosen"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -95,7 +104,7 @@
                     </Button>
 
                     <LinearLayout
-                        android:id="@+id/sort_1"
+                        android:id="@+id/form_witcher_not_chosen"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -107,18 +116,18 @@
                             tools:layout="@layout/fragment_sorting">
                         </fragment>
 
-                        <include layout="@layout/advert_in_list"
-                            android:id="@+id/layout_simple_advert_not_chosen"
+                        <LinearLayout
+                            android:id="@+id/adlist_witcher_not_chosen"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                        </include>
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                        </LinearLayout>
 
                     </LinearLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/form_witcher_chosen"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -134,7 +143,7 @@
                     </Button>
 
                     <LinearLayout
-                        android:id="@+id/sort_2"
+                        android:id="@+id/form_witcher_chosen"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -146,15 +155,14 @@
                             tools:layout="@layout/fragment_sorting">
                         </fragment>
 
-                        <include
-                            android:id="@+id/layout_simple_advert_chosen"
+                        <LinearLayout
+                            android:id="@+id/adlist_witcher_chosen"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            layout="@layout/advert_in_list">
-                        </include>
+                            android:orientation="vertical">
+                        </LinearLayout>
 
                     </LinearLayout>
-
 
                 </LinearLayout>
 
@@ -174,12 +182,12 @@
                         android:background="@drawable/frame_button">
                     </Button>
 
-                    <include
-                        android:id="@+id/layout_simple_advert_during"
+                    <LinearLayout
+                        android:id="@+id/adlist_during"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        layout="@layout/advert_in_list">
-                    </include>
+                        android:orientation="vertical">
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -199,12 +207,12 @@
                         android:background="@drawable/frame_button">
                     </Button>
 
-                    <include
-                        android:id="@+id/layout_simple_advert_exec"
+                    <LinearLayout
+                        android:id="@+id/adlist_executed"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        layout="@layout/advert_in_list">
-                    </include>
+                        android:orientation="vertical">
+                    </LinearLayout>
 
                 </LinearLayout>
 
