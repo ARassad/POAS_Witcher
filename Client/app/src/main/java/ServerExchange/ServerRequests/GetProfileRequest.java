@@ -71,14 +71,16 @@ public class GetProfileRequest extends TokenServerRequest<Profile> {
         @Override
         public Profile convert() {
             LinkedList<AdvertCard> advertCards = new LinkedList<>();
-            for (Map.Entry<String, JsonObj.HistoryContractJson> contrEn : object.history.contract.entrySet()){
-                JsonObj.HistoryContractJson contr = contrEn.getValue();
+            if ( object.history.contract != null) {
+                for (Map.Entry<String, JsonObj.HistoryContractJson> contrEn : object.history.contract.entrySet()) {
+                    JsonObj.HistoryContractJson contr = contrEn.getValue();
 
-                java.util.Date date = new java.util.Date(contr.last_status_update * 1000);
+                    java.util.Date date = new java.util.Date(contr.last_status_update * 1000);
 
-                Advert.AdvertStatus status = Advert.AdvertStatus.fromInt(contr.status);
+                    Advert.AdvertStatus status = Advert.AdvertStatus.fromInt(contr.status);
 
-                advertCards.addLast( new AdvertCard(contr.id_contract, contr.header, contr.id_client, contr.id_witcher, date, status));
+                    advertCards.addLast(new AdvertCard(contr.id_contract, contr.header, contr.id_client, contr.id_witcher, date, status));
+                }
             }
             Profile.ProfileType ptype = object.type.equals("client") ? Profile.ProfileType.CUSTOMER : Profile.ProfileType.WITCHER;
             Bitmap photo = object.photo != null ? ImageConvert.fromBase64Str(object.photo) : null;

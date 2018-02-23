@@ -18,7 +18,7 @@ public class GetCommentsRequest extends TokenServerRequest<LinkedList<Comment>> 
     @Override
     protected RequestType getRequestType(){ return RequestType.GET; }
 
-    String METHOD_NAME = "get_list_comment";
+    String METHOD_NAME = "GetListComments";
     long id;
 
     @Override
@@ -63,10 +63,12 @@ public class GetCommentsRequest extends TokenServerRequest<LinkedList<Comment>> 
         @Override
         public LinkedList<Comment> convert() {
             LinkedList<Comment> coms = new LinkedList<>();
-            for (Map.Entry<String, JsonComment> comEm : comments.entrySet()){
-                JsonComment com = comEm.getValue();
-                Date date = new java.util.Date(com.date_of_create * 1000);
-                coms.addLast( new Comment(com.id, com.text, com.author_id, com.author_name, date, ImageConvert.fromBase64Str(com.photo)));
+            if (comments != null) {
+                for (Map.Entry<String, JsonComment> comEm : comments.entrySet()) {
+                    JsonComment com = comEm.getValue();
+                    Date date = new java.util.Date(com.date_of_create * 1000);
+                    coms.addLast(new Comment(com.id, com.text, com.author_id, com.author_name, date, ImageConvert.fromBase64Str(com.photo)));
+                }
             }
             return coms;
         }

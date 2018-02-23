@@ -124,7 +124,6 @@ public class ProfileActivity extends AppCompatActivity
                SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' hh:mm");
                setNewComment(comment.getAuthorAvatar(),comment.getText(), formatForDateNow.format(comment.getDateOfCreate()));
            }
-
        }
    }
 
