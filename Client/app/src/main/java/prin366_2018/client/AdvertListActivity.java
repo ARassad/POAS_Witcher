@@ -62,6 +62,8 @@ public class AdvertListActivity extends AppCompatActivity
             }
         });
 
+        advertListSetting(false, false);
+
         setButton((Button)findViewById(R.id.button_witcher_not_chosen), findViewById(R.id.form_witcher_not_chosen));
         setButton((Button)findViewById(R.id.button_witcher_chosen), findViewById(R.id.form_witcher_chosen));
         setButton((Button)findViewById(R.id.button_during), findViewById(R.id.adlist_during));
@@ -72,7 +74,7 @@ public class AdvertListActivity extends AppCompatActivity
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // в зависимости от значения isChecked выводим нужные группы объявлений
-                advertListSetting(true, isChecked);
+                advertListSetting(false, !isChecked);
             }
         });
     }
@@ -124,18 +126,25 @@ public class AdvertListActivity extends AppCompatActivity
      * isAllAdvert - true: все объявления, false: свои
      */
     private void advertListSetting(boolean isWitcher, boolean isAllAdvert) {
-        if (isWitcher && !isAllAdvert) {
-            findViewById(R.id.form_during).setVisibility(View.VISIBLE);
-            findViewById(R.id.form_subscribed).setVisibility(View.VISIBLE);
-            findViewById(R.id.form_executed).setVisibility(View.VISIBLE);
-        }
-        else if (!isWitcher && !isAllAdvert) {
-            findViewById(R.id.form_witcher_not_chosen).setVisibility(View.VISIBLE);
-            findViewById(R.id.form_witcher_chosen).setVisibility(View.VISIBLE);
-            findViewById(R.id.form_executed).setVisibility(View.VISIBLE);
+        if (isAllAdvert) {
+            findViewById(R.id.all_advert).setVisibility(View.VISIBLE);
+            findViewById(R.id.full_form).setVisibility(View.GONE);
         }
         else {
-            findViewById(R.id.all_advert).setVisibility(View.VISIBLE);
+            findViewById(R.id.all_advert).setVisibility(View.GONE);
+            findViewById(R.id.full_form).setVisibility(View.VISIBLE);
+            if (isWitcher) {
+                findViewById(R.id.full_form_witcher_not_chosen).setVisibility(View.GONE);
+                findViewById(R.id.full_form_witcher_chosen).setVisibility(View.GONE);
+                findViewById(R.id.form_during).setVisibility(View.VISIBLE);
+                findViewById(R.id.form_subscribed).setVisibility(View.VISIBLE);
+            }
+            else {
+                findViewById(R.id.full_form_witcher_not_chosen).setVisibility(View.VISIBLE);
+                findViewById(R.id.full_form_witcher_chosen).setVisibility(View.VISIBLE);
+                findViewById(R.id.form_during).setVisibility(View.GONE);
+                findViewById(R.id.form_subscribed).setVisibility(View.GONE);
+            }
         }
     }
 
