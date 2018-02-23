@@ -1,6 +1,5 @@
 package prin366_2018.client;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
@@ -19,8 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.LinkedList;
@@ -80,7 +81,6 @@ public class AdvertListActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AdvertListActivity.this, EditAdvertActivity.class);
-                intent.putExtra("isCreate", true);
                 startActivityForResult(intent, NEW_ADVERT);
             }
         });
@@ -89,6 +89,15 @@ public class AdvertListActivity extends AppCompatActivity
         setButton((Button)findViewById(R.id.button_witcher_chosen), findViewById(R.id.form_witcher_chosen));
         setButton((Button)findViewById(R.id.button_during), findViewById(R.id.adlist_during));
         setButton((Button)findViewById(R.id.button_executed), findViewById(R.id.adlist_executed));
+
+
+        ((Switch)findViewById(R.id.switch_advert)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // в зависимости от значения isChecked выводим нужные группы объявлений
+                advertListSetting(true, isChecked);
+            }
+        });
 
 
         getAdvertsRequest.getSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new onGetAverts(AdvertListActivity.this));
@@ -133,6 +142,29 @@ public class AdvertListActivity extends AppCompatActivity
             }
         }
     }
+
+
+    /**
+     * Отображение определенных групп объявлений в зависимости от типа пользователя и списка объявлений
+     * isWitcher - true: ведьмак, false: заказчик
+     * isAllAdvert - true: все объявления, false: свои
+     */
+    private void advertListSetting(boolean isWitcher, boolean isAllAdvert) {
+        if (isWitcher && !isAllAdvert) {
+            findViewById(R.id.form_during).setVisibility(View.VISIBLE);
+            findViewById(R.id.form_subscribed).setVisibility(View.VISIBLE);
+            findViewById(R.id.form_executed).setVisibility(View.VISIBLE);
+        }
+        else if (!isWitcher && !isAllAdvert) {
+            findViewById(R.id.form_witcher_not_chosen).setVisibility(View.VISIBLE);
+            findViewById(R.id.form_witcher_chosen).setVisibility(View.VISIBLE);
+            findViewById(R.id.form_executed).setVisibility(View.VISIBLE);
+        }
+        else {
+            findViewById(R.id.all_advert).setVisibility(View.VISIBLE);
+        }
+    }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
