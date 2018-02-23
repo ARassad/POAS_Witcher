@@ -111,8 +111,8 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         });
 
         //Вот здесь я пишу код (Андрей)
-        profileRequest.getProfile(9, new onGetProfile(ProfileActivity.this));
-
+        //profileRequest.getProfile(9, new onGetProfile(ProfileActivity.this));
+        profileRequest.getLoggedProfile(new onGetProfile(ProfileActivity.this));
     }
 
     @Override

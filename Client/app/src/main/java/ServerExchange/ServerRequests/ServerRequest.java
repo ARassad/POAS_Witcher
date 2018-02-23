@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Set;
 
 import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
@@ -181,14 +182,24 @@ public abstract class ServerRequest <AnswerType> {
             }
 
             //TODO: Возможно это будет вызывать ошибку
-            if (urlConnection.getResponseCode() !=  HttpURLConnection.HTTP_OK){
-                throw new ServerException( urlConnection.getResponseMessage());
-            }
+            //if (urlConnection.getResponseCode() !=  HttpURLConnection.HTTP_OK){
+            //    throw new ServerException( urlConnection.getResponseMessage());
+            //}
 
             InputStream in = urlConnection.getInputStream();
             InputStreamReader inReader = new InputStreamReader(in);
             BufferedReader reader = new BufferedReader(inReader);
 
+            LinkedList<String> strs = new LinkedList<>();
+            // Это код считывания того, что пиршло, испольщуется для дебага
+            /*
+            try {
+                while (true) {
+                    String str = reader.readLine();
+                    strs.add(str);
+                }
+            } catch(Exception eee) {}
+            */
             JsonServerAnswer serverAnswer = gson.fromJson(reader, JsonServerAnswerClass);
             JsonAnswerHandler(serverAnswer);
             isErrorInServerRequest = ! serverAnswer.isStatusOk();
