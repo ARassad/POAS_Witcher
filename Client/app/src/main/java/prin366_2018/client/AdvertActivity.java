@@ -80,6 +80,14 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         });
     }
 
+    private void setNewResponder(String witcher, String icon) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ResponderFragment respond = new ResponderFragment(witcher, icon);
+        ft.add(R.id.list_responders, respond);
+        ft.commit();
+    }
+
     private void setNewComment(Bitmap photo, String text, String datetime) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();

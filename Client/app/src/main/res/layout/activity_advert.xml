@@ -278,6 +278,30 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/button_responders"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_gravity="start"
+                        android:text="Откликнувшиеся"
+                        android:textSize="16sp"
+                        android:background="@drawable/frame_button">
+                    </Button>
+
+                    <LinearLayout
+                        android:id="@+id/list_responders"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/form_comments"
