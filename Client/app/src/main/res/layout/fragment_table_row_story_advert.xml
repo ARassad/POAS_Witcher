@@ -1,0 +1,35 @@
+<TableRow
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="prin366_2018.client.TableRowStoryAdvertFragment">
+
+    <TextView
+        android:id="@+id/tablerow_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:textAlignment="center"
+        android:background="@drawable/frame_table_row" />
+
+    <TextView
+        android:id="@+id/tablerow_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:textAlignment="center"
+        android:background="@drawable/frame_table_row" />
+
+    <TextView
+        android:id="@+id/tablerow_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:textAlignment="center"
+        android:background="@drawable/frame_table_row"/>
+
+</TableRow>

@@ -214,6 +214,7 @@
                                 android:text="@string/table_status"/>
 
                         </TableRow>
+
                     </TableLayout>
                 </LinearLayout>
 
@@ -234,6 +235,14 @@
                     </Button>
 
                     <LinearLayout
+                        android:id="@+id/comments_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/comment_form"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
@@ -252,7 +261,7 @@
                             android:layout_height="70dp">
 
                             <AutoCompleteTextView
-                                android:id="@+id/text_comment"
+                                android:id="@+id/input_comment"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:hint="@string/comment"

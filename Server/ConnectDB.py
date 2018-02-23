@@ -1,4 +1,5 @@
 import pyodbc
+pyodbc.pooling = False
 
 
 def connect_database():
@@ -10,4 +11,4 @@ def connect_database():
     cnxn = pyodbc.connect('DRIVER={};PORT=1433;SERVER={};PORT=1443;DATABASE={};UID={};PWD={}'.format
                           (driver, server, database, username, password), autocommit=True)
     cursor = cnxn.cursor()
-    return cursor
+    return cursor, cnxn
