@@ -38,6 +38,7 @@ import android.widget.TextView;
 
 import ServerExchange.AdvertCard;
 import ServerExchange.Comment;
+import ServerExchange.ImageConvert;
 import ServerExchange.Profile;
 import ServerExchange.ServerRequests.AddCommentProfileRequest;
 import ServerExchange.ServerRequests.GetCommentsRequest;
@@ -202,7 +203,7 @@ public class ProfileActivity extends AppCompatActivity
 
 
         //Метод установки новой строки в таблицу
-        setTableRow("18.03.2018", "Название", "Завершено");
+        //setTableRow("18.03.2018", "Название", "Завершено");
         //Метод установки нового комментария
         setNewComment(Bitmap.createBitmap(120, 160, Bitmap.Config.ARGB_8888), "Комментарий", "01.01.2001 - 19:00");
 
@@ -236,8 +237,9 @@ public class ProfileActivity extends AppCompatActivity
                 //Сохранить информацию о имени в БД
                 aboutMe.setText(data.getStringExtra("aboutMe"));
                 //Сохранить информацию "о себе" в БД
-                Bitmap bitmap = decodeBase64(data.getStringExtra("photo"));
-                image.setImageBitmap(bitmap);
+                Bitmap bitmap = ImageConvert.fromBase64Str(data.getStringExtra("photo"));
+                if (bitmap != null)
+                    image.setImageBitmap(bitmap);
                 //Сохранить фоточку в БД
             }
         }

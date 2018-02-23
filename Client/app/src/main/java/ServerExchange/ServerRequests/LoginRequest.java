@@ -24,8 +24,11 @@ public abstract class LoginRequest<AnswerType> extends ServerRequest<AnswerType>
     }
     @Override
     protected void JsonAnswerHandler(JsonServerAnswer answ) {
-        LoginJsonServerAnswer answ_ = (LoginJsonServerAnswer) answ;
-        TokenServerRequest.setToken( answ_.object.token);
-        loggedUserId = answ_.object.id_profile;
+
+        if (answ.isStatusOk()) {
+            LoginJsonServerAnswer answ_ = (LoginJsonServerAnswer) answ;
+            TokenServerRequest.setToken(answ_.object.token);
+            loggedUserId = answ_.object.id_profile;
+        }
     }
 }

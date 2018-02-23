@@ -137,7 +137,7 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //ШОТО ПРОИСХОДИТ ПРИ НАЖАТИИ НА КНОПКУ ФОТОЧКИ
-                isPhotoChanged = true;
+
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
                 startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
@@ -159,17 +159,20 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
         ImageButton imageView = (ImageButton) findViewById(R.id.image);
 
-        switch(requestCode) {
-            case GALLERY_REQUEST:
-                Uri selectedImage = imageReturnedIntent.getData();
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
-                    bitmap = Bitmap.createScaledBitmap(bitmap, 120, 160, false);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                imageView.setImageBitmap(bitmap);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case GALLERY_REQUEST:
+                    isPhotoChanged = true;
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                        bitmap = Bitmap.createScaledBitmap(bitmap, 120, 160, false);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    imageView.setImageBitmap(bitmap);
 
+            }
         }
     }
 }
