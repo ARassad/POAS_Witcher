@@ -47,7 +47,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     AutoCompleteTextView name;
     AutoCompleteTextView aboutMe;
-    Button image;
+    ImageButton image;
 
     String oldName;
     String oldAboutMe;
@@ -112,7 +112,7 @@ public class EditProfileActivity extends AppCompatActivity {
         aboutMe.setText(oldAboutMe);
 
 
-        image = (Button)findViewById(R.id.image);
+        image = (ImageButton) findViewById(R.id.image);
 
         Button buttonSave = (Button)findViewById(R.id.button_save_edit);
         buttonSave.setOnClickListener(new View.OnClickListener() {
