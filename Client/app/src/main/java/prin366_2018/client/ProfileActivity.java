@@ -192,12 +192,28 @@ public class ProfileActivity extends AppCompatActivity
             public void onClick(View view) {
                 String text = ((TextView)findViewById(R.id.input_comment)).getText().toString();
 
-                SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' hh:mm");
-                setNewComment(Bitmap.createBitmap(120, 160, Bitmap.Config.ARGB_8888),
-                        text,
-                        formatForDateNow.format(new Date()));
+                if (text.isEmpty() == false ){
+                    boolean stringContainsSymbol = false;
+                    for (int i=0; i<text.length(); i++){
+                        if (text.charAt(i) != ' ' && text.charAt(i) !='\n'){
+                            stringContainsSymbol = true;
+                            break;
+                        }
+                    }
 
-                addComment.getLoggedProfile(text, new onAddComment(ProfileActivity.this));
+                    if (stringContainsSymbol == true){
+                        SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' hh:mm");
+                        setNewComment(Bitmap.createBitmap(120, 160, Bitmap.Config.ARGB_8888),
+                                text,
+                                formatForDateNow.format(new Date()));
+
+                        addComment.getLoggedProfile(text, new onAddComment(ProfileActivity.this));
+                    }
+
+                }
+
+                ((TextView)findViewById(R.id.input_comment)).setText("");
+
             }
         });
 
