@@ -15,7 +15,6 @@ class EventAuth(Enum):
 def authorization(cursor, params):
     cursor.execute("select * from Authorization_info where login='{}'".format(params[User.Login.value]))
     row = cursor.fetchone()
-    id_auth = row[0]
 
     status = Object()
     obj = Object()
@@ -24,6 +23,7 @@ def authorization(cursor, params):
     if row is None:
         status.message = EventAuth.LoginNotExist.value
     elif row[2] == params[User.Password.value]:
+        id_auth = row[0]
         status.message = EventAuth.SuccessAuthorizaion.value
         status.status = Status.Ok.value
         tok = params[User.Login.value] + str(time.time())
