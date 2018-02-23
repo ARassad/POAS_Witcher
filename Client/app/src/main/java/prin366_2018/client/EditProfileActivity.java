@@ -72,6 +72,8 @@ public class EditProfileActivity extends AppCompatActivity {
             Intent intent = new Intent();
             intent.putExtra("name", name.getText().toString());
             intent.putExtra("aboutMe", aboutMe.getText().toString());
+            if ( bitmap != null)
+                intent.putExtra("photo", encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, 100));
             setResult(RESULT_OK, intent);
             finish();
         }

@@ -75,7 +75,7 @@ public class ProfileActivity extends AppCompatActivity
 
             name.setText(answ.getName() != null ? answ.getName() : "NoName");
 
-            aboutMe.setText( answ.getInfo() != null ? answ.getName() : "Nobody");
+            aboutMe.setText( answ.getInfo() != null ? answ.getInfo() : "Nobody");
             role.setText( answ.getType() == Profile.ProfileType.WITCHER ? "Ведьмак" : "Наниматель");
             if (answ.getImage() != null) {
                 image.setImageBitmap(answ.getImage());
@@ -126,7 +126,7 @@ public class ProfileActivity extends AppCompatActivity
             public void onClick(View view) {
                 Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
 
-                Bundle b = new Bundle();
+
                 intent.putExtra("name", name.getText().toString());
                 intent.putExtra("aboutMe", aboutMe.getText().toString());
                 startActivityForResult(intent, SAVE_DATA);
@@ -181,17 +181,13 @@ public class ProfileActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SAVE_DATA) {
             if (resultCode == RESULT_OK) {
-                name = (TextView) findViewById(R.id.text_name);
+
                 name.setText(data.getStringExtra("name"));
                 //Сохранить информацию о имени в БД
-
-                aboutMe = (TextView) findViewById(R.id.text_about);
                 aboutMe.setText(data.getStringExtra("aboutMe"));
                 //Сохранить информацию "о себе" в БД
-
                 Bitmap bitmap = decodeBase64(data.getStringExtra("photo"));
-                ImageView photo = (ImageView)findViewById(R.id.image);
-                photo.setImageBitmap(bitmap);
+                image.setImageBitmap(bitmap);
                 //Сохранить фоточку в БД
             }
         }
