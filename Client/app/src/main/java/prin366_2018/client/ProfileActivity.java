@@ -111,6 +111,8 @@ public class ProfileActivity extends AppCompatActivity
        }
    }
 
+    AddCommentProfileRequest addComment = new AddCommentProfileRequest();
+
    class onGetComments extends DefaultServerAnswerHandler<LinkedList<Comment>>{
 
        public onGetComments(Context context) {
@@ -187,10 +189,14 @@ public class ProfileActivity extends AppCompatActivity
         buttonSendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String text = ((TextView)findViewById(R.id.input_comment)).getText().toString();
+
                 SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' hh:mm");
                 setNewComment(Bitmap.createBitmap(120, 160, Bitmap.Config.ARGB_8888),
-                        ((TextView)findViewById(R.id.input_comment)).getText().toString(),
+                        text,
                         formatForDateNow.format(new Date()));
+
+                addComment.getLoggedProfile(text, new onAddComment(ProfileActivity.this));
             }
         });
 
@@ -204,17 +210,12 @@ public class ProfileActivity extends AppCompatActivity
 
     }
 
-    AddCommentProfileRequest addComment = new AddCommentProfileRequest();
-
     private void setNewComment(Bitmap photo, String text, String datetime) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
         CommentFragment comment = new CommentFragment(photo, text, datetime);
         ft.add(R.id.comments_list, comment);
         ft.commit();
-
-        addComment.getLoggedProfile(text, new onAddComment(ProfileActivity.this));
-
     }
 
     private void setTableRow(String date, String title, String status) {
