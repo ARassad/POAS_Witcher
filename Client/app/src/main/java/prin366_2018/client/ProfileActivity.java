@@ -39,6 +39,8 @@ import android.widget.TextView;
 import ServerExchange.AdvertCard;
 import ServerExchange.Comment;
 import ServerExchange.Profile;
+import ServerExchange.ServerRequests.AddCommentProfileRequest;
+import ServerExchange.ServerRequests.GetCommentsRequest;
 import ServerExchange.ServerRequests.GetProfileRequest;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
@@ -47,6 +49,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Locale;
 
 /**
@@ -93,6 +96,39 @@ public class ProfileActivity extends AppCompatActivity
 
 
     GetProfileRequest profileRequest = new GetProfileRequest();
+
+
+   class onAddComment extends DefaultServerAnswerHandler<Boolean>{
+
+       public onAddComment(Context context) {
+           super(context);
+       }
+
+       @Override
+       public void handle(Boolean answ) {
+
+
+       }
+   }
+
+   class onGetComments extends DefaultServerAnswerHandler<LinkedList<Comment>>{
+
+       public onGetComments(Context context) {
+           super(context);
+       }
+
+       @Override
+       public void handle(LinkedList<Comment> answ) {
+
+           for (Comment comment : answ){
+               SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' hh:mm");
+               setNewComment(comment.getAuthorAvatar(),comment.getText(), formatForDateNow.format(comment.getDateOfCreate()));
+           }
+
+       }
+   }
+
+   GetCommentsRequest getCommentsRequest = new GetCommentsRequest();
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -144,6 +180,7 @@ public class ProfileActivity extends AppCompatActivity
         //Вот здесь я пишу код (Андрей)
         //profileRequest.getProfile(9, new onGetProfile(ProfileActivity.this));
         profileRequest.getLoggedProfile(new onGetProfile(ProfileActivity.this));
+        getCommentsRequest.getLoggedProfile(new onGetComments(ProfileActivity.this));
 
         Button buttonSendComment = (Button)findViewById(R.id.imagebutton_send_comment);
         buttonSendComment.setTypeface(typeface);
@@ -168,12 +205,17 @@ public class ProfileActivity extends AppCompatActivity
 
     }
 
+    AddCommentProfileRequest addComment = new AddCommentProfileRequest();
+
     private void setNewComment(Bitmap photo, String text, String datetime) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
         CommentFragment comment = new CommentFragment(photo, text, datetime);
         ft.add(R.id.comments_list, comment);
         ft.commit();
+
+        addComment.getLoggedProfile(text, new onAddComment(ProfileActivity.this));
+
     }
 
     private void setTableRow(String date, String title, String status) {

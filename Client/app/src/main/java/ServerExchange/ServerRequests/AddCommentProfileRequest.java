@@ -54,4 +54,8 @@ public class AddCommentProfileRequest extends TokenServerRequest<Boolean> {
         startRequest(onAddCommentProfileHandler);
     }
 
+    public void getLoggedProfile(String text, IServerAnswerHandler onGetProfileHandler){
+        addCommentProfile(text, LoginRequest.getLoggedUserId(), onGetProfileHandler);
+    }
+
 }

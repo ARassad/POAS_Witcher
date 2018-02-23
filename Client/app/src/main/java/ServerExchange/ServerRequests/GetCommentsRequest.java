@@ -91,4 +91,7 @@ public class GetCommentsRequest extends TokenServerRequest<LinkedList<Comment>> 
 
     }
 
+    public void getLoggedProfile(IServerAnswerHandler onGetProfileHandler){
+        getProfileComments(LoginRequest.getLoggedUserId(), onGetProfileHandler);
+    }
 }
