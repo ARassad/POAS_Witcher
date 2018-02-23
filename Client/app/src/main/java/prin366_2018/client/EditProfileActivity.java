@@ -52,7 +52,7 @@ public class EditProfileActivity extends AppCompatActivity {
         Button buttonSave = (Button)findViewById(R.id.button_save_edit);
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)  {
+            public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.putExtra("name", name.getText().toString());
                 intent.putExtra("aboutMe", aboutMe.getText().toString());

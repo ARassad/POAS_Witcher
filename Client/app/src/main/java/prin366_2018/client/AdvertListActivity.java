@@ -27,6 +27,7 @@ public class AdvertListActivity extends AppCompatActivity
 
     private static final int NEW_ADVERT = 2222;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +73,8 @@ public class AdvertListActivity extends AppCompatActivity
         ft.add(id, newRow);
         ft.commit();
     }
+
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

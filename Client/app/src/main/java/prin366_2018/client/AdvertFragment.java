@@ -2,6 +2,7 @@ package prin366_2018.client;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -34,6 +35,13 @@ public class AdvertFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_advert, container, false);
 
+        view.findViewById(R.id.fr).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AdvertActivity.class);
+                startActivity(intent);
+            }
+        });
         ((TextView)view.findViewById(R.id.text_advert_title)).setText(title);
         ((TextView)view.findViewById(R.id.text_advert_info)).setText(description);
         String c = cost + " оренов";
@@ -43,5 +51,4 @@ public class AdvertFragment extends Fragment {
 
         return view;
     }
-
 }
