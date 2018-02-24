@@ -98,9 +98,9 @@ def security_requests(method, params, isget=1):
                 try:
                     for i in params.keys():
                         if i != 'method' and is_dict(par_req[i]) and is_dict(par_req[i][params[i]]):
-                            d = par_req.pop(i)[params[i]]
-                            par_req.update(d)
+                            par_req.update(par_req.pop(i)[params[i]])
                         current_params += 1
+
                 except KeyError:
                     bad_params = True
 
