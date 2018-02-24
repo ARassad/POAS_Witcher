@@ -49,8 +49,12 @@ import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -123,8 +127,9 @@ public class ProfileActivity extends AppCompatActivity
        @Override
        public void handle(LinkedList<Comment> answ) {
 
+           Collections.sort(answ, Comment.DateComparator);
            for (Comment comment : answ){
-               SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' hh:mm");
+               SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' HH:mm");
                setNewComment(comment.getAuthorAvatar(),comment.getText(), formatForDateNow.format(comment.getDateOfCreate()));
            }
        }
