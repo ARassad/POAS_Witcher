@@ -94,6 +94,13 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <fragment
+                        class="prin366_2018.client.SortingFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:layout="@layout/fragment_sorting">
+                    </fragment>
+
                 </LinearLayout>
 
                 <LinearLayout

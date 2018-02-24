@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -42,7 +43,7 @@ public class SortingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_sorting, container, false);
+        final View view = inflater.inflate(R.layout.fragment_sorting, container, false);
 
         String[] sort1 = { "Награде", "Названию", "Локации", "Дате" };
         String[] sort2 = { "Возрастанию", "Убыванию" };
@@ -55,6 +56,31 @@ public class SortingFragment extends Fragment {
         setSpinner((Spinner)view.findViewById(R.id.spinner_sort_other), sort2, "Сортировать по");
         setSpinner((Spinner)view.findViewById(R.id.spinner_kingdom), kingdoms, "Королевства");
         setSpinner((Spinner)view.findViewById(R.id.spinner_city), cities, "Города");
+
+        ((Spinner)view.findViewById(R.id.spinner_sort_main)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View v, int i, long l) {
+                switch(i) {
+                    case 2:
+                        view.findViewById(R.id.locations).setVisibility(View.VISIBLE);
+                        view.findViewById(R.id.rewards).setVisibility(View.GONE);
+                        break;
+                    case 0:
+                        view.findViewById(R.id.locations).setVisibility(View.GONE);
+                        view.findViewById(R.id.rewards).setVisibility(View.VISIBLE);
+                        break;
+                    default:
+                        view.findViewById(R.id.locations).setVisibility(View.GONE);
+                        view.findViewById(R.id.rewards).setVisibility(View.GONE);
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         return view;
     }
 
