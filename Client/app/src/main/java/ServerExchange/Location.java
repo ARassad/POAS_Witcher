@@ -37,4 +37,7 @@ public class Location {
         this.city = city;
     }
 
+    public String toString(){
+        return kingdom + ", " + city;
+    }
 }

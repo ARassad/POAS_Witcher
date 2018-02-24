@@ -1,5 +1,6 @@
 package prin366_2018.client;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -20,7 +21,25 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
+
+import ServerExchange.Advert;
+import ServerExchange.Comment;
+import ServerExchange.Profile;
+import ServerExchange.ProfilePart;
+import ServerExchange.ServerRequests.AddCommentContractRequest;
+import ServerExchange.ServerRequests.GetAdvertRequest;
+import ServerExchange.ServerRequests.GetAdvertsRequest;
+import ServerExchange.ServerRequests.GetCommentsRequest;
+import ServerExchange.ServerRequests.GetWitcherDesiredContractRequest;
+import ServerExchange.ServerRequests.LoginRequest;
+import ServerExchange.ServerRequests.RefuseContractRequest;
+import ServerExchange.ServerRequests.RemoveAdvertRequest;
+import ServerExchange.ServerRequests.SelectExecutorRequest;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
+
 
 import static prin366_2018.client.ProfileActivity.decodeBase64;
 
@@ -28,6 +47,168 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
 
     static final private int SAVE_DATA = 2;
+
+
+    private GetAdvertRequest getAdvertRequest = new GetAdvertRequest();
+    private class onGetAdvert extends DefaultServerAnswerHandler<Advert>{
+
+        public onGetAdvert(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void handle(Advert answ) {
+            advert = answ;
+
+            authorNameView.setText(answ.getAuthorName());
+            descriptionView.setText(answ.getInfo());
+            headerView.setText(answ.getName());
+            rewardView.setText(String.valueOf(answ.getReward()));
+            locationView.setText(answ.getLocation().toString());
+            executorNameView.setText(answ.getExecutorName());
+
+            if (answ.getAuthorId() == LoginRequest.getLoggedUserId()){
+                getDesiredRequest.getDesired(answ.getId(), new onGetDesiredList(AdvertActivity.this));
+                ifCreatedByLoggedUser();
+            }
+        }
+    }
+
+    private GetCommentsRequest getCommentsRequest = new GetCommentsRequest();
+    private class onGetComments extends DefaultServerAnswerHandler<LinkedList<Comment>>{
+
+        public onGetComments(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void handle(LinkedList<Comment> answ) {
+
+            for (Comment comment : answ){
+                SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' hh:mm");
+                setNewComment(comment.getAuthorAvatar(),comment.getText(), formatForDateNow.format(comment.getDateOfCreate()));
+            }
+        }
+    }
+
+    private AddCommentContractRequest addCommentsRequest = new AddCommentContractRequest();
+    private class onAddComment extends DefaultServerAnswerHandler<Boolean>{
+
+        public onAddComment(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void handle(Boolean answ) {
+
+        }
+    }
+
+    private GetWitcherDesiredContractRequest getDesiredRequest = new GetWitcherDesiredContractRequest();
+    private class onGetDesiredList extends DefaultServerAnswerHandler<ArrayList<ProfilePart>> {
+
+        public onGetDesiredList(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void handle(ArrayList<ProfilePart> answ) {
+            for (ProfilePart profile : answ){
+                //TODO: Заполнять список
+            }
+        }
+    }
+
+    //TODO: upend
+    private SelectExecutorRequest selectExecutorRequest = new SelectExecutorRequest();
+    private class onSelectExecutorAnswer extends DefaultServerAnswerHandler<Boolean>{
+
+        public onSelectExecutorAnswer(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void handle(Boolean answ) {
+
+        }
+    }
+
+    private RemoveAdvertRequest removeAdvertRequest = new RemoveAdvertRequest();
+    private class onRemoveAdvertAnswer extends DefaultServerAnswerHandler<Boolean>{
+
+        public onRemoveAdvertAnswer(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void handle(Boolean answ) {
+            finish();
+        }
+    }
+
+    //TODO: upend
+    private RefuseContractRequest refuseContractRequest = new RefuseContractRequest();
+    private class onRefuseAnswer extends DefaultServerAnswerHandler<Boolean>{
+
+        public onRefuseAnswer(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void handle(Boolean answ) {
+
+        }
+    }
+
+
+    private TextView headerView, descriptionView, authorNameView, rewardView, locationView, executorNameView;
+    private TextView newCommentView;
+    private void connectViews(){
+        headerView          = findViewById(R.id.text_title_advert);
+        descriptionView     = findViewById(R.id.text_description);
+        authorNameView      = findViewById(R.id.text_name_client);
+        rewardView          = findViewById(R.id.text_cost_advert);
+        locationView        = findViewById(R.id.text_kingdom_city_advert);
+        executorNameView    = findViewById(R.id.text_executor);
+        newCommentView      = findViewById(R.id.input_comment);
+    }
+
+    private Typeface typeface;
+
+    private void ifCreatedByLoggedUser(){
+        Button buttonEdit = (Button)findViewById(R.id.button_edit);
+        buttonEdit.setTypeface(typeface);
+        buttonEdit.setText("\uf044");
+        buttonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdvertActivity.this, EditAdvertActivity.class);
+                intent.putExtra("IsCreate", false);
+                intent.putExtra("kingdom", advert.getLocation().getKingdom());
+                intent.putExtra("city", advert.getLocation().getCity());
+                intent.putExtra("bounty", advert.getReward());
+                intent.putExtra("header", advert.getName());
+                intent.putExtra("description", advert.getInfo());
+                intent.putExtra("advertId", advert.getId());
+                startActivityForResult(intent, SAVE_DATA);
+            }
+        });
+
+        Button buttonDelete = (Button)findViewById(R.id.button_delete);
+        buttonDelete.setTypeface(typeface);
+        buttonDelete.setText("\uf2ed");
+        buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: show message box
+                removeAdvertRequest.removeAdvert(advertId, new onRemoveAdvertAnswer(AdvertActivity.this));
+            }
+        });
+    }
+
+
+    private long advertId = -1;
+    private Advert advert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,37 +231,29 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         setButton((Button)findViewById(R.id.button_images), findViewById(R.id.images_advert));
         setButton((Button)findViewById(R.id.button_comments), findViewById(R.id.comments_list));
 
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/fa-solid-900.ttf");
-
-        final Button buttonEdit = (Button)findViewById(R.id.button_edit);
-        buttonEdit.setTypeface(typeface);
-        buttonEdit.setText("\uf044");
-        buttonEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(AdvertActivity.this, EditAdvertActivity.class);
-                /*intent.putExtra("name", name.getText().toString());
-                intent.putExtra("aboutMe", aboutMe.getText().toString());*/
-                startActivityForResult(intent, SAVE_DATA);
-            }
-        });
-
-        final Button buttonDelete = (Button)findViewById(R.id.button_delete);
-        buttonDelete.setTypeface(typeface);
-        buttonDelete.setText("\uf2ed");
+        typeface = Typeface.createFromAsset(getAssets(), "fonts/fa-solid-900.ttf");
 
         Button buttonSendComment = (Button)findViewById(R.id.imagebutton_send_comment);
         buttonSendComment.setTypeface(typeface);
         buttonSendComment.setText("\uf1d8");
+
         buttonSendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' hh:mm");
+                addCommentsRequest.addCommentContract(newCommentView.getText().toString(), advertId, new onAddComment(AdvertActivity.this));
                 setNewComment(Bitmap.createBitmap(120, 160, Bitmap.Config.ARGB_8888),
                         ((TextView)findViewById(R.id.input_comment)).getText().toString(),
                         formatForDateNow.format(new Date()));
             }
         });
+
+
+        advertId = getIntent().getLongExtra("advertId",-1);
+        if (advertId >= 0){
+            getAdvertRequest.getAdvert(advertId, new onGetAdvert(AdvertActivity.this));
+            getCommentsRequest.getAdvertComments(advertId, new onGetComments(AdvertActivity.this));
+        }
     }
 
     @Override
@@ -89,9 +262,15 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         if (requestCode == SAVE_DATA) {
             if (resultCode == RESULT_OK) {
                 //TODO
+                Intent intent = getIntent();
+                headerView.setText(intent.getStringExtra("header"));
+                descriptionView.setText(intent.getStringExtra("description"));
+                rewardView.setText(intent.getIntExtra("bounty", 1));
+                locationView.setText(intent.getStringExtra("kingdom") + ", " + intent.getStringExtra("city"));
             }
         }
     }
+
 
     private void setButton(Button button, final View v) {
         button.setOnClickListener(new View.OnClickListener() {

@@ -28,6 +28,10 @@ public class GetAdvertRequest extends TokenServerRequest<Advert> {
         super(serverAddress);
     }
 
+    public GetAdvertRequest() {
+        super();
+    }
+
     @Override
     protected ServerMethod getMethod() {
 
@@ -92,7 +96,7 @@ public class GetAdvertRequest extends TokenServerRequest<Advert> {
             }
 
             Advert advert = new Advert(object.id, object.header, object.text, imgs, new Location(object.kingdom, object.town),
-                    object.bounty, client.id, null/*other method*/, witcher.id, Advert.AdvertStatus.fromInt(object.status),
+                    object.bounty, client.id, client.name,null/*other method*/, witcher.id, witcher.name, Advert.AdvertStatus.fromInt(object.status),
                     dateOfLastUpdate, null/*other method*/);
             return advert;
         }

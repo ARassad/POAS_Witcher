@@ -88,10 +88,12 @@ public class Advert implements ICommented {
     
     //Profile author;
     private long id_author;
+    private String authorName;
     public long getAuthorId(){
         return id_author;
     }
-    
+    public String getAuthorName() {return authorName; }
+
     private LinkedList<Long> idSubscribedWitchersList;
     public ArrayList<Long> getIdSubscribedWitchersList(){
         return new ArrayList<>(idSubscribedWitchersList);
@@ -103,13 +105,14 @@ public class Advert implements ICommented {
     
     //Profile executor;
     private long id_executor;
-
+    private String executorName;
     public void setExecutorId( long id_witcher){
         id_executor = id_witcher;
     }
     public long getExecutorId(){
         return id_executor;
     }
+    public String getExecutorName() {return executorName; }
 
     public static enum AdvertStatus{
         FREE,
@@ -193,8 +196,10 @@ public class Advert implements ICommented {
     }
 
     public Advert(long id, String name, String info, LinkedList<Bitmap> images, Location location, int reward,
-                  long id_author, LinkedList<Long> idSubscribedWitchersList, long id_executor, AdvertStatus status,
+                  long id_author, String authorName,LinkedList<Long> idSubscribedWitchersList,
+                  long id_executor, String executorName ,AdvertStatus status,
                   Date dateOfCreate, CommentsContainer comments) {
+
         this.id = id;
         this.name = name;
         this.info = info;
@@ -202,8 +207,10 @@ public class Advert implements ICommented {
         this.location = location;
         this.reward = reward;
         this.id_author = id_author;
+        this.authorName = authorName;
         this.idSubscribedWitchersList = idSubscribedWitchersList;
         this.id_executor = id_executor;
+        this.executorName = executorName;
         this.status = status;
         this.dateOfCreate = dateOfCreate;
         this.comments = comments;
@@ -213,8 +220,8 @@ public class Advert implements ICommented {
     @Override
     public Object clone(){
         
-        return new Advert(id, name, info, images, location, reward, id_author, idSubscribedWitchersList,
-            id_executor, status, dateOfCreate, comments);
+        return new Advert(id, name, info, images, location, reward, id_author, authorName,idSubscribedWitchersList,
+            id_executor,executorName ,status, dateOfCreate, comments);
         
     }
 }

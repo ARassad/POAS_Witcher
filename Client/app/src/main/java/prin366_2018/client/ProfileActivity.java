@@ -100,10 +100,10 @@ public class ProfileActivity extends AppCompatActivity
     }
 
 
-    GetProfileRequest profileRequest = new GetProfileRequest();
+    private GetProfileRequest profileRequest = new GetProfileRequest();
 
 
-   class onAddComment extends DefaultServerAnswerHandler<Boolean>{
+    private class onAddComment extends DefaultServerAnswerHandler<Boolean>{
 
        public onAddComment(Context context) {
            super(context);
@@ -116,16 +116,16 @@ public class ProfileActivity extends AppCompatActivity
        }
    }
 
-    AddCommentProfileRequest addComment = new AddCommentProfileRequest();
+    private AddCommentProfileRequest addComment = new AddCommentProfileRequest();
 
-   class onGetComments extends DefaultServerAnswerHandler<LinkedList<Comment>>{
+    private class onGetComments extends DefaultServerAnswerHandler<LinkedList<Comment>>{
 
-       public onGetComments(Context context) {
-           super(context);
-       }
+        public onGetComments(Context context) {
+             super(context);
+        }
 
-       @Override
-       public void handle(LinkedList<Comment> answ) {
+        @Override
+        public void handle(LinkedList<Comment> answ) {
 
            Collections.sort(answ, Comment.DateComparator);
            for (Comment comment : answ){
@@ -135,7 +135,7 @@ public class ProfileActivity extends AppCompatActivity
        }
    }
 
-   GetCommentsRequest getCommentsRequest = new GetCommentsRequest();
+    private GetCommentsRequest getCommentsRequest = new GetCommentsRequest();
 
     @SuppressLint("ClickableViewAccessibility")
     @Override

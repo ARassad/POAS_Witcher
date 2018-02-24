@@ -13,7 +13,7 @@ import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
  * Created by Дима on 20.02.2018.
  */
 
-public class GetWithcerDesiredContractRequest extends TokenServerRequest<ArrayList<ProfilePart>> {
+public class GetWitcherDesiredContractRequest extends TokenServerRequest<ArrayList<ProfilePart>> {
 
     @Override
     protected RequestType getRequestType(){ return RequestType.GET; }
@@ -22,8 +22,11 @@ public class GetWithcerDesiredContractRequest extends TokenServerRequest<ArrayLi
 
     private long id_contract;
 
-    public GetWithcerDesiredContractRequest(String serverAddress) {
+    public GetWitcherDesiredContractRequest(String serverAddress) {
         super(serverAddress);
+    }
+    public GetWitcherDesiredContractRequest() {
+        super();
     }
 
     @Override
@@ -71,7 +74,7 @@ public class GetWithcerDesiredContractRequest extends TokenServerRequest<ArrayLi
         return JsonGetWithcerDesiredContractServerAnswer.class;
     }
 
-    public void addCommentContract(long id_contract, IServerAnswerHandler onGetWithcerDesiredContractHandler) {
+    public void getDesired (long id_contract, IServerAnswerHandler onGetWithcerDesiredContractHandler) {
         this.id_contract = id_contract;
         startRequest(onGetWithcerDesiredContractHandler);
     }
