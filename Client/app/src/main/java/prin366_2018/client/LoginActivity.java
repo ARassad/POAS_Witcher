@@ -70,6 +70,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
 
+    //FCM Token
+    private MyFirebaseInstanceIDService fcmToken = new MyFirebaseInstanceIDService();
+    {
+        fcmToken.onTokenRefresh();
+    }
+
 
     /**
      * В этот метод пихать всё, что должно произойти при загрузке приложения
@@ -80,9 +86,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onAppStart(){
 
         if (isFirstOpen) {
-            MyFirebaseInstanceIDService fff = new MyFirebaseInstanceIDService();
-            fff.onTokenRefresh();
-
             SharedPreferences params = getSharedPreferences("settings", MODE_PRIVATE);
             //ip Андрея
             ServerRequest.setDefaultAddress("192.168.1.3");
@@ -227,7 +230,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
 
             LocationsList.refillFromServer();
-            new AuthorizationRequest().login(email, password, new DefaultServerAnswerHandler<Boolean>(LoginActivity.this) {
+            new AuthorizationRequest().login(email, password, fcmToken.getToken(), new DefaultServerAnswerHandler<Boolean>(LoginActivity.this) {
                 @Override
                 public void handle(Boolean answ) {
                     if (answ!= null && answ == true){

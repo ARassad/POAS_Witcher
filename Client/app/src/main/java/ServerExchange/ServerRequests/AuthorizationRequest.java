@@ -25,6 +25,7 @@ public class AuthorizationRequest extends LoginRequest<Boolean>{
 
     private String login;
     private String password;
+    private String fcmToken;
 
     private final String AUTH_METHOD_NAME = "Auth";
     @Override
@@ -33,6 +34,7 @@ public class AuthorizationRequest extends LoginRequest<Boolean>{
         HashMap<String, Object> params = new HashMap<>();
         params.put("login", login);
         params.put("password", password);
+        params.put("fcm_token", fcmToken);
 
         return new ServerMethod(AUTH_METHOD_NAME, params);
     }
@@ -50,9 +52,10 @@ public class AuthorizationRequest extends LoginRequest<Boolean>{
         return AuthJsonServeAnswer.class;
     }
 
-    public void login(String login, String password, IServerAnswerHandler onLoginHandler){
+    public void login(String login, String password, String fcmToken, IServerAnswerHandler onLoginHandler){
         this.login = login;
         this.password = Password.encode(password);
+        this.fcmToken = fcmToken;
         startRequest(onLoginHandler);
     }
 
