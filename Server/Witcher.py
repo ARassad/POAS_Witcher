@@ -2,6 +2,7 @@ from Server.Objects import Object
 from Server.Objects import Status
 from Server.Advert import Advert
 from Server.Profile import User
+from Server.FCM import send_firebase_push
 from enum import Enum
 Advert.IDpost = "id_contract"
 
@@ -67,5 +68,30 @@ def refuse_contract(cursor, params):
                    .format(params[Advert.IDpost]))
     status.status = Status.Ok.value
     status.message = EventWitcher.Success.value
+
+    return status.toJSON()
+
+
+def contract_complited(cursor, params):
+    cursor.execute("select * from Witcher where id_profile=(select id_profile from Token_Table where token='{}')"
+                   .format(params[User.Token.value]))
+    row = cursor.fetchone()
+    status = Object()
+
+    if row is not None:
+        cursor.execute('update Contract set status=3 where id={}'.format(params[Advert.ID.value]))
+        status.status = Status.Ok.value
+
+        cursor.execute('select id_client, header from Contract where id={}'.format(params[Advert.ID.value]))
+        row = cursor.fetchone()
+        id_sender = row[0]
+        title = 'Контракт ' + row[1]
+        cursor.execute("select name from Profile where id=(select id_profile from Token_Table where token='{}')"
+                       .format(params[User.Token.value]))
+        name = cursor.fetchone()[0]
+        body = 'Ведьмак ' + name + ' выполнил выше задание!'
+        send_firebase_push(cursor, title, body, id_sender)
+    else:
+        status.status = Status.Error.value
 
     return status.toJSON()

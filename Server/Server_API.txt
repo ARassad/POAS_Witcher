@@ -150,6 +150,17 @@ localhost/api?method=Get_list_contract&token=b5ad4e9f2bdedb278dd91ce0e8043fce
 	Если locate, то должны быть параметры town или kingdom
 	Если bounty, то должны быть параметры min или max
 
+GetContractClient
+GetContractWitcher
+Гет запросы, принимают токен
+Примеры
+http://localhost/api?method=GetContractWitcher&token=cb6b5509b2f53798555a0b961ef4631d
+http://localhost/api?method=GetContractClient&token=7514e2a11659c612f9a5bd26f7e01d2c
+
+Ведьмак выполнил контракт
+http://localhost/api?method=ContractComplited&token=cb6b5509b2f53798555a0b961ef4631d&id=3
+id здесь контракта
+
 Опциональный параметр sort может равняться alph, locate, lastupdate
 	Опциональный для sort, параметр sortype может быть asc, desc 
 Samples

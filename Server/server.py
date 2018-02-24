@@ -17,6 +17,7 @@ from Server.Advert import write_comment_contract
 from Server.Witcher import select_witcher
 from Server.Witcher import answer_witcher
 from Server.Witcher import refuse_contract
+from Server.Witcher import contract_complited
 from Server.Comments import get_list_comment
 from Server.Town import get_towns
 from Server.SecurityServer import security_requests
@@ -52,6 +53,7 @@ api_methods_get[ApiMethod.GetListComments.value] = get_list_comment
 api_methods_get[ApiMethod.GetTowns.value] = get_towns
 api_methods_get[ApiMethod.GetContractClient.value] = get_contract_client
 api_methods_get[ApiMethod.GetContractWitcher.value] = get_contract_witcher
+api_methods_get[ApiMethod.ContractComplited.value] = contract_complited
 
 
 class HttpServer(BaseHTTPRequestHandler):

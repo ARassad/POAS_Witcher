@@ -82,7 +82,9 @@ paramsRequests = {
                                     'type_req': 0},
 
     ApiMethod.GetContractClient.value: {'params': {'token': 'token'}, 'min_params': 1, 'count': 1, 'type_req': 1},
-    ApiMethod.GetContractWitcher.value: {'params': {'token': 'token'}, 'min_params': 1, 'count': 1, 'type_req': 1}}
+    ApiMethod.GetContractWitcher.value: {'params': {'token': 'token'}, 'min_params': 1, 'count': 1, 'type_req': 1},
+    ApiMethod.ContractComplited.value: {'params': {'token': 'token', 'id': 'id'}, 'min_params': 2, 'count': 2,
+                                        'type_req': 1}}
 
 
 def security_requests(method, params, isget=1):
