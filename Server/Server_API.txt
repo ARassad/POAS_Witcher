@@ -1,4 +1,4 @@
-Авторизация:
+﻿Авторизация:
 localhost/api/Auth
 Отправляемые данные:
 {'login': 'mkovalev', 'password': 'passwd'} json format
@@ -144,26 +144,17 @@ type=contract - контракт
 Получить города
 http://localhost/api?method=GetTowns&token=b5ad4e9f2bdedb278dd91ce0e8043fce
 
+Получить лист контрактов
+localhost/api?method=Get_list_contract&token=b5ad4e9f2bdedb278dd91ce0e8043fce
+Опциональный параметр filter может равняться locate или bounty
+	Если locate, то должны быть параметры town или kingdom
+	Если bounty, то должны быть параметры min или max
 
-
-Get list of contracts : 
-Params: login, password
-Optional params: 
-filter = { 
-	locate => town OR kingdom
-	bounty => min AND max
-	}
-sort = {
-	alph,
-	locate,
-	lastupdate
-	
-	Optional => sortype => [asc, desc]
-}
-
+Опциональный параметр sort может равняться alph, locate, lastupdate
+	Опциональный для sort, параметр sortype может быть asc, desc 
 Samples
-localhost/api?method=Get_list_contract&login=arassadnikov&password=pass&filter=bounty&min=0&max=100
-localhost/api?method=Get_list_contract&login=arassadnikov&password=pass&filter=locate&town=Vizima&kingdom=Temeria
-localhost/api?method=Get_list_contract&login=arassadnikov&password=pass&filter=locate&town=Vizima
-localhost/api?method=Get_list_contract&login=arassadnikov&password=pass&filter=locate&kingdom=Temeria
-localhost/api?method=Get_list_contract&login=arassadnikov&password=pass&sort=lastupdate&sortype=desc
+localhost/api?method=Get_list_contract&token=b5ad4e9f2bdedb278dd91ce0e8043fce&filter=bounty&min=0&max=100
+localhost/api?method=Get_list_contract&token=b5ad4e9f2bdedb278dd91ce0e8043fce&filter=locate&town=Vizima&kingdom=Temeria
+localhost/api?method=Get_list_contract&token=b5ad4e9f2bdedb278dd91ce0e8043fce&filter=locate&town=Vizima
+localhost/api?method=Get_list_contract&token=b5ad4e9f2bdedb278dd91ce0e8043fce&filter=locate&kingdom=Temeria
+localhost/api?method=Get_list_contract&token=b5ad4e9f2bdedb278dd91ce0e8043fce&sort=lastupdate&sortype=desc

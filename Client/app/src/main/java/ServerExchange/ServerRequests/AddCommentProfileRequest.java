@@ -1,7 +1,8 @@
 package ServerExchange.ServerRequests;
 
-import java.io.IOException;
 import java.util.HashMap;
+
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 
 
 /**
@@ -47,10 +48,14 @@ public class AddCommentProfileRequest extends TokenServerRequest<Boolean> {
         return JsonAddCommentProfileServerAnswer.class;
     }
 
-    public void addCommentProfile(String text, long id, IServerAnswerHandler onAddCommentProfileHandler) throws IOException {
+    public void addCommentProfile(String text, long id, IServerAnswerHandler onAddCommentProfileHandler) {
         this.text = text;
         this.profile_id = id;
         startRequest(onAddCommentProfileHandler);
+    }
+
+    public void getLoggedProfile(String text, IServerAnswerHandler onGetProfileHandler){
+        addCommentProfile(text, LoginRequest.getLoggedUserId(), onGetProfileHandler);
     }
 
 }

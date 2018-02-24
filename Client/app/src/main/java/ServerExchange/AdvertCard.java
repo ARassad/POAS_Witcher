@@ -14,7 +14,7 @@ import java.util.Date;
 public class AdvertCard {
  
     Advert.AdvertStatus status;
-    Advert.AdvertStatus getStatus(){
+    public Advert.AdvertStatus getStatus(){
         return status;
     }
     
@@ -24,7 +24,7 @@ public class AdvertCard {
     }
 
     private String header;
-    public String gerAdvertHeader(){
+    public String getAdvertHeader(){
         return header;
     }
 
