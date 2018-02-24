@@ -18,14 +18,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 public class AdvertListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SortingFragment.OnFragmentInteractionListener {
 
     private static final int NEW_ADVERT = 2222;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +62,21 @@ public class AdvertListActivity extends AppCompatActivity
             }
         });
 
+        advertListSetting(false, false);
+
         setButton((Button)findViewById(R.id.button_witcher_not_chosen), findViewById(R.id.form_witcher_not_chosen));
         setButton((Button)findViewById(R.id.button_witcher_chosen), findViewById(R.id.form_witcher_chosen));
         setButton((Button)findViewById(R.id.button_during), findViewById(R.id.adlist_during));
         setButton((Button)findViewById(R.id.button_executed), findViewById(R.id.adlist_executed));
+
+
+        ((Switch)findViewById(R.id.switch_advert)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // в зависимости от значения isChecked выводим нужные группы объявлений
+                advertListSetting(false, !isChecked);
+            }
+        });
     }
 
     private void setNewAdvert(int id, String title, String description, String kingdom, String city, String cost) {
@@ -72,6 +86,8 @@ public class AdvertListActivity extends AppCompatActivity
         ft.add(id, newRow);
         ft.commit();
     }
+
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -102,6 +118,36 @@ public class AdvertListActivity extends AppCompatActivity
             }
         }
     }
+
+
+    /**
+     * Отображение определенных групп объявлений в зависимости от типа пользователя и списка объявлений
+     * isWitcher - true: ведьмак, false: заказчик
+     * isAllAdvert - true: все объявления, false: свои
+     */
+    private void advertListSetting(boolean isWitcher, boolean isAllAdvert) {
+        if (isAllAdvert) {
+            findViewById(R.id.all_advert).setVisibility(View.VISIBLE);
+            findViewById(R.id.full_form).setVisibility(View.GONE);
+        }
+        else {
+            findViewById(R.id.all_advert).setVisibility(View.GONE);
+            findViewById(R.id.full_form).setVisibility(View.VISIBLE);
+            if (isWitcher) {
+                findViewById(R.id.full_form_witcher_not_chosen).setVisibility(View.GONE);
+                findViewById(R.id.full_form_witcher_chosen).setVisibility(View.GONE);
+                findViewById(R.id.form_during).setVisibility(View.VISIBLE);
+                findViewById(R.id.form_subscribed).setVisibility(View.VISIBLE);
+            }
+            else {
+                findViewById(R.id.full_form_witcher_not_chosen).setVisibility(View.VISIBLE);
+                findViewById(R.id.full_form_witcher_chosen).setVisibility(View.VISIBLE);
+                findViewById(R.id.form_during).setVisibility(View.GONE);
+                findViewById(R.id.form_subscribed).setVisibility(View.GONE);
+            }
+        }
+    }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
