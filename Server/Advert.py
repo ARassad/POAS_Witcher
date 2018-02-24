@@ -2,6 +2,7 @@ from Server.Objects import User
 from Server.Objects import Object
 from Server.Objects import Status
 from Server.Profile import Comment
+from Server.FCM import send_firebase_push
 from enum import Enum
 import time
 #0 - FREE - Открытый / В поиске
@@ -90,6 +91,7 @@ def edit_advert(cursor, params):
         update_string = ""
         last_update = int(time.time())
         id_lphoto = row[5]
+        cont = row[11]
 
         if params.get(Advert.Witcher.value, None) is not None:
             update_string += "id_witcher={},".format(params[Advert.Witcher.value])
@@ -118,6 +120,14 @@ def edit_advert(cursor, params):
 
         cursor.execute("update Contract set {} where id={}".format(update_string, params[Advert.ID.value]))
 
+        cursor.execute("select a.id_profile from Witcher as a inner join Desired_Contract as b on \
+                        a.id=b.id_witcher where id_contract={}".format(params[Advert.ID.value]))
+        row = cursor.fetchall()
+        title = 'Наниматель изменил контракт'
+        body = 'Контракт ' + cont
+        for i in row:
+            send_firebase_push(cursor, body, title, i[0])
+
         status.status = Status.Ok.value
         status.message = EventAdvert.Success.value
     else:
@@ -135,14 +145,26 @@ def delete_advert(cursor, params):
     status = Object()
 
     if row is not None:
-        id_client = row[1]
-        cursor.execute("select id_client from Contract where id={}".format(params[Advert.ID.value]))
-        id_cont_client = cursor.fetchone()[0]
+        id_client = row[0]
+        cursor.execute("select id_client, header from Contract where id={}".format(params[Advert.ID.value]))
+        row = cursor.fetchone()
+        id_cont_client = row[0]
+        cont = row[1]
 
         if id_client == id_cont_client:
             cursor.execute("delete Contract where id={}".format(params[Advert.ID.value]))
             status.status = Status.Ok.value
             status.message = EventAdvert.Success.value
+
+            cursor.execute("select a.id_profile from Witcher as a inner join Desired_Contract as b on \
+                            a.id=b.id_witcher where id_contract={}".format(params[Advert.ID.value]))
+
+            row = cursor.fetchall()
+            title = 'Наниматель удалил контракт'
+            body = 'Контракт ' + cont
+
+            for i in row:
+                send_firebase_push(cursor, body, title, i[0])
         else:
             status.status = Status.Error.value
             status.message = EventAdvert.AlienDelete.value
