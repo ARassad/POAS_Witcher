@@ -6,13 +6,14 @@ import java.util.Map;
 
 import ServerExchange.Advert;
 import ServerExchange.Location;
+import ServerExchange.LocationsList;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 
 /**
  * Created by Dryush on 13.02.2018.
  */
 
-public class GetAdvertsRequest extends ServerRequest < LinkedList<Advert>> {
+public class GetAdvertsRequest extends TokenServerRequest < LinkedList<Advert>> {
 
     public GetAdvertsRequest() {
         super();
@@ -38,7 +39,7 @@ public class GetAdvertsRequest extends ServerRequest < LinkedList<Advert>> {
         String toServerParam(){
             switch (this){
                 case BY_LOCATE: return "locate";
-                case BY_REWARD: return "bounte";
+                case BY_REWARD: return "bounty";
                 default: throw new RuntimeException("Добавь новый тип в метод GetAdvertsRequest.FilterType.toServerParams");
             }
         }
@@ -95,7 +96,7 @@ public class GetAdvertsRequest extends ServerRequest < LinkedList<Advert>> {
         }
 
         if (orderType != null){
-            params.put("order", orderType.toServerParam());
+            params.put("sortype", orderType.toServerParam());
         }
         if (filterType != null){
             params.put("filter", filterType.toServerParam());
@@ -149,11 +150,13 @@ public class GetAdvertsRequest extends ServerRequest < LinkedList<Advert>> {
         @Override
         public LinkedList<Advert> convert() {
             LinkedList<Advert> adverts = new LinkedList<>();
+            LocationsList locsList = LocationsList.getInstance();
             for (Map.Entry<String, JsonObj.OneContractJson> key_contract : object.contracts.entrySet()){
                 JsonObj.OneContractJson contract = key_contract.getValue();
                 java.util.Date update_time = new java.util.Date(contract.last_update * 1000);
                 Advert.AdvertStatus st = Advert.AdvertStatus.fromInt(contract.status);
-                Advert advert = new Advert(contract.id, contract.header, contract.text, null, new Location(null, null), contract.bounty, contract.id_client,"", null, contract.id_witcher, "", st, update_time, null);
+                Location loc = locsList.getById(contract.id_task_located);
+                Advert advert = new Advert(contract.id, contract.header, contract.text, null, loc, contract.bounty, contract.id_client,"", null, contract.id_witcher, "", st, update_time, null);
                 adverts.addLast(advert);
             }
             return adverts;
