@@ -27,7 +27,15 @@ def select_witcher(cursor, params):
 
     if row is not None:
         cursor.execute("update Contract set id_witcher={} where id={}"
-                      .format(params[Witcher.IDpost.value], params[Advert.IDpost]))
+                       .format(params[Witcher.IDpost.value], params[Advert.IDpost]))
+
+        cursor.execute("select header from Contract where id={}".format(params[Advert.IDpost]))
+        cont = cursor.fetchone()[0]
+        title = 'Вы выбраны для выполнения контракта!'
+        body = 'Контракт ' + cont
+        cursor.execute("select id_profile from Witcher where id={}".format(params[Witcher.IDpost.value]))
+        id_sender = cursor.fetchone()[0]
+        send_firebase_push(cursor, body, title, id_sender)
 
         status.status = Status.Ok.value
         status.message = EventWitcher.Success.value
