@@ -88,9 +88,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (isFirstOpen) {
             SharedPreferences params = getSharedPreferences("settings", MODE_PRIVATE);
             //ip Андрея
-            ServerRequest.setDefaultAddress("192.168.1.3");
+            //ServerRequest.setDefaultAddress("192.168.1.3");
             //ip Хоста Миши
-            //ServerRequest.setDefaultAddress("212.237.54.117");
+            ServerRequest.setDefaultAddress("212.237.54.117");
             //ServerRequest.setDefaultAddress( params.getString("server_address", "localhost"));
 
             if (!params.contains("server_address")) {
