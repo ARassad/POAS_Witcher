@@ -183,7 +183,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AdvertActivity.this, EditAdvertActivity.class);
-                intent.putExtra("IsCreate", false);
+                intent.putExtra("isCreate", false);
                 intent.putExtra("kingdom", advert.getLocation().getKingdom());
                 intent.putExtra("city", advert.getLocation().getCity());
                 intent.putExtra("bounty", advert.getReward());
