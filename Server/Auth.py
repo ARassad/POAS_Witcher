@@ -35,6 +35,9 @@ def authorization(cursor, params):
                        .format(obj.token, int(time.time()), obj.id_profile))
 
         #  Вставка fcm_tokena
+        cursor.execute("select * from FCM_Token where id_profile = {}".format(obj.id_profile))
+        if len(cursor.fetchone()) != 0:
+            cursor.execute("delete FCM_Token where id_profile = {}".format(obj.id_profile))
         cursor.execute("insert into FCM_Token (id_profile, fcm_token) values( {}, '{}')"
                        .format(obj.id_profile, params[User.FCM_Token.value]))
 
