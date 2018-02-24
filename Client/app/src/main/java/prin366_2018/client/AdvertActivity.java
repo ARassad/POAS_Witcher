@@ -60,13 +60,25 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         public void handle(Advert answ) {
             advert = answ;
 
-            authorNameView.setText(answ.getAuthorName());
-            descriptionView.setText(answ.getInfo());
-            headerView.setText(answ.getName());
-            rewardView.setText(String.valueOf(answ.getReward()));
-            locationView.setText(answ.getLocation().toString());
-            executorNameView.setText(answ.getExecutorName());
+            if (answ.getAuthorName() != null) {
+                authorNameView.setText(answ.getAuthorName());
+            }
+            if (answ.getInfo()!= null){
+                descriptionView.setText(answ.getInfo());
+            }
+            if (answ.getName() != null){
+                headerView.setText(answ.getName());
+            }
+            if (answ.getReward() != null) {
+                rewardView.setText(String.valueOf(answ.getReward()));
+            }
 
+            if (answ.getLocation() != null) {
+                locationView.setText(answ.getLocation().toString());
+            }
+            if (answ.getExecutorId() != null) {
+                executorNameView.setText(answ.getExecutorName());
+            }
             if (answ.getAuthorId() == LoginRequest.getLoggedUserId()){
                 getDesiredRequest.getDesired(answ.getId(), new onGetDesiredList(AdvertActivity.this));
                 ifCreatedByLoggedUser();
@@ -214,6 +226,8 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advert);
+
+        connectViews();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

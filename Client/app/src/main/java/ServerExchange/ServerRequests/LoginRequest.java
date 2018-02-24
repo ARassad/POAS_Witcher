@@ -27,6 +27,7 @@ public abstract class LoginRequest<AnswerType> extends ServerRequest<AnswerType>
         class JsonToken{
             public String token;
             public Long id_profile;
+            public int type;
         }
         public JsonToken object;
     }
@@ -37,6 +38,7 @@ public abstract class LoginRequest<AnswerType> extends ServerRequest<AnswerType>
             LoginJsonServerAnswer answ_ = (LoginJsonServerAnswer) answ;
             TokenServerRequest.setToken(answ_.object.token);
             loggedUserId = answ_.object.id_profile;
+            loggedUserType = answ_.object.type == 0 ? Profile.ProfileType.WITCHER : Profile.ProfileType.CUSTOMER;
         }
     }
 }

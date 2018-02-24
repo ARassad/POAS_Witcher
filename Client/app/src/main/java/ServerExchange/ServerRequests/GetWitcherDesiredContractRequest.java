@@ -18,7 +18,7 @@ public class GetWitcherDesiredContractRequest extends TokenServerRequest<ArrayLi
     @Override
     protected RequestType getRequestType(){ return RequestType.GET; }
 
-    private String GET_WITCHER_DESIRED_CONTRACT_METHOD_NAME = "GetWithcerDesiredContract";
+    private String GET_WITCHER_DESIRED_CONTRACT_METHOD_NAME = "GetWitcherDesiredContract";
 
     private long id_contract;
 
@@ -61,8 +61,12 @@ public class GetWitcherDesiredContractRequest extends TokenServerRequest<ArrayLi
         @Override
         public ArrayList<ProfilePart> convert() {
             LinkedList<ProfilePart> prfls = new LinkedList<>();
-            for (Map.Entry<String, JsonObj.JsonWitchers.JsonWitcherInfo> winfo : object.witchers.witcher.entrySet()){
-                prfls.addLast(winfo.getValue().convert());
+            if (object.witchers != null){
+                if (object.witchers.witcher != null) {
+                    for (Map.Entry<String, JsonObj.JsonWitchers.JsonWitcherInfo> winfo : object.witchers.witcher.entrySet()) {
+                        prfls.addLast(winfo.getValue().convert());
+                    }
+                }
             }
             return new ArrayList<>(prfls);
         }

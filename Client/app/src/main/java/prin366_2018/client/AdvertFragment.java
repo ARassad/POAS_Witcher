@@ -17,20 +17,22 @@ import android.widget.TextView;
 public class AdvertFragment extends Fragment {
 
     private String title, description, kingdom, city, cost;
+    private long advertId;
 
     public AdvertFragment() {}
 
     @SuppressLint("ValidFragment")
-    public AdvertFragment(String title, String description, String kingdom, String city, String cost) {
+    public AdvertFragment(String title, String description, String kingdom, String city, String cost, long advertId) {
         this.title = title;
         this.description = description;
         this.kingdom = kingdom;
         this.city = city;
         this.cost = cost;
+        this.advertId = advertId;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_advert, container, false);
@@ -39,6 +41,7 @@ public class AdvertFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), AdvertActivity.class);
+                intent.putExtra("advertId", advertId);
                 startActivity(intent);
             }
         });
