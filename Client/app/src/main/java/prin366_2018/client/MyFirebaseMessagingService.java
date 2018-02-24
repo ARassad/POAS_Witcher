@@ -3,6 +3,8 @@ package prin366_2018.client;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
@@ -29,9 +31,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String title = data.getTitle();
         String icon = data.getIcon();
 
-        //Log.d(TAG, "FCM Message Id: " + remoteMessage.getMessageId());
-        //Log.d(TAG, "FCM Notification Message: " +*
-        //        remoteMessage.getNotification());
-        //Log.d(TAG, "FCM Data Message: " + remoteMessage.getData());
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.witcher_icon)
+                        .setContentTitle(title)
+                        .setContentText(text);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(getId(), mBuilder.build());
+    }
+
+    private int getId() {
+        return (int) System.currentTimeMillis() % Integer.MAX_VALUE;
     }
 }
