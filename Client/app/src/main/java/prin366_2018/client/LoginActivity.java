@@ -88,9 +88,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (isFirstOpen) {
             SharedPreferences params = getSharedPreferences("settings", MODE_PRIVATE);
             //ip Андрея
-            ServerRequest.setDefaultAddress("192.168.1.3");
+            //ServerRequest.setDefaultAddress("192.168.1.3");
             //ip Хоста Миши
-            //ServerRequest.setDefaultAddress("212.237.54.117");
+            ServerRequest.setDefaultAddress("212.237.54.117");
             //ServerRequest.setDefaultAddress( params.getString("server_address", "localhost"));
 
             if (!params.contains("server_address")) {
@@ -124,12 +124,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
 
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
+            }
+        });
+
+        Button registration = (Button) findViewById(R.id.email_registration_button);
+        registration.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, RegistrationTabActivity.class);
+                startActivity(intent);
             }
         });
 
