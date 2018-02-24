@@ -2,6 +2,7 @@ package prin366_2018.client;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Pair;
@@ -17,6 +18,7 @@ import com.google.gson.internal.bind.MapTypeAdapterFactory;
 
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
+import java.util.LinkedList;
 import java.util.TreeSet;
 
 import ServerExchange.LocationsList;
@@ -68,6 +70,22 @@ public class EditAdvertActivity extends AppCompatActivity {
     }
 
 
+    private String kingdomVal = "";
+    private String cityVal = "";
+    private int bountyVal = 1;
+    private String headerVal = "";
+    private String descriptionVal = "";
+    private long advertId = -1;
+    private void getFromBeforeActivity(){
+        Intent intent = getIntent();
+        kingdomVal = intent.getStringExtra("kingdom");
+        cityVal = intent.getStringExtra("city");
+        bountyVal = intent.getIntExtra("bounty", 1);
+        headerVal = intent.getStringExtra("header");
+        descriptionVal = intent.getStringExtra("description");
+        advertId = intent.getLongExtra("advertId", -1);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,13 +94,13 @@ public class EditAdvertActivity extends AppCompatActivity {
         final LocationsList locsList =LocationsList.getInstance();
         //{"Не указано"};
 
-
+        getFromBeforeActivity();
 
         kingdom = ((Spinner)findViewById(R.id.spinner_edit_kingdom));
         String[] kingdoms = new String[0];
         kingdoms = locsList.getKingdoms().toArray(kingdoms);
         setSpinner(kingdom, kingdoms, "Королевство");
-        String advertKingdom = getIntent().getStringExtra("kingdom");
+        String advertKingdom = kingdomVal;
         selectedKingdomIndex = 0;
         if (advertKingdom != null && !"".equals(advertKingdom)){
             int kingdomsSize = kingdoms.length;
@@ -119,7 +137,7 @@ public class EditAdvertActivity extends AppCompatActivity {
         String cities[] = idsAndNamesC.second;
 
         selectedCityIndex = 0;
-        String advertCity = getIntent().getStringExtra("city");
+        String advertCity = cityVal;
         if (advertCity != null && !"".equals(advertCity)){
             int citiesSize = cities.length;
             for (int i = 0; i < citiesSize; i++){
@@ -146,19 +164,23 @@ public class EditAdvertActivity extends AppCompatActivity {
 
 
         title = (TextView)findViewById(R.id.text_title_advert);
+        if (headerVal != null) {
+            title.setText(headerVal);
+        }
+
         description = (TextView)findViewById(R.id.text_description);
+        if (description != null) {
+            description.setText(descriptionVal);
+        }
+
         cost = (TextView)findViewById(R.id.edit_advert_cost);
+        cost.setText(String.valueOf(bountyVal));
 
 
-
-        String oldTitleVal = title.getText().toString();
-        String oldDescriptionValue = description.getText().toString();
-        int oldCostVal = 0;
-        try {
-            oldCostVal = Integer.parseInt(cost.getText().toString());
-
-        }catch (Exception e) {}
-        long oldLockId = locId;
+        final String oldTitleVal = title.getText().toString();
+        final String oldDescriptionValue = description.getText().toString();
+        final int oldCostVal = bountyVal;
+        final long oldLockId = locId;
 
         Button buttonPublic = (Button)findViewById(R.id.button_public);
         buttonPublic.setOnClickListener(new View.OnClickListener() {
@@ -173,7 +195,16 @@ public class EditAdvertActivity extends AppCompatActivity {
                 if (getIntent().getBooleanExtra("isCreate", false)){
                       createRequest.createAdvert(newTitleVal, newDescriptionVal, newCostVal, locId, null, new onCreateAdvert(EditAdvertActivity.this));
                 } else {
-                    //  updateRequest.updateAdvert();
+                    //TODO: add and delete photos
+                    updateRequest.updateAdvert( advertId,
+                                ! newTitleVal.equals(oldTitleVal) ? newTitleVal : null,
+                                ! newDescriptionVal.equals(oldDescriptionValue) ? newDescriptionVal : null,
+                                oldLockId != newLocId ? newLocId : null,
+                                oldCostVal != newCostVal ? newCostVal : null,
+                                new LinkedList<Bitmap>(),
+                                new LinkedList<Bitmap>(),
+                                new onUpdateAdvert(EditAdvertActivity.this)
+                    );
                 }
 
 
@@ -183,9 +214,9 @@ public class EditAdvertActivity extends AppCompatActivity {
 
     private void goBack(){
         Intent intent = new Intent();
-        intent.putExtra("title", title.getText().toString());
+        intent.putExtra("header", title.getText().toString());
         intent.putExtra("description", description.getText().toString());
-        intent.putExtra("cost", cost.getText().toString());
+        intent.putExtra("bounty", cost.getText().toString());
         intent.putExtra("kingdom", (String)kingdom.getSelectedItem());
         intent.putExtra("city", (String) city.getSelectedItem());
         setResult(RESULT_OK, intent);

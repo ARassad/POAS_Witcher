@@ -15,7 +15,7 @@ public class RemoveAdvertRequest extends TokenServerRequest<Boolean> {
 
     private static String METHOD_NAME = "DeleteAdvert";
 
-    private int id;
+    private long id;
 
     @Override
     protected ServerMethod getMethod() {
@@ -36,7 +36,7 @@ public class RemoveAdvertRequest extends TokenServerRequest<Boolean> {
         return RemoveRequestJsonAnswer.class;
     }
 
-    public void removeAdvert(int id, IServerAnswerHandler onRemovedHandler){
+    public void removeAdvert(long id, IServerAnswerHandler onRemovedHandler){
         this.id = id;
         startRequest(onRemovedHandler);
     }

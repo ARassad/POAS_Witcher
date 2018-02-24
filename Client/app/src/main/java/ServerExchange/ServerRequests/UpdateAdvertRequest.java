@@ -1,5 +1,6 @@
 package ServerExchange.ServerRequests;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 
 import java.util.HashMap;
@@ -20,10 +21,10 @@ public class UpdateAdvertRequest extends TokenServerRequest<Boolean> {
 	
 	private String UPDATE_ADVERT_METHOD_NAME = "EditAdvert";
 
-    private Integer id;
+    private Long id;
     //private int id_witcher;
     //private int status;
-    private Integer id_task_located;
+    private Long id_task_located;
     private String header;
     private String text;
     private Integer bounty;
@@ -82,8 +83,8 @@ public class UpdateAdvertRequest extends TokenServerRequest<Boolean> {
         return JsonUpdateAdvertServerAnswer.class;
     }
 
-    public void updateAdvert( int id, int id_task_located, String text, String header,
-                              int bounty, IServerAnswerHandler onUpdateAdvertHandler){
+    public void updateAdvert(long id, Long id_task_located, String text, String header,
+                             Integer bounty, IServerAnswerHandler onUpdateAdvertHandler){
         this.id = id;
         //this.status = status;
         this.header = header;
@@ -93,8 +94,8 @@ public class UpdateAdvertRequest extends TokenServerRequest<Boolean> {
         startRequest(onUpdateAdvertHandler);
     }
 
-    public void updateAdvert(int id, int id_task_located, String text, String header,
-                             int bounty, LinkedList<Bitmap> imgsToAdd, LinkedList<Bitmap> imgsToRemove, IServerAnswerHandler onUpdateAdvertHandler){
+    public void updateAdvert(long id, String text, String header, Long id_task_located,
+                             Integer bounty, LinkedList<Bitmap> imgsToAdd, LinkedList<Bitmap> imgsToRemove, IServerAnswerHandler onUpdateAdvertHandler){
         this.id = id;
         //this.status = status;
         this.header = header;
@@ -103,21 +104,25 @@ public class UpdateAdvertRequest extends TokenServerRequest<Boolean> {
         this.bounty = bounty;
 
         LinkedList <String> _imgsToDel = new LinkedList<>();
-        for (Bitmap img : imgsToRemove){
-            _imgsToDel.addLast(ImageConvert.toBase64Str(img));
+        if (imgsToRemove != null) {
+            for (Bitmap img : imgsToRemove) {
+                _imgsToDel.addLast(ImageConvert.toBase64Str(img));
+            }
         }
         this.photo_del = _imgsToDel;
 
         LinkedList <String> _imgsToAdd = new LinkedList<>();
-        for (Bitmap img : imgsToAdd){
-            _imgsToAdd.addLast(ImageConvert.toBase64Str(img));
+        if (imgsToAdd != null) {
+            for (Bitmap img : imgsToAdd) {
+                _imgsToAdd.addLast(ImageConvert.toBase64Str(img));
+            }
         }
         this.photo_new = _imgsToAdd;
 
         startRequest(onUpdateAdvertHandler);
     }
 
-    public void addPhotos(int id, LinkedList<Bitmap> imgsToAdd){
+    public void addPhotos(long id, LinkedList<Bitmap> imgsToAdd){
         this.id = id;
         LinkedList <String> _imgsToAdd = new LinkedList<>();
         for (Bitmap img : imgsToAdd){
@@ -126,7 +131,7 @@ public class UpdateAdvertRequest extends TokenServerRequest<Boolean> {
         this.photo_new = _imgsToAdd;
     }
 
-    public void removePhotos(int id, LinkedList<Bitmap> imgsToRemove){
+    public void removePhotos(long id, LinkedList<Bitmap> imgsToRemove){
         this.id = id;
         LinkedList <String> _imgsToRemove = new LinkedList<>();
         for (Bitmap img : imgsToRemove){

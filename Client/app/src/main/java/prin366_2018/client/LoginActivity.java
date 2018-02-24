@@ -80,11 +80,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onAppStart(){
 
         if (isFirstOpen) {
+            MyFirebaseInstanceIDService fff = new MyFirebaseInstanceIDService();
+            fff.onTokenRefresh();
+
             SharedPreferences params = getSharedPreferences("settings", MODE_PRIVATE);
             //ip Андрея
-            //ServerRequest.setDefaultAddress("192.168.0.4");
+            ServerRequest.setDefaultAddress("192.168.1.3");
             //ip Хоста Миши
-            ServerRequest.setDefaultAddress("212.237.54.117");
+            //ServerRequest.setDefaultAddress("212.237.54.117");
             //ServerRequest.setDefaultAddress( params.getString("server_address", "localhost"));
 
             if (!params.contains("server_address")) {
@@ -123,7 +126,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                 attemptLogin();
+                attemptLogin();
             }
         });
 
