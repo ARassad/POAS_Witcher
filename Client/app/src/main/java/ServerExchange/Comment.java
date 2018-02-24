@@ -7,13 +7,14 @@ package ServerExchange;
 
 import android.graphics.Bitmap;
 
+import java.util.Comparator;
 import java.util.Date;
 
 /**
  *
  * @author dryush
  */
-public class Comment {
+public class Comment implements Comparable<Comment>{
 
     private long id;
 
@@ -61,5 +62,16 @@ public class Comment {
         this.id_author = id_author;
         this.dateOfCreate = dateOfCreate;
     }
-    
+
+    public int compareTo(Comment com){
+        return this.dateOfCreate.compareTo(com.getDateOfCreate());
+    }
+
+    public static Comparator<Comment> DateComparator = new Comparator <Comment>(){
+
+        public int compare(Comment com1, Comment com2){
+            return com1.dateOfCreate.compareTo(com2.getDateOfCreate());
+        }
+    };
+
 }
