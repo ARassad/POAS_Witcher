@@ -61,18 +61,10 @@ def answer_witcher(cursor, params):
 
 
 def refuse_contract(cursor, params):
-    cursor.execute("select * from Client where id_profile=(select id_profile from Token_Table where token='{}')"
-                   .format(params[User.Token.value]))
-    row = cursor.fetchone()
     status = Object()
-
-    if row is not None:
-        cursor.execute("update Contract set id_witcher=null where id={}"
-                       .format(params[Advert.IDpost]))
-        status.status = Status.Ok.value
-        status.message = EventWitcher.Success.value
-    else:
-        status.status = Status.Error.value
-        status.message = EventWitcher.WitcherSelect.value
+    cursor.execute("update Contract set id_witcher=null status=0 where id={}"
+                   .format(params[Advert.IDpost]))
+    status.status = Status.Ok.value
+    status.message = EventWitcher.Success.value
 
     return status.toJSON()
