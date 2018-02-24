@@ -78,8 +78,8 @@ public class Advert implements ICommented {
     public String getCity() {return this.location.getCity();}
     public String getKingdom() {return this.location.getKingdom();}
 
-    int reward;
-    public int getReward(){
+    Integer reward;
+    public Integer getReward(){
         return reward;
     }
     public void setReward(int reward){
@@ -104,12 +104,12 @@ public class Advert implements ICommented {
     }
     
     //Profile executor;
-    private long id_executor;
+    private Long id_executor;
     private String executorName;
     public void setExecutorId( long id_witcher){
         id_executor = id_witcher;
     }
-    public long getExecutorId(){
+    public Long getExecutorId(){
         return id_executor;
     }
     public String getExecutorName() {return executorName; }
@@ -197,7 +197,7 @@ public class Advert implements ICommented {
 
     public Advert(long id, String name, String info, LinkedList<Bitmap> images, Location location, int reward,
                   long id_author, String authorName,LinkedList<Long> idSubscribedWitchersList,
-                  long id_executor, String executorName ,AdvertStatus status,
+                  Long id_executor, String executorName ,AdvertStatus status,
                   Date dateOfCreate, CommentsContainer comments) {
 
         this.id = id;
