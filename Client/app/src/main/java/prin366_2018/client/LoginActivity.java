@@ -31,6 +31,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,12 +71,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-
-    //FCM Token
-    private MyFirebaseInstanceIDService fcmToken = new MyFirebaseInstanceIDService();
-    {
-        fcmToken.onTokenRefresh();
-    }
 
 
     /**
@@ -240,7 +236,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
 
             LocationsList.refillFromServer();
-            new AuthorizationRequest().login(email, password, fcmToken.getToken(), new DefaultServerAnswerHandler<Boolean>(LoginActivity.this) {
+            new AuthorizationRequest().login(email, password, FirebaseInstanceId.getInstance().getToken(), new DefaultServerAnswerHandler<Boolean>(LoginActivity.this) {
                 @Override
                 public void handle(Boolean answ) {
                     if (answ!= null && answ == true){
