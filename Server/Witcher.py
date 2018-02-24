@@ -61,6 +61,7 @@ def answer_witcher(cursor, params):
 
 
 def refuse_contract(cursor, params):
+    # создать копию объявления в зависимости от отказа и выставить статус
     status = Object()
     cursor.execute("update Contract set id_witcher=null status=0 where id={}"
                    .format(params[Advert.IDpost]))

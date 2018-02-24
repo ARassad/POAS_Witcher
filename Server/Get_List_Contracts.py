@@ -1,6 +1,6 @@
 from Server.Objects import Object, Status
 from enum import Enum
-
+from Server.Objects import User
 
 class EventGetListContracts(Enum):
     SuccessGetListContracts = "Success"
@@ -116,6 +116,84 @@ def get_list_contracts(cursor, params):
             contr.header = i[11]
 
             obj.contracts[n] = contr
+
+    status.object = obj
+    return status.toJSON()
+
+
+def get_contract_client(cursor, params):
+    cursor.execute("select * from Client where id_profile=(select id_profile from Token_Table where token='{}')"
+                   .format(params[User.Token.value]))
+    row = cursor.fetchone()
+
+    obj = Object()
+    status = Object()
+
+    if row is not None:
+        id_client = row[0]
+        cursor.execute('select * from Contract where id_client={}'.format(id_client))
+        row = cursor.fetchall()
+
+        obj.contracts = {}
+        for i in row:
+            line = Object()
+            line.id = i[0]
+            line.id_witcher = i[1]
+            line.id_client = i[2]
+            line.text = i[6]
+            line.bounty = i[7]
+            line.status = i[8]
+            line.last_update_status = i[9]
+            line.last_update = i[10]
+            line.header = i[11]
+            cursor.execute('select a.name, b.name from Town as a inner join Kingdom as b on a.id_kingdom = b.id \
+                           where a.id={}'.format(i[4]))
+            towns = cursor.fetchone()
+            line.town = towns[0]
+            line.kingdom = towns[1]
+            obj.contracts[len(obj.contracts)] = line
+    else:
+        Status.status = Status.Error.value
+
+    status.object = obj
+    return status.toJSON()
+
+
+def get_contract_witcher(cursor, params):
+    cursor.execute("select * from Witcher where id_profile=(select id_profile from Token_Table where token='{}')"
+                   .format(params[User.Token.value]))
+    row = cursor.fetchone()
+
+    obj = Object()
+    status = Object()
+
+    if row is not None:
+        id_witcher = row[0]
+        cursor.execute('select a.id, a.id_witcher, a.id_client, a.id_task_located, a.text, a.bounty, a.status, \
+                        a.last_update_status, a.last_update, a.header from Contract as a inner join Desired_Contract \
+                        as b on b.id_contract = a.id where b.id_witcher={} and a.status<=3'.format(id_witcher))
+        row = cursor.fetchall()
+
+        obj.contracts = {}
+        for i in row:
+            line = Object()
+            line.id = i[0]
+            line.id_witcher = i[1]
+            line.id_client = i[2]
+            line.text = i[4]
+            line.bounty = i[5]
+            line.status = i[6]
+            line.last_update_status = i[7]
+            line.last_update = i[8]
+            line.header = i[9]
+            cursor.execute('select a.name, b.name from Town as a inner join Kingdom as b on a.id_kingdom = b.id \
+                              where a.id={}'.format(i[3]))
+            towns = cursor.fetchone()
+            line.town = towns[0]
+            line.kingdom = towns[1]
+            obj.contracts[len(obj.contracts)] = line
+    else:
+        Status.status = Status.Error.value
 
     status.object = obj
     return status.toJSON()
