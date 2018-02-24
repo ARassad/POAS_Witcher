@@ -102,15 +102,17 @@
                     android:layout_height="wrap_content">
 
                     <RadioButton
+                        android:id="@+id/radButWitcher"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ведьмак"
-                        android:checked="true"/>
+                        android:checked="true"
+                        android:text="Ведьмак" />
 
                     <RadioButton
+                        android:id="@+id/radButClient"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Заказчик"/>
+                        android:text="Заказчик" />
                 </RadioGroup>
 
             </LinearLayout>
