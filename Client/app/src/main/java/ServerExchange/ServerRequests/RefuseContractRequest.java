@@ -1,14 +1,15 @@
 package ServerExchange.ServerRequests;
 
 
-import java.io.IOException;
 import java.util.HashMap;
+
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 
 /**
  * Created by Dima on 19.02.2018.
  */
 
-public class RefuseContractRequest extends TokenServerRequest {
+public class RefuseContractRequest extends TokenServerRequest<Boolean> {
 
     @Override
     protected RequestType getRequestType(){ return RequestType.POST; }
@@ -45,7 +46,7 @@ public class RefuseContractRequest extends TokenServerRequest {
         return JsonRefuseContractServerAnswer.class;
     }
 
-    public void RefuseContract(long id_contract, IServerAnswerHandler onRefuseContractHandler) throws IOException {
+    public void RefuseContract(long id_contract, IServerAnswerHandler onRefuseContractHandler)  {
         this.id_contract = id_contract;
         startRequest(onRefuseContractHandler);
     }

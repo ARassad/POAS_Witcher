@@ -1,14 +1,12 @@
 package ServerExchange.ServerRequests;
 
 import android.graphics.Bitmap;
-import android.util.Base64;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 
 import ServerExchange.ImageConvert;
 import ServerExchange.Password;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 
 /**
  * Created by Дима on 16.02.2018.
@@ -27,6 +25,7 @@ public class UpdateProfileRequest extends TokenServerRequest<Boolean> {
     private String password = null;
 
     public UpdateProfileRequest(String address) {super(address);}
+    public UpdateProfileRequest() {super();}
 
 
     @Override
@@ -68,11 +67,12 @@ public class UpdateProfileRequest extends TokenServerRequest<Boolean> {
         return JsonUpdateProfileServerAnswer.class;
     }
 
-    public void updateProfile(String name, String text, Bitmap photo, IServerAnswerHandler onUpdateProfileHandler) throws IOException {
+    public void updateProfile(String name, String text, Bitmap photo, IServerAnswerHandler onUpdateProfileHandler) {
         this.name = name;
         this.text = text;
-        this.photo  = ImageConvert.toBase64Str(photo);
-
+        if (photo != null) {
+            this.photo = ImageConvert.toBase64Str(photo);
+        }
         startRequest(onUpdateProfileHandler);
     }
 

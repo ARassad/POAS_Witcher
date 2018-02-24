@@ -1,10 +1,10 @@
 package ServerExchange.ServerRequests;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import ServerExchange.Password;
 import ServerExchange.Profile;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 
 /**
  * Created by Dryush on 15.02.2018.
@@ -34,7 +34,8 @@ public class RegistrationRequest extends ServerRequest<Boolean>{
         HashMap<String, Object>  params = new HashMap<>();
         params.put("login", login);
         params.put("password", password);
-        params.put("is_witcher", isWitcher);
+        params.put("isWitcher", isWitcher);
+
         ServerMethod sm = new ServerMethod(REGISTR_METHOD_NAME, params);
         return sm;
     }
@@ -44,7 +45,7 @@ public class RegistrationRequest extends ServerRequest<Boolean>{
 
         @Override
         public Boolean convert() {
-            return status.equals("OK");
+            return isStatusOk();
         }
     }
 
@@ -61,7 +62,6 @@ public class RegistrationRequest extends ServerRequest<Boolean>{
         this.password = Password.encode(password);
         this.isWitcher = type == Profile.ProfileType.WITCHER ? 1 : 0;
         this.startRequest();
-        new AuthorizationRequest().login(login, password, onLoginHandler);
 
     }
 }
