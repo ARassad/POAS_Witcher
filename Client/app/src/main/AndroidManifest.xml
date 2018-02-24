@@ -40,6 +40,10 @@
             android:name=".EditAdvertActivity"
             android:windowSoftInputMode="stateHidden">
         </activity>
+        <activity
+            android:name=".AdvertActivity"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
 
         <service
             android:name=".MyFirebaseMessagingService"

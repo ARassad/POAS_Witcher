@@ -15,13 +15,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static prin366_2018.client.ProfileActivity.decodeBase64;
+
 public class AdvertActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+
+
+    static final private int SAVE_DATA = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +55,15 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         final Button buttonEdit = (Button)findViewById(R.id.button_edit);
         buttonEdit.setTypeface(typeface);
         buttonEdit.setText("\uf044");
+        buttonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AdvertActivity.this, EditAdvertActivity.class);
+                /*intent.putExtra("name", name.getText().toString());
+                intent.putExtra("aboutMe", aboutMe.getText().toString());*/
+                startActivityForResult(intent, SAVE_DATA);
+            }
+        });
 
         final Button buttonDelete = (Button)findViewById(R.id.button_delete);
         buttonDelete.setTypeface(typeface);
@@ -66,6 +81,16 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
                         formatForDateNow.format(new Date()));
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SAVE_DATA) {
+            if (resultCode == RESULT_OK) {
+                //TODO
+            }
+        }
     }
 
     private void setButton(Button button, final View v) {
