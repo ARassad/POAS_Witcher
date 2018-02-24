@@ -3,6 +3,8 @@ package ServerExchange.ServerRequests.ServerAnswerHandlers;
 import android.app.AlertDialog;
 import android.content.Context;
 
+import java.io.EOFException;
+
 /**
  * Created by Dryush on 22.02.2018.
  */
@@ -29,7 +31,6 @@ public abstract class DefaultServerAnswerHandler<AnswerType> implements IServerA
     }
 
     public void exceptionHandle(Exception excp){
-
         dlgAlert.setMessage(excp.getMessage());
         dlgAlert.create().show();
     }

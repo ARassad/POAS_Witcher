@@ -91,12 +91,14 @@ public class GetAdvertRequest extends TokenServerRequest<Advert> {
             java.util.Date dateOfLastUpdate = new java.util.Date(object.last_update * 1000);
 
             LinkedList<Bitmap> imgs = new LinkedList<>();
-            for (Map.Entry<String, String> phEntry : object.photoContact.photo.entrySet()){
-                imgs.addLast(ImageConvert.fromBase64Str(phEntry.getValue()));
+            if (object.photoContact != null) {
+                for (Map.Entry<String, String> phEntry : object.photoContact.photo.entrySet()) {
+                    imgs.addLast(ImageConvert.fromBase64Str(phEntry.getValue()));
+                }
             }
 
             Advert advert = new Advert(object.id, object.header, object.text, imgs, new Location(object.kingdom, object.town),
-                    object.bounty, client.id, client.name,null/*other method*/, witcher.id, witcher.name, Advert.AdvertStatus.fromInt(object.status),
+                    object.bounty, client.id, client.name,null/*other method*/,witcher== null ? null : witcher.id, witcher== null ? null :witcher.name, Advert.AdvertStatus.fromInt(object.status),
                     dateOfLastUpdate, null/*other method*/);
             return advert;
         }
