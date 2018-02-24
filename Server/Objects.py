@@ -26,6 +26,8 @@ class ApiMethod(Enum):
     GetListComments = "GetListComments"
     GetTowns = "GetTowns"
     GetContractClient = "GetContractClient"
+    GetContractWitcher = "GetContractWitcher"
+
 
 class Comment(Enum):
     TextComment = "text"

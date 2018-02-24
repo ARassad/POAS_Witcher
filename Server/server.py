@@ -3,6 +3,7 @@ from Server.Auth import authorization
 from Server.Registration import registration
 from Server.Get_List_Contracts import get_list_contracts
 from Server.Get_List_Contracts import get_contract_client
+from Server.Get_List_Contracts import get_contract_witcher
 from Server.Profile import get_profile
 from Server.Profile import update_profile
 from Server.Profile import write_comment_profile
@@ -50,6 +51,7 @@ api_methods_post[ApiMethod.RefuseContract.value] = refuse_contract
 api_methods_get[ApiMethod.GetListComments.value] = get_list_comment
 api_methods_get[ApiMethod.GetTowns.value] = get_towns
 api_methods_get[ApiMethod.GetContractClient.value] = get_contract_client
+api_methods_get[ApiMethod.GetContractWitcher.value] = get_contract_witcher
 
 
 class HttpServer(BaseHTTPRequestHandler):
