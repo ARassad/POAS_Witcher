@@ -229,6 +229,8 @@ def get_advert(cursor, params):
         obj.photoContract.photo[len(obj.photoContract.photo)] = ph
 
     status.object = obj
+    status.status = Status.Ok.value;
+    status.message = EventAdvert.Success.value
     return status.toJSON()
 
 
