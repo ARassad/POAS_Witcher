@@ -41,6 +41,13 @@ def authorization(cursor, params):
         cursor.execute("insert into FCM_Token (id_profile, fcm_token) values( {}, '{}')"
                        .format(obj.id_profile, params[User.FCM_Token.value]))
 
+        cursor.execute("select * from Witcher where id_profile={}".format(obj.id_profile))
+        row = cursor.fetchone()
+        if row is not None:
+            obj.type = 0
+        else:
+            obj.type = 1
+
         status.object = obj
     else:
         status.message = EventAuth.PasswordIncorrect.value
