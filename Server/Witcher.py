@@ -16,7 +16,7 @@ class EventWitcher(Enum):
 class Witcher(Enum):
     ID = "id"
     IDpost = "id_witcher"
-    Status = "Status"
+    Status = "status"
 
 
 def select_witcher(cursor, params):
@@ -46,12 +46,24 @@ def answer_witcher(cursor, params):
 
     if row is not None:
         id_answer = params[Witcher.Status.value]
-        if id_answer == 1:
-            cursor.execute("update Contract set status={} where id={}"
-                           .format(params[Witcher.Status.value], params[Advert.IDpost]))
+        cursor.execute("select id_client, header from Contract where id={}".format(params[Advert.IDpost]))
+        row = cursor.fetchone()
+        id_sender = row[0]
+        cont = row[1]
+        cursor.execute("select name from Profile where id=(select id_profile from Token_Table where token='{}')"
+                       .format(params[User.Token.value]))
+        name = cursor.fetchone()[0]
+        body = 'Контракт ' + cont
+
+        if id_answer == 2:
+            cursor.execute("update Contract set status=2 where id={}".format(params[Advert.IDpost]))
+            title = 'Ведьмак ' + name + ' взялся за контракт!'
         else:
-            cursor.execute("update Contract set id_witcher=null where id={}"
-                           .format(params[Advert.IDpost]))
+            cursor.execute("update Contract set id_witcher=null, status=0 where id={}".format(params[Advert.IDpost]))
+            title = 'Ведьмак ' + name + ' отказался от контракта!'
+
+        send_firebase_push(cursor, body, title, id_sender)
+
         status.status = Status.Ok.value
         status.message = EventWitcher.Success.value
     else:
