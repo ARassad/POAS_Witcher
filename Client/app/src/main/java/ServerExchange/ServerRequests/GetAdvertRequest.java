@@ -1,11 +1,15 @@
 package ServerExchange.ServerRequests;
 
-import java.util.Date;
+import android.graphics.Bitmap;
+
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 import ServerExchange.Advert;
-import ServerExchange.Comment;
+import ServerExchange.ImageConvert;
 import ServerExchange.Location;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 
 /**
  * Created by Dryush on 16.02.2018.
@@ -42,50 +46,54 @@ public class GetAdvertRequest extends TokenServerRequest<Advert> {
 
     class AdvertJsonServerAnswer extends JsonServerAnswer{
 
-        public class ClientJson{
-            public long id;
-            public String name;
-        }
-        public ClientJson client;
-
-        public class AdvertJson{
-            public int bounty;
-            class Comments{
-                public long count;
-                public long comments[];
+            public class ClientJson {
+                public long id;
+                public String name;
             }
-            public Comments commentsContract;
-            //TODO: Напомнить про заголовок
 
-            public long id;
-            public String kingdom;
-            public long last_update;
-            public long last_update_status;
+            public ClientJson client;
 
-            public class PhotosJson{
-                public long count;
-                public long photo[];
+            public class AdvertJson {
+                public int bounty;
+                public String header;
+
+                public long id;
+                public String kingdom;
+                public long last_update;
+                public long last_update_status;
+
+                public class PhotosJson {
+                    public long count;
+                    public HashMap<String,String> photo;
+                }
+
+                public PhotosJson photoContact;
+                public int status;
+                public String text;
+                public String town;
             }
-            public PhotosJson photoContact;
-            public int status;
-            public String text;
-            public String town;
-        }
-        public AdvertJson object;
 
-        public class WitcherJson{
-            public long id;
-            public String name;
-        }
-        public WitcherJson witcher;
+            public AdvertJson object;
+
+            public class WitcherJson {
+                public long id;
+                public String name;
+            }
+
+            public WitcherJson witcher;
 
         @Override
         public Advert convert() {
-            java.util.Date dateOfLastUpdate = new java.util.Date(object.last_update);
-            //TODO: Узнать, как приходят фотки
-            Advert advert = new Advert(object.id, "fix it", object.text, null, new Location(object.kingdom, object.town),
+            java.util.Date dateOfLastUpdate = new java.util.Date(object.last_update * 1000);
+
+            LinkedList<Bitmap> imgs = new LinkedList<>();
+            for (Map.Entry<String, String> phEntry : object.photoContact.photo.entrySet()){
+                imgs.addLast(ImageConvert.fromBase64Str(phEntry.getValue()));
+            }
+
+            Advert advert = new Advert(object.id, object.header, object.text, imgs, new Location(object.kingdom, object.town),
                     object.bounty, client.id, null/*other method*/, witcher.id, Advert.AdvertStatus.fromInt(object.status),
-                    dateOfLastUpdate, null);
+                    dateOfLastUpdate, null/*other method*/);
             return advert;
         }
     }

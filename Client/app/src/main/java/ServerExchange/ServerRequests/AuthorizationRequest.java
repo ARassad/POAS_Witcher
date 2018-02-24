@@ -1,10 +1,9 @@
 package ServerExchange.ServerRequests;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import ServerExchange.Password;
-import ServerExchange.Profile;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 
 /**
  * Created by Dryush on 13.02.2018.
@@ -31,7 +30,7 @@ public class AuthorizationRequest extends LoginRequest<Boolean>{
     @Override
     protected ServerMethod getMethod() {
 
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, Object> params = new HashMap<>();
         params.put("login", login);
         params.put("password", password);
 
@@ -42,7 +41,7 @@ public class AuthorizationRequest extends LoginRequest<Boolean>{
 
         @Override
         public Boolean convert() {
-            return this.status.equals("OK");
+            return isStatusOk();
         }
     }
 

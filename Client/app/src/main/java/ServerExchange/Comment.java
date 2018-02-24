@@ -51,5 +51,15 @@ public class Comment {
         this.id_author = id_author;
         this.dateOfCreate = dateOfCreate;
     }
+
+    public Comment( String text, long id_author, String authorName, Date dateOfCreate, Bitmap photo) {
+        this.id = -1;
+        this.text = text;
+        this.authorAvatar = photo;
+        this.authorName = authorName;
+        //this.author = author;
+        this.id_author = id_author;
+        this.dateOfCreate = dateOfCreate;
+    }
     
 }

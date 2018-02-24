@@ -3,11 +3,17 @@ package ServerExchange.ServerRequests;
 import java.io.IOException;
 import java.util.HashMap;
 
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
+
 /**
  * Created by Dima on 19.02.2018.
  */
 
 public class SelectExecutorRequest extends TokenServerRequest<Boolean> {
+
+
+    @Override
+    protected RequestType getRequestType(){ return RequestType.POST; }
 
     private String SELECT_WITCHER_IN_CONTRACT_METHOD_NAME = "SelectWitcherInContract";
 
@@ -32,7 +38,7 @@ public class SelectExecutorRequest extends TokenServerRequest<Boolean> {
 
         @Override
         public Boolean convert() {
-            return status.equals("OK");
+            return isStatusOk();
         }
     }
 

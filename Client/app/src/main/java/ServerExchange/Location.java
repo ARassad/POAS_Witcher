@@ -10,17 +10,29 @@ package ServerExchange;
  * @author dryush
  */
 public class Location {
-    String kingdom;
+    private String kingdom;
     public String getKingdom(){
         return kingdom;
     }
     
-    String city;
+    private String city;
     public String getCity(){
         return city;
     }
 
-    public Location(String kingdom, String city){
+    private Long id;
+    public long getId(){
+        return id;
+    }
+
+    public Location(long id, String kingdom, String city){
+        this.id = id;
+        this.kingdom = kingdom;
+        this.city = city;
+    }
+
+
+    public Location( String kingdom, String city){
         this.kingdom = kingdom;
         this.city = city;
     }

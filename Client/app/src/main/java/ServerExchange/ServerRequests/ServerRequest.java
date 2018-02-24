@@ -3,27 +3,18 @@ package ServerExchange.ServerRequests;
 import android.os.AsyncTask;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.net.Authenticator;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
-import java.util.function.BiConsumer;
+
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 
 /**
  * Created by Dryush on 13.02.2018.
@@ -126,7 +117,7 @@ public abstract class ServerRequest <AnswerType> {
         public String status;
         public String message;
         public boolean isStatusOk() {
-            return status == "OK";
+            return status.equalsIgnoreCase("OK");
         }
 
 
@@ -135,11 +126,15 @@ public abstract class ServerRequest <AnswerType> {
 
     abstract protected Class<? extends JsonServerAnswer> getJsonAnswerClass();
 
-    AnswerType answer;
+    AnswerType answer = null;
+    Exception excp = null;
+    String errorMessage = null;
 
+    boolean isErrorInServerRequest = false;
 
+    protected AnswerType doRequest(ServerMethod method, Class< ? extends JsonServerAnswer> JsonServerAnswerClass) {
 
-    protected AnswerType doRequest(ServerMethod method, Class< ? extends JsonServerAnswer> JsonServerAnswerClass) throws IOException {
+        HttpURLConnection urlConnection = null;
 
         String request = PROTOCOL + serverAddress + API;
         if ( getRequestType() == RequestType.POST ) {
@@ -154,18 +149,26 @@ public abstract class ServerRequest <AnswerType> {
         }
 
         try {
+            String strRequestMethod = "";
+            if (getRequestType() == RequestType.POST) {
+                strRequestMethod = "POST";
+            } else if (getRequestType() == RequestType.GET) {
+                strRequestMethod = "GET";
+            }
+
             URL requestURL = new URL(request);
 
-            HttpURLConnection urlConnection = (HttpURLConnection) requestURL.openConnection();
+            urlConnection = (HttpURLConnection) requestURL.openConnection();
 
-            urlConnection.setDoOutput(true);
+
+            if (strRequestMethod.equals("POST")) {
+                urlConnection.setDoOutput(true);
+            }
             urlConnection.setDoInput(true);
-            String strRequestMethod = "";
-            if (getRequestType() == RequestType.POST) { strRequestMethod = "POST"; }
-            else if ( getRequestType() == RequestType.GET) {strRequestMethod = "GET";}
             urlConnection.setRequestMethod(strRequestMethod);
 
             urlConnection.connect();
+
             Gson gson = new Gson();
 
             if (getRequestType() == RequestType.POST) {
@@ -173,36 +176,44 @@ public abstract class ServerRequest <AnswerType> {
                 String jsonRequest = gson.toJson(method.params);
                 OutputStream out = urlConnection.getOutputStream();
                 out.write(jsonRequest.getBytes());
-                //ObjectOutputStream objectOut = new ObjectOutputStream( out);
-                //objectOut.writeUTF(jsonRequest);
-                   out.flush();
+
+                out.flush();
                 out.close();
             }
+
+            //TODO: Возможно это будет вызывать ошибку
+            //if (urlConnection.getResponseCode() !=  HttpURLConnection.HTTP_OK){
+            //    throw new ServerException( urlConnection.getResponseMessage());
+            //}
 
             InputStream in = urlConnection.getInputStream();
             InputStreamReader inReader = new InputStreamReader(in);
             BufferedReader reader = new BufferedReader(inReader);
 
-            //InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            //String a = reader.readLine();
-
-
-
-
-
+            LinkedList<String> strs = new LinkedList<>();
+            // Это код считывания того, что пиршло, испольщуется для дебага
+            /*
+            try {
+                while (true) {
+                    String str = reader.readLine();
+                    strs.add(str);
+                }
+            } catch(Exception eee) {}
+            */
             JsonServerAnswer serverAnswer = gson.fromJson(reader, JsonServerAnswerClass);
-            if ( serverAnswer.status.equals("Error") ){
-                throw new ServerException( serverAnswer.message);
-            }
             JsonAnswerHandler(serverAnswer);
+            isErrorInServerRequest = ! serverAnswer.isStatusOk();
+            urlConnection.disconnect();
 
             return (AnswerType) serverAnswer.convert();
-
-        } catch (Exception except){
-            throw except;
+        }catch (Exception e){
+            excp = e;
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            return null;
         }
     }
-
 
     /**
      * перегрузи этот метод, если хочешь обработать JSON ответ до его конвертации
@@ -225,7 +236,8 @@ public abstract class ServerRequest <AnswerType> {
     
     private class RequestProcess extends AsyncTask<Void, Void, Void> {
 
-        IServerAnswerHandler handler;
+        IServerAnswerHandler handler = null;
+
 
         Class<? extends JsonServerAnswer> aClass;
 
@@ -239,21 +251,30 @@ public abstract class ServerRequest <AnswerType> {
         AnswerType answer;
 
         @Override
-        protected Void doInBackground(Void ... p){
-            try {
-                answer = doRequest(getMethod(), aClass);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        protected Void doInBackground(Void ... p) {
+
+
+            answer = doRequest(getMethod(), aClass);
+
             return null;
         }
 
 
         @Override
         protected void onPostExecute(Void p){
-            if (handler != null) {
-
-                handler.handle(answer);
+            if (excp != null){
+                handler.exceptionHandle(excp);
+                excp = null;
+            } else {
+                if (handler != null) {
+                    if (isErrorInServerRequest) {
+                        handler.errorHandle(errorMessage);
+                        errorMessage = null;
+                        isErrorInServerRequest = false;
+                    }
+                    handler.handle(answer);
+                    answer = null;
+                }
             }
         }
 

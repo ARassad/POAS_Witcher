@@ -3,10 +3,11 @@ package ServerExchange.ServerRequests;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import ServerExchange.Comment;
 import ServerExchange.ImageConvert;
-import ServerExchange.Profile;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 
 /**
  * Created by Dryush on 16.02.2018.
@@ -17,7 +18,7 @@ public class GetCommentsRequest extends TokenServerRequest<LinkedList<Comment>> 
     @Override
     protected RequestType getRequestType(){ return RequestType.GET; }
 
-    String METHOD_NAME = "get_list_comment";
+    String METHOD_NAME = "GetListComments";
     long id;
 
     @Override
@@ -49,22 +50,27 @@ public class GetCommentsRequest extends TokenServerRequest<LinkedList<Comment>> 
 
     //TODO: уточнить ответ от сервера
     class JsonCommentsAnswer extends JsonServerAnswer{
-        class JsonComment{
-            public String photo;
-            public String author_name;
-            public long author_id;
-            public long date_of_create;
-            public long id;
-            public String text;
-        }
-        JsonComment comments[];
+        class JsonObj {
+            class JsonComment {
+                public String photo;
+                public String name;
+                public long date;
+                public long id_prof;
+                public String text;
+            }
 
+            HashMap<String, JsonComment> id_comments;
+        }
+        JsonObj object;
         @Override
         public LinkedList<Comment> convert() {
             LinkedList<Comment> coms = new LinkedList<>();
-            for (JsonComment com : comments){
-                Date date = new java.util.Date(com.date_of_create); //TODO: проверить нужно ли умножаьт на 1000
-                coms.addLast( new Comment(com.id, com.text, com.author_id, com.author_name, date, ImageConvert.fromBase64Str(com.photo)));
+            if (object.id_comments != null) {
+                for (Map.Entry<String, JsonObj.JsonComment> comEm : object.id_comments.entrySet()) {
+                    JsonObj.JsonComment com = comEm.getValue();
+                    Date date = new java.util.Date(com.date * 1000);
+                    coms.addLast(new Comment(com.text, com.id_prof, com.name, date, ImageConvert.fromBase64Str(com.photo)));
+                }
             }
             return coms;
         }
@@ -89,4 +95,7 @@ public class GetCommentsRequest extends TokenServerRequest<LinkedList<Comment>> 
 
     }
 
+    public void getLoggedProfile(IServerAnswerHandler onGetProfileHandler){
+        getProfileComments(LoginRequest.getLoggedUserId(), onGetProfileHandler);
+    }
 }

@@ -2,20 +2,29 @@ package prin366_2018.client;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.system.Os;
 import android.util.Base64;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
+
+import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
+import ServerExchange.ServerRequests.UpdateProfileRequest;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -29,40 +38,101 @@ import java.io.IOException;
  * Created by Dryush on 18.02.2018.
  */
 
+
 public class EditProfileActivity extends AppCompatActivity {
 
     static final private int RESULT_CANCEL = 0;
     static final private int RESULT_OK = 1;
     static final int GALLERY_REQUEST = 2;
 
+    AutoCompleteTextView name;
+    AutoCompleteTextView aboutMe;
+    ImageButton image;
+
+    String oldName;
+    String oldAboutMe;
+    Boolean isPhotoChanged = false;
+
+    AlertDialog pleaseWaitMessage;
+
+
+    //TODO: Протестить
+    private class onImageEdited extends DefaultServerAnswerHandler<Boolean> {
+
+        boolean isEnded = false;
+        boolean isOk = true;
+
+        public onImageEdited(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void handle(Boolean answ) {
+
+            Intent intent = new Intent();
+            intent.putExtra("name", name.getText().toString());
+            intent.putExtra("aboutMe", aboutMe.getText().toString());
+            if ( bitmap != null)
+                intent.putExtra("photo", encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, 100));
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+
+        @Override
+        public void errorHandle(String errorMessage) {
+
+            super.errorHandle(errorMessage);
+        }
+
+        @Override
+        public void exceptionHandle(Exception excp) {
+
+            super.exceptionHandle(excp);
+        }
+    }
+    UpdateProfileRequest saveRequest = new UpdateProfileRequest();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
+        pleaseWaitMessage = new AlertDialog.Builder(EditProfileActivity.this).create();
+        pleaseWaitMessage.setTitle("Сохраняем");
+        pleaseWaitMessage.setCancelable(false);
+
+
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/fa-solid-900.ttf");
 
-        final AutoCompleteTextView name = (AutoCompleteTextView)findViewById(R.id.text_name);
-        name.setText(getIntent().getStringExtra("name"));
-        final AutoCompleteTextView aboutMe = (AutoCompleteTextView)findViewById(R.id.text_about);
-        aboutMe.setText(getIntent().getStringExtra("aboutMe"));
-        final ImageButton photo = (ImageButton)findViewById(R.id.image);
+        name = (AutoCompleteTextView)findViewById(R.id.text_name);
+        oldName = getIntent().getStringExtra("name");
+        name.setText(oldName);
 
+
+        aboutMe = (AutoCompleteTextView)findViewById(R.id.text_about);
+        oldAboutMe = getIntent().getStringExtra("aboutMe");
+        aboutMe.setText(oldAboutMe);
+
+
+        image = (ImageButton) findViewById(R.id.image);
 
         Button buttonSave = (Button)findViewById(R.id.button_save_edit);
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.putExtra("name", name.getText().toString());
-                intent.putExtra("aboutMe", aboutMe.getText().toString());
-                intent.putExtra("photo", encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, 100));
-                setResult(RESULT_OK, intent);
-                finish();
+                //ШОТО ПРОИСХОДИТ ПРИ НАЖАТИИ НА КНОПКУ "СОХРАНИТЬ"
+                onImageEdited oie = new onImageEdited(EditProfileActivity.this);
+                String newName = name.getText().toString();
+                String newAboutMe = aboutMe.getText().toString();
+
+                saveRequest.updateProfile( newName.equals(oldName) ? null : newName,
+                                            newAboutMe.equals(oldAboutMe) ? null : newAboutMe,
+                                            isPhotoChanged ? ((BitmapDrawable)image.getBackground()).getBitmap() : null,
+                                            oie);
             }
         });
 
-        ImageButton image = (ImageButton)findViewById(R.id.image);
+
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,17 +158,20 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
         ImageButton imageView = (ImageButton) findViewById(R.id.image);
 
-        switch(requestCode) {
-            case GALLERY_REQUEST:
-                Uri selectedImage = imageReturnedIntent.getData();
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
-                    bitmap = Bitmap.createScaledBitmap(bitmap, 120, 160, false);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                imageView.setImageBitmap(bitmap);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case GALLERY_REQUEST:
+                    isPhotoChanged = true;
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                        bitmap = Bitmap.createScaledBitmap(bitmap, 120, 160, false);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    imageView.setImageBitmap(bitmap);
 
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package prin366_2018.client;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -31,12 +32,25 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import ServerExchange.AdvertCard;
+import ServerExchange.Comment;
+import ServerExchange.ImageConvert;
+import ServerExchange.Profile;
+import ServerExchange.ServerRequests.AddCommentProfileRequest;
+import ServerExchange.ServerRequests.GetCommentsRequest;
+import ServerExchange.ServerRequests.GetProfileRequest;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Locale;
 
 /**
@@ -47,12 +61,76 @@ import java.util.Locale;
 public class ProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, TableRowStoryAdvertFragment.OnFragmentInteractionListener {
 
+
+    TextView name;
+    TextView aboutMe;
+    TextView role;
+    ImageView image;
+
     static final private int RESULT_CANCEL = 0;
     static final private int RESULT_OK = 1;
     static final private int SAVE_DATA = 2;
 
-    TextView name;
-    TextView aboutMe;
+    class onGetProfile extends DefaultServerAnswerHandler<Profile> {
+
+        public onGetProfile(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void handle(Profile answ) {
+
+            name.setText(answ.getName() != null ? answ.getName() : "NoName");
+
+            aboutMe.setText( answ.getInfo() != null ? answ.getInfo() : "Nobody");
+            role.setText( answ.getType() == Profile.ProfileType.WITCHER ? "Ведьмак" : "Наниматель");
+            if (answ.getImage() != null) {
+                image.setImageBitmap(answ.getImage());
+            }
+
+            ArrayList<AdvertCard> history = answ.getHistory();
+            for (AdvertCard historyElem : history){
+                setTableRow(historyElem.getLastStatusUpdate().toString(), historyElem.getAdvertHeader(), historyElem.getStatus().toRuString());
+            }
+        }
+    }
+
+
+    GetProfileRequest profileRequest = new GetProfileRequest();
+
+
+   class onAddComment extends DefaultServerAnswerHandler<Boolean>{
+
+       public onAddComment(Context context) {
+           super(context);
+       }
+
+       @Override
+       public void handle(Boolean answ) {
+
+
+       }
+   }
+
+    AddCommentProfileRequest addComment = new AddCommentProfileRequest();
+
+   class onGetComments extends DefaultServerAnswerHandler<LinkedList<Comment>>{
+
+       public onGetComments(Context context) {
+           super(context);
+       }
+
+       @Override
+       public void handle(LinkedList<Comment> answ) {
+
+           for (Comment comment : answ){
+               SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' hh:mm");
+               setNewComment(comment.getAuthorAvatar(),comment.getText(), formatForDateNow.format(comment.getDateOfCreate()));
+           }
+       }
+   }
+
+   GetCommentsRequest getCommentsRequest = new GetCommentsRequest();
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -62,6 +140,9 @@ public class ProfileActivity extends AppCompatActivity
 
         name = (TextView) findViewById(R.id.text_name);
         aboutMe = (TextView) findViewById(R.id.text_about);
+        role = (TextView) findViewById(R.id.text_role);
+        image = (ImageView) findViewById(R.id.image);
+
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -90,11 +171,18 @@ public class ProfileActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+
+
                 intent.putExtra("name", name.getText().toString());
                 intent.putExtra("aboutMe", aboutMe.getText().toString());
                 startActivityForResult(intent, SAVE_DATA);
             }
         });
+
+        //Вот здесь я пишу код (Андрей)
+        //profileRequest.getProfile(9, new onGetProfile(ProfileActivity.this));
+        profileRequest.getLoggedProfile(new onGetProfile(ProfileActivity.this));
+        getCommentsRequest.getLoggedProfile(new onGetComments(ProfileActivity.this));
 
         Button buttonSendComment = (Button)findViewById(R.id.imagebutton_send_comment);
         buttonSendComment.setTypeface(typeface);
@@ -102,16 +190,36 @@ public class ProfileActivity extends AppCompatActivity
         buttonSendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' hh:mm");
-                setNewComment(Bitmap.createBitmap(120, 160, Bitmap.Config.ARGB_8888),
-                        ((TextView)findViewById(R.id.input_comment)).getText().toString(),
-                        formatForDateNow.format(new Date()));
+                String text = ((TextView)findViewById(R.id.input_comment)).getText().toString();
+
+                if (text.isEmpty() == false ){
+                    boolean stringContainsSymbol = false;
+                    for (int i=0; i<text.length(); i++){
+                        if (text.charAt(i) != ' ' && text.charAt(i) !='\n'){
+                            stringContainsSymbol = true;
+                            break;
+                        }
+                    }
+
+                    if (stringContainsSymbol == true){
+                        SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' hh:mm");
+                        setNewComment(Bitmap.createBitmap(120, 160, Bitmap.Config.ARGB_8888),
+                                text,
+                                formatForDateNow.format(new Date()));
+
+                        addComment.getLoggedProfile(text, new onAddComment(ProfileActivity.this));
+                    }
+
+                }
+
+                ((TextView)findViewById(R.id.input_comment)).setText("");
+
             }
         });
 
 
         //Метод установки новой строки в таблицу
-        setTableRow("18.03.2018", "Название", "Завершено");
+        //setTableRow("18.03.2018", "Название", "Завершено");
         //Метод установки нового комментария
         setNewComment(Bitmap.createBitmap(120, 160, Bitmap.Config.ARGB_8888), "Комментарий", "01.01.2001 - 19:00");
 
@@ -140,17 +248,14 @@ public class ProfileActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SAVE_DATA) {
             if (resultCode == RESULT_OK) {
-                TextView name = (TextView) findViewById(R.id.text_name);
+
                 name.setText(data.getStringExtra("name"));
                 //Сохранить информацию о имени в БД
-
-                TextView aboutMe = (TextView) findViewById(R.id.text_about);
                 aboutMe.setText(data.getStringExtra("aboutMe"));
                 //Сохранить информацию "о себе" в БД
-
-                Bitmap bitmap = decodeBase64(data.getStringExtra("photo"));
-                ImageView photo = (ImageView)findViewById(R.id.image);
-                photo.setImageBitmap(bitmap);
+                Bitmap bitmap = ImageConvert.fromBase64Str(data.getStringExtra("photo"));
+                if (bitmap != null)
+                    image.setImageBitmap(bitmap);
                 //Сохранить фоточку в БД
             }
         }

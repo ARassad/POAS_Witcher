@@ -14,12 +14,16 @@ public class ImageConvert {
 
     public static Bitmap fromBase64Str(String base64Str){
 
+        if (base64Str == null)
+            return null; //TODO : костыль
         byte[] rawBitmap = Base64.decode(base64Str.getBytes(), Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(rawBitmap, 0, rawBitmap.length);
         return bitmap;
     }
 
     public static String toBase64Str(Bitmap img){
+        if (img == null)
+            return null; //TODO : костыль
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         img.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream .toByteArray();

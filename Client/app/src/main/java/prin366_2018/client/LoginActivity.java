@@ -34,7 +34,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ServerExchange.LocationsList;
 import ServerExchange.ServerRequests.AuthorizationRequest;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 import ServerExchange.ServerRequests.ServerRequest;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -73,13 +76,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Проследите, что была защита от затирания т.к. этот метод будет заупскаться каждый раз,
      * Когда будет открываться экран Входа в приложуху
      */
+    boolean isFirstOpen = true;
     protected void onAppStart(){
-        SharedPreferences params = getSharedPreferences("settings", MODE_PRIVATE);
-        ServerRequest.setDefaultAddress( params.getString("server_address", "localhost"));
 
-        if (!params.contains("server_address")){
-            params.edit().putString("server_address", "localhost");
+        if (isFirstOpen) {
+            SharedPreferences params = getSharedPreferences("settings", MODE_PRIVATE);
+            //ip Андрея
+            //ServerRequest.setDefaultAddress("192.168.0.4");
+            //ip Хоста Миши
+            ServerRequest.setDefaultAddress("212.237.54.117");
+            //ServerRequest.setDefaultAddress( params.getString("server_address", "localhost"));
+
+            if (!params.contains("server_address")) {
+                params.edit().putString("server_address", "localhost");
+            }
+            isFirstOpen = false;
         }
+
     }
 
     @Override
@@ -98,7 +111,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+
                     return true;
                 }
                 return false;
@@ -110,10 +123,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                 if (attemptLogin()) {
-                     Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
-                     startActivity(intent);
-                 }
+                 attemptLogin();
             }
         });
 
@@ -212,7 +222,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            new AuthorizationRequest().login(email, password, null);
+
+            LocationsList.refillFromServer();
+            new AuthorizationRequest().login(email, password, new DefaultServerAnswerHandler<Boolean>(LoginActivity.this) {
+                @Override
+                public void handle(Boolean answ) {
+                    if (answ!= null && answ == true){
+                        startActivity( new Intent(LoginActivity.this, ProfileActivity.class));
+                    }
+                }
+            });
             //mAuthTask = new UserLoginTask(email, password);
             //mAuthTask.execute((Void) null);
         }
@@ -222,7 +241,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        return true;//email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
