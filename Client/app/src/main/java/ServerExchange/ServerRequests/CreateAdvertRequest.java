@@ -21,7 +21,7 @@ public class CreateAdvertRequest extends TokenServerRequest<Boolean> {
 
     private String CREATE_ADVERT_METHOD_NAME = "CreateAdvert";
 
-    private int id_task_located;
+    private long id_task_located;
     private String text;
     private String header;
     private int bounty;
@@ -62,14 +62,16 @@ public class CreateAdvertRequest extends TokenServerRequest<Boolean> {
         }
     }
 
-    public void createAdvert(String header, String text, int bounty, int id_task_located,  ArrayList<Bitmap> photos, IServerAnswerHandler onCreateAdvertHandler)  {
+    public void createAdvert(String header, String text, int bounty, long id_task_located,  ArrayList<Bitmap> photos, IServerAnswerHandler onCreateAdvertHandler)  {
         this.id_task_located = id_task_located;
         this.text = text;
         this.header = header;
         this.bounty = bounty;
         LinkedList<String> photoStrs = new LinkedList<>();
-        for (Bitmap img : photos){
-            photoStrs.addLast( ImageConvert.toBase64Str(img));
+        if (photos != null) {
+            for (Bitmap img : photos) {
+                photoStrs.addLast(ImageConvert.toBase64Str(img));
+            }
         }
 
         this.photos = photoStrs;

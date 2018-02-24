@@ -1,5 +1,6 @@
 package prin366_2018.client;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
@@ -81,6 +82,7 @@ public class AdvertListActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AdvertListActivity.this, EditAdvertActivity.class);
+                intent.putExtra("isCreate", true);
                 startActivityForResult(intent, NEW_ADVERT);
             }
         });
@@ -100,7 +102,7 @@ public class AdvertListActivity extends AppCompatActivity
         });
 
 
-        getAdvertsRequest.getSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new onGetAverts(AdvertListActivity.this));
+       // getAdvertsRequest.getSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new onGetAverts(AdvertListActivity.this));
     }
 
     private void setNewAdvert(int id, String title, String description, String kingdom, String city, String cost) {

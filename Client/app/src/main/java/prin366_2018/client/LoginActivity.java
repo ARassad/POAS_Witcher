@@ -34,6 +34,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ServerExchange.LocationsList;
 import ServerExchange.ServerRequests.AuthorizationRequest;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
@@ -77,6 +78,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     boolean isFirstOpen = true;
     protected void onAppStart(){
+
         if (isFirstOpen) {
             SharedPreferences params = getSharedPreferences("settings", MODE_PRIVATE);
             //ip Андрея
@@ -88,6 +90,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (!params.contains("server_address")) {
                 params.edit().putString("server_address", "localhost");
             }
+            isFirstOpen = false;
         }
 
     }
@@ -219,6 +222,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
+
+            LocationsList.refillFromServer();
             new AuthorizationRequest().login(email, password, new DefaultServerAnswerHandler<Boolean>(LoginActivity.this) {
                 @Override
                 public void handle(Boolean answ) {
