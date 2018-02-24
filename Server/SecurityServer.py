@@ -79,7 +79,9 @@ paramsRequests = {
                                    'min_params': 3, 'count': 3, 'type_req': 0},
 
     ApiMethod.Authorization.value: {'params': {'login': 'login', 'password': 'password'}, 'min_params': 2, 'count': 2,
-                                    'type_req': 0}}
+                                    'type_req': 0},
+
+    ApiMethod.GetContractClient.value: {'params': {'token': 'token'}, 'min_params': 1, 'count': 1, 'type_req': 1}}
 
 
 def security_requests(method, params, isget=1):
