@@ -40,7 +40,7 @@ def create_advert(cursor, params):
     status = Object()
 
     if row is not None:
-        id_client = row[1]
+        id_client = row[0]
 
         cursor.execute("insert into List_Comments (empty) values(null)")
         cursor.execute("select max(id) from List_Comments")
