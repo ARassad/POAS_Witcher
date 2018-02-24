@@ -34,6 +34,14 @@ import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHan
 public class AdvertListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SortingFragment.OnFragmentInteractionListener {
 
+    public enum GroupAdvert {
+        ALL_ADVERT,//все объявления
+        WITCHER_NOT_CHOSEN, //ведьмак не выбран
+        WITCHER_CHOSEN, //ведьмак выбран
+        DURING, //Исполняются
+        SUBSRIBED, //Подписаны
+        EXECUTED //Исполнены
+    };
     private static final int NEW_ADVERT = 2222;
 
     GetAdvertsRequest getAdvertsRequest = new GetAdvertsRequest();
@@ -49,7 +57,7 @@ public class AdvertListActivity extends AppCompatActivity
 
             for (Advert advert : answ){
                 //TODO: Возможны баги с id long  в int
-                setNewAdvert((int)advert.getId(), advert.getName(), advert.getInfo(), advert.getKingdom(), advert.getCity(), String.valueOf(advert.getReward()));
+                setNewAdvert(GroupAdvert.WITCHER_NOT_CHOSEN, advert.getName(), advert.getInfo(), advert.getKingdom(), advert.getCity(), String.valueOf(advert.getReward()));
             }
         }
     }
@@ -108,11 +116,29 @@ public class AdvertListActivity extends AppCompatActivity
         getAdvertsRequest.getSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new onGetAverts(AdvertListActivity.this));
     }
 
-    private void setNewAdvert(int id, String title, String description, String kingdom, String city, String cost) {
+    private void setNewAdvert(GroupAdvert id, String title, String description, String kingdom, String city, String cost) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
         AdvertFragment newRow = new AdvertFragment(title, description, kingdom, city, cost);
-        ft.add(id, newRow);
+        int idxml = R.id.all_advert;
+        switch (id) {
+            case WITCHER_NOT_CHOSEN:
+                idxml = R.id.adlist_witcher_not_chosen;
+                break;
+            case WITCHER_CHOSEN:
+                idxml = R.id.adlist_witcher_chosen;
+                break;
+            case DURING:
+                idxml = R.id.adlist_during;
+                break;
+            case SUBSRIBED:
+                idxml = R.id.adlist_subsribed;
+                break;
+            case EXECUTED:
+                idxml = R.id.adlist_executed;
+                break;
+        }
+        ft.add(idxml, newRow);
         ft.commit();
     }
 
@@ -137,7 +163,7 @@ public class AdvertListActivity extends AppCompatActivity
         if (requestCode == NEW_ADVERT) {
             if (resultCode == RESULT_OK) {
                 data.getStringExtra("title");
-                setNewAdvert(R.id.adlist_witcher_not_chosen,
+                setNewAdvert(GroupAdvert.WITCHER_NOT_CHOSEN,
                         data.getStringExtra("title"),
                         data.getStringExtra("description"),
                         data.getStringExtra("kingdom"),
