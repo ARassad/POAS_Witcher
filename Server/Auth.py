@@ -32,7 +32,12 @@ def authorization(cursor, params):
         cursor.execute("select id from Profile where id_authorization_info={}".format(id_auth))
         obj.id_profile = cursor.fetchone()[0]
         cursor.execute("insert into Token_Table (token, last_update, id_profile) values('{}', {}, {})"
-                       .format(obj.token, time.time().__int__(), obj.id_profile))
+                       .format(obj.token, int(time.time()), obj.id_profile))
+
+        #  Вставка fcm_tokena
+        cursor.execute("insert into FCM_Token (id_profile, fcm_token) values( {}, '{}')"
+                       .format(obj.id_profile, params[User.FCM_Token.value]))
+
         status.object = obj
     else:
         status.message = EventAuth.PasswordIncorrect.value

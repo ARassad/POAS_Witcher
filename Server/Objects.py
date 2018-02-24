@@ -49,6 +49,7 @@ class User(Enum):
     Password = "password"
     IsWitcher = "witcher"
     Token = "token"
+    FCM_Token = "fcm_token"
 
 
 class Object:

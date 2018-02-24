@@ -1,7 +1,7 @@
 ﻿Авторизация:
 localhost/api/Auth
 Отправляемые данные:
-{'login': 'mkovalev', 'password': 'passwd'} json format
+{'login': 'mkovalev', 'password': 'passwd', 'fcm_token': 'очень длинная строка'} json format
 Возвращаемые данные:
 status: OK / Error
 object:
