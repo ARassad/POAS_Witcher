@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import ServerExchange.LocationsList;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
@@ -12,7 +13,7 @@ import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
  * Created by Dryush on 20.02.2018.
  */
 
-public class GetLocationsListRequest extends TokenServerRequest<TreeMap<String, HashSet<LocationsList.City>>> {
+public class GetLocationsListRequest extends TokenServerRequest<TreeMap<String, TreeSet<LocationsList.City>>> {
     @Override
     protected RequestType getRequestType() {
         return RequestType.GET;
@@ -39,12 +40,12 @@ public class GetLocationsListRequest extends TokenServerRequest<TreeMap<String, 
         public HashMap<String, JsonTownsList> kingdoms;
 
         @Override
-        public TreeMap<String, HashSet<LocationsList.City>> convert() {
-            TreeMap<String, HashSet<LocationsList.City>> locs = new TreeMap<>();
+        public TreeMap<String, TreeSet<LocationsList.City>> convert() {
+            TreeMap<String, TreeSet<LocationsList.City>> locs = new TreeMap<>();
 
             for (Map.Entry< String, JsonTownsList> kt: kingdoms.entrySet()){
                 JsonTownsList towns = kt.getValue();
-                HashSet<LocationsList.City> citySet = new HashSet<>();
+                TreeSet<LocationsList.City> citySet = new TreeSet<>();
                 for (Map.Entry<String, JsonTownsList.JsonTown> town : towns.town.entrySet()){
                     citySet.add( new LocationsList.City(town.getValue().id_town, town.getValue().name_town));
                 }

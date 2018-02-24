@@ -2,6 +2,9 @@ package ServerExchange.ServerRequests;
 
 import android.media.session.MediaSession;
 
+import ServerExchange.Advert;
+import ServerExchange.Profile;
+
 /**
  * Created by Dryush on 15.02.2018.
  */
@@ -14,6 +17,11 @@ public abstract class LoginRequest<AnswerType> extends ServerRequest<AnswerType>
 
     static private Long loggedUserId = null;
     static public Long getLoggedUserId() { return loggedUserId.longValue();}
+    static private Profile.ProfileType loggedUserType;
+    static public Profile.ProfileType getLoggedUserType(){
+        return loggedUserType;
+    }
+
 
     abstract class LoginJsonServerAnswer extends JsonServerAnswer{
         class JsonToken{

@@ -75,6 +75,7 @@ public class AdvertListActivity extends AppCompatActivity
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/fa-solid-900.ttf");
 
+        //Кнопка добавить объявление
         Button buttonAddAdvert = (Button)findViewById(R.id.button_add_advert);
         buttonAddAdvert.setTypeface(typeface);
         buttonAddAdvert.setText("\uf055");
@@ -104,7 +105,7 @@ public class AdvertListActivity extends AppCompatActivity
         });
 
 
-       // getAdvertsRequest.getSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new onGetAverts(AdvertListActivity.this));
+        getAdvertsRequest.getSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new onGetAverts(AdvertListActivity.this));
     }
 
     private void setNewAdvert(int id, String title, String description, String kingdom, String city, String cost) {

@@ -5,6 +5,7 @@ import android.util.Pair;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -129,5 +130,22 @@ public class LocationsList {
             isFound = curCity.name.equals(city);
         }
         return curCity != null ? curCity.id : null;
+    }
+
+    public Location getById(long id){
+        boolean isFound = false;
+        String kingdom = "", city = "";
+        for(Iterator<Map.Entry<String, TreeSet<City>>> iKingd = locs.entrySet().iterator(); !isFound && iKingd.hasNext();){
+            Map.Entry<String, TreeSet<City>> entryKingdom = iKingd.next();
+            for (Iterator<City> iCity = entryKingdom.getValue().iterator(); iCity.hasNext() && !isFound; ){
+                City cit = iCity.next();
+                isFound = cit.id == id;
+                if (isFound) {
+                    kingdom = entryKingdom.getKey();
+                    city = cit.getName();
+                }
+            }
+        }
+        return new Location(id, kingdom, city);
     }
 }
