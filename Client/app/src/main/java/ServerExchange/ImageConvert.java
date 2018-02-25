@@ -19,11 +19,12 @@ public class ImageConvert {
             return null; //TODO : костыль
         Bitmap bitmap = null;
         try {
+            base64Str = base64Str.replace(' ', '+');
             //byte[] rawBitmap = Base64.decode(base64Str.getBytes("UTF-8"), Base64.URL_SAFE);
             byte[] rawBitmap = Base64.decode(base64Str.getBytes(), Base64.DEFAULT);
             bitmap = BitmapFactory.decodeByteArray(rawBitmap, 0, rawBitmap.length);
         } catch (Exception e) {
-            //e.printStackTrace();//Не должно быть такого
+            e.printStackTrace();//Не должно быть такого
         }
         return bitmap;
     }
