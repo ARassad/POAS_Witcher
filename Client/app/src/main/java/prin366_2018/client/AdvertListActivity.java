@@ -28,7 +28,9 @@ import android.widget.TextView;
 import java.util.LinkedList;
 
 import ServerExchange.Advert;
+import ServerExchange.Profile;
 import ServerExchange.ServerRequests.GetAdvertsRequest;
+import ServerExchange.ServerRequests.LoginRequest;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
 
 public class AdvertListActivity extends AppCompatActivity
@@ -52,14 +54,24 @@ public class AdvertListActivity extends AppCompatActivity
             super(context);
         }
 
+        private GroupAdvert group = GroupAdvert.ALL_ADVERT;
+        public onGetAverts(Context cont, GroupAdvert group){
+            super(cont);
+            this.group = group;
+        }
+
         @Override
         public void handle( LinkedList<Advert> answ) {
 
             for (Advert advert : answ){
                 //TODO: Возможны баги с id long  в int
-                setNewAdvert(GroupAdvert.ALL_ADVERT, advert.getName(), advert.getInfo(), advert.getKingdom(), advert.getCity(), String.valueOf(advert.getReward()), advert.getId());
+                setNewAdvert(this.group, advert.getName(), advert.getInfo(), advert.getKingdom(), advert.getCity(), String.valueOf(advert.getReward()), advert.getId());
             }
         }
+    }
+
+    void updateList(GroupAdvert gr){
+
     }
 
     @Override
@@ -96,7 +108,7 @@ public class AdvertListActivity extends AppCompatActivity
             }
         });
 
-        advertListSetting(false, false);
+        //advertListSetting(false, false);
 
         setButton((Button)findViewById(R.id.button_witcher_not_chosen), findViewById(R.id.form_witcher_not_chosen));
         setButton((Button)findViewById(R.id.button_witcher_chosen), findViewById(R.id.form_witcher_chosen));
@@ -108,12 +120,12 @@ public class AdvertListActivity extends AppCompatActivity
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // в зависимости от значения isChecked выводим нужные группы объявлений
-                advertListSetting(false, !isChecked);
+                advertListSetting(LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER, !isChecked);
             }
         });
 
 
-        getAdvertsRequest.getSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new onGetAverts(AdvertListActivity.this));
+        getAdvertsRequest.getFreeSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new onGetAverts(AdvertListActivity.this));
     }
 
     private void setNewAdvert(GroupAdvert id, String title, String description, String kingdom, String city, String cost, long advertId) {
@@ -178,6 +190,7 @@ public class AdvertListActivity extends AppCompatActivity
     }
 
 
+
     /**
      * Отображение определенных групп объявлений в зависимости от типа пользователя и списка объявлений
      * isWitcher - true: ведьмак, false: заказчик
@@ -238,6 +251,6 @@ public class AdvertListActivity extends AppCompatActivity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-
+        String stop = "debug";
     }
 }
