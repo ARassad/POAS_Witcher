@@ -129,7 +129,7 @@ public class ProfileActivity extends AppCompatActivity
 
            Collections.sort(answ, Comment.DateComparator);
            for (Comment comment : answ){
-               SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' HH:MM");
+               SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' HH:mm");
                setNewComment(comment.getAuthorAvatar(),comment.getText(), formatForDateNow.format(comment.getDateOfCreate()));
            }
        }
@@ -207,7 +207,7 @@ public class ProfileActivity extends AppCompatActivity
                     }
 
                     if (stringContainsSymbol == true){
-                        SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' HH:MM");
+                        SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' HH:mm");
                         setNewComment(Bitmap.createBitmap(120, 160, Bitmap.Config.ARGB_8888),
                                 text,
                                 formatForDateNow.format(new Date()));
