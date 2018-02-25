@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -96,8 +97,9 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         @Override
         public void handle(LinkedList<Comment> answ) {
 
+            Collections.sort(answ, Comment.DateComparator);
             for (Comment comment : answ){
-                SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' hh:mm");
+                SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' HH:mm");
                 setNewComment(comment.getAuthorAvatar(),comment.getText(), formatForDateNow.format(comment.getDateOfCreate()));
             }
         }
