@@ -99,7 +99,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
             Collections.sort(answ, Comment.DateComparator);
             for (Comment comment : answ){
-                SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' HH:mm");
+                SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' HH:MM");
                 setNewComment(comment.getAuthorAvatar(),comment.getText(), formatForDateNow.format(comment.getDateOfCreate()));
             }
         }
@@ -256,11 +256,34 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         buttonSendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' hh:mm");
-                addCommentsRequest.addCommentContract(newCommentView.getText().toString(), advertId, new onAddComment(AdvertActivity.this));
-                setNewComment(Bitmap.createBitmap(120, 160, Bitmap.Config.ARGB_8888),
-                        ((TextView)findViewById(R.id.input_comment)).getText().toString(),
-                        formatForDateNow.format(new Date()));
+
+                String text = ((TextView)findViewById(R.id.input_comment)).getText().toString();
+
+                if (text.isEmpty() == false ) {
+                    boolean stringContainsSymbol = false;
+                    for (int i = 0; i < text.length(); i++) {
+                        if (text.charAt(i) != ' ' && text.charAt(i) != '\n') {
+                            stringContainsSymbol = true;
+                            break;
+                        }
+                    }
+
+                    if (stringContainsSymbol == true){
+
+                        SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' HH:MM");
+                        setNewComment(Bitmap.createBitmap(120, 160, Bitmap.Config.ARGB_8888),
+                                text,
+                                formatForDateNow.format(new Date()));
+
+                        addCommentsRequest.addCommentContract(text, advertId, new onAddComment(AdvertActivity.this));
+
+                    }
+
+                }
+
+                ((TextView)findViewById(R.id.input_comment)).setText("");
+
+
             }
         });
 
