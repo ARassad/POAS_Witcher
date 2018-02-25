@@ -30,9 +30,12 @@ import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHan
 
 public class RegistrationTabActivity extends AppCompatActivity {
 
-    private AutoCompleteTextView mEmailView;
-    private EditText mPasswordView;
-    private EditText mPasswordRepitView;
+    static final int validLengthLogin = 5;
+    static final int validLengthPassword = 5;
+
+    private AutoCompleteTextView mLoginView;
+    private AutoCompleteTextView mPasswordView;
+    private AutoCompleteTextView mPasswordRepitView;
     private RadioButton mRadioButtWitcher;
     private RadioButton mRadioButtClient;
     private View mProgressView;
@@ -43,9 +46,9 @@ public class RegistrationTabActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration_tab);
 
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordRepitView = (EditText) findViewById(R.id.password_repeat);
+        mLoginView = (AutoCompleteTextView) findViewById(R.id.email);
+        mPasswordView = (AutoCompleteTextView) findViewById(R.id.password);
+        mPasswordRepitView = (AutoCompleteTextView) findViewById(R.id.password_repeat);
         mRadioButtWitcher = (RadioButton) findViewById(R.id.radButWitcher);
         mRadioButtClient = (RadioButton) findViewById(R.id.radButClient);
 
@@ -81,15 +84,29 @@ public class RegistrationTabActivity extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.email_login_form);
     }
 
+    private boolean isLoginValid(String login){
+        boolean isOk = true;
+        if (login.length() < validLengthLogin)
+            isOk = false;
+        return isOk;
+    }
+
+    private boolean isPasswordValid(String password){
+        boolean isOk = true;
+        if (password.length() < validLengthPassword)
+            isOk = false;
+        return isOk;
+    }
+
     private boolean registration(){
         // Reset errors.
-        mEmailView.setError(null);
+        mLoginView.setError(null);
         mPasswordView.setError(null);
         mPasswordRepitView.setError(null);
         mRadioButtWitcher.setError(null);
         mRadioButtClient.setError(null);
 
-        String email = mEmailView.getText().toString();
+        String login = mLoginView.getText().toString();
         String password = mPasswordView.getText().toString();
         String passwordRepit = mPasswordRepitView.getText().toString();
         boolean isWitcher = mRadioButtWitcher.isChecked();
@@ -98,31 +115,39 @@ public class RegistrationTabActivity extends AppCompatActivity {
         boolean cancel = false;
         View focusView = null;
 
+        // Check for a valid email address.
+        if (login.isEmpty()) {
+            mLoginView.setError("Поле \"Логин\" необходимо для заполнения");
+            focusView = mLoginView;
+            cancel = true;
+        }
+        else if (!isLoginValid(login)) {
+            mLoginView.setError("Некорректный логин");
+            focusView = mLoginView;
+            cancel = true;
+        }
+        if (password.isEmpty()){
+            mPasswordView.setError(" Поле \"Пароль\" необходимо для заполнения");
+            focusView = mPasswordView;
+            cancel = true;
+        }
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !LoginActivity.isPasswordValid(password)) {
+        else if (!isPasswordValid(password)) {
             mPasswordView.setError("Некорректный пароль");
             focusView = mPasswordView;
             cancel = true;
         }
-        else if (!TextUtils.isEmpty(password) && !password.equals(passwordRepit) ){
+        if ( !password.equals(passwordRepit) ){
             mPasswordRepitView.setError("Пароли не совпадают");
             focusView = mPasswordRepitView;
             cancel = true;
         }
-        // Check for a valid email address.
-        else if (TextUtils.isEmpty(email)) {
-            mEmailView.setError("Это поле необходимо для заполнения");
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!LoginActivity.isEmailValid(email)) {
-            mEmailView.setError("Некорректный логин");
-            focusView = mEmailView;
-            cancel = true;
-        } else if ( isWitcher == isClient ) {
+        if ( isWitcher == isClient ) {
             mRadioButtWitcher.setError("Некорректный тип пользователя");
             focusView = mRadioButtWitcher;
             cancel = true;
         }
+
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -138,7 +163,7 @@ public class RegistrationTabActivity extends AppCompatActivity {
                 typeClient = Profile.ProfileType.CUSTOMER;
 
             LocationsList.refillFromServer();
-            new RegistrationRequest().registration(email, password, typeClient, new DefaultServerAnswerHandler<Boolean>(RegistrationTabActivity.this) {
+            new RegistrationRequest().registration(login, password, typeClient, new DefaultServerAnswerHandler<Boolean>(RegistrationTabActivity.this) {
                 @Override
                 public void handle(Boolean answ) {
                     if (answ!= null && answ == true){
