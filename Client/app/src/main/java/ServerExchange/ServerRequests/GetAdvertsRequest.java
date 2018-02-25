@@ -32,7 +32,11 @@ public class GetAdvertsRequest extends TokenServerRequest < LinkedList<Advert>> 
         return RequestType.GET;
     }
 
-    private String GETLIST_METHOD_NAME = "Get_list_contract";
+    private String METHOD_NAME ;
+    private final String GET_FREE_ADVERTS_LIST = "Get_list_contract";
+    private final String GET_WITCHER_ADVERTS_LIST = "Get_list_contract";
+    private final String GET_CLIENT_ADVERTS_LIST= "Get_list_contract";
+
     private enum FilterType{
         BY_LOCATE,
         BY_REWARD;
@@ -118,7 +122,7 @@ public class GetAdvertsRequest extends TokenServerRequest < LinkedList<Advert>> 
         this.minmax = null;
         this.loc = null;
 
-        return new ServerMethod(GETLIST_METHOD_NAME, params);
+        return new ServerMethod(METHOD_NAME, params);
     }
 
     @Override
@@ -163,25 +167,29 @@ public class GetAdvertsRequest extends TokenServerRequest < LinkedList<Advert>> 
         }
     }
 
-    public void getSortedBy (SortType sort, OrderType order, IServerAnswerHandler onGetListHandler ){
+    public void getFreeSortedBy (SortType sort, OrderType order, IServerAnswerHandler onGetListHandler ){
+        METHOD_NAME = GET_FREE_ADVERTS_LIST;
         this.sortType = sort;
         this.orderType = order;
         startRequest(onGetListHandler);
     }
 
-    public void getSortedBy (SortType sort, IServerAnswerHandler onGetListHandler ){
+    public void getFreeSortedBy (SortType sort, IServerAnswerHandler onGetListHandler ){
+        METHOD_NAME = GET_FREE_ADVERTS_LIST;
         this.sortType = sort;
         startRequest(onGetListHandler);
     }
 
-    public void getFilteredByReward (FilterType type, int min, int max, IServerAnswerHandler onGetListHandler){
+    public void getFreeFilteredByReward (FilterType type, int min, int max, IServerAnswerHandler onGetListHandler){
+        METHOD_NAME = GET_FREE_ADVERTS_LIST;
         this.filterType = type;
         minmax[0] = min;
         minmax[1] = max;
         startRequest(onGetListHandler);
     }
 
-    public void getFilteredByReward (FilterType type, int min, int max, SortType sort, IServerAnswerHandler onGetListHandler){
+    public void getFreeFilteredByReward (FilterType type, int min, int max, SortType sort, IServerAnswerHandler onGetListHandler){
+        METHOD_NAME = GET_FREE_ADVERTS_LIST;
         this.filterType = type;
         this.sortType = sort;
         minmax[0] = min;
@@ -189,7 +197,8 @@ public class GetAdvertsRequest extends TokenServerRequest < LinkedList<Advert>> 
         startRequest(onGetListHandler);
     }
 
-    public void getFilteredByReward (FilterType type, int min, int max, SortType sort, OrderType order, IServerAnswerHandler onGetListHandler){
+    public void getFreeFilteredByReward (FilterType type, int min, int max, SortType sort, OrderType order, IServerAnswerHandler onGetListHandler){
+        METHOD_NAME = GET_FREE_ADVERTS_LIST;
         this.filterType = type;
         this.sortType = sort;
         this.orderType = order;
@@ -198,14 +207,128 @@ public class GetAdvertsRequest extends TokenServerRequest < LinkedList<Advert>> 
         startRequest(onGetListHandler);
     }
 
-    public void getFilteredByLocation (FilterType type, SortType sort, String kingdom, String town, IServerAnswerHandler onGetListHandler){
+    public void getFreeFilteredByLocation (FilterType type, SortType sort, String kingdom, String town, IServerAnswerHandler onGetListHandler){
+        METHOD_NAME = GET_FREE_ADVERTS_LIST;
         this.sortType = sort;
         this.filterType = type;
         loc = new Location(kingdom, town);
         startRequest(onGetListHandler);
     }
 
-    public void getFilteredByLocation (FilterType type, SortType sort, OrderType order, String kingdom, String town, IServerAnswerHandler onGetListHandler){
+    public void getFreeFilteredByLocation (FilterType type, SortType sort, OrderType order, String kingdom, String town, IServerAnswerHandler onGetListHandler){
+        METHOD_NAME = GET_FREE_ADVERTS_LIST;
+        this.sortType = sort;
+        this.filterType = type;
+        loc = new Location(kingdom, town);
+        startRequest(onGetListHandler);
+    }
+
+    public void getWitcherSortedBy (SortType sort, OrderType order, IServerAnswerHandler onGetListHandler ){
+        METHOD_NAME = GET_WITCHER_ADVERTS_LIST;
+        this.sortType = sort;
+        this.orderType = order;
+        startRequest(onGetListHandler);
+    }
+
+    public void getWitcherSortedBy (SortType sort, IServerAnswerHandler onGetListHandler ){
+        METHOD_NAME = GET_WITCHER_ADVERTS_LIST;
+        this.sortType = sort;
+        startRequest(onGetListHandler);
+    }
+
+    public void getWitcherFilteredByReward (FilterType type, int min, int max, IServerAnswerHandler onGetListHandler){
+        METHOD_NAME = GET_WITCHER_ADVERTS_LIST;
+        this.filterType = type;
+        minmax[0] = min;
+        minmax[1] = max;
+        startRequest(onGetListHandler);
+    }
+
+    public void getWitcherFilteredByReward (FilterType type, int min, int max, SortType sort, IServerAnswerHandler onGetListHandler){
+        METHOD_NAME = GET_WITCHER_ADVERTS_LIST;
+        this.filterType = type;
+        this.sortType = sort;
+        minmax[0] = min;
+        minmax[1] = max;
+        startRequest(onGetListHandler);
+    }
+
+    public void getWitcherFilteredByReward (FilterType type, int min, int max, SortType sort, OrderType order, IServerAnswerHandler onGetListHandler){
+        METHOD_NAME = GET_WITCHER_ADVERTS_LIST;
+        this.filterType = type;
+        this.sortType = sort;
+        this.orderType = order;
+        minmax[0] = min;
+        minmax[1] = max;
+        startRequest(onGetListHandler);
+    }
+
+    public void getWitcherFilteredByLocation (FilterType type, SortType sort, String kingdom, String town, IServerAnswerHandler onGetListHandler){
+        METHOD_NAME = GET_WITCHER_ADVERTS_LIST;
+        this.sortType = sort;
+        this.filterType = type;
+        loc = new Location(kingdom, town);
+        startRequest(onGetListHandler);
+    }
+
+    public void getWitcherFilteredByLocation (FilterType type, SortType sort, OrderType order, String kingdom, String town, IServerAnswerHandler onGetListHandler){
+        METHOD_NAME = GET_WITCHER_ADVERTS_LIST;
+        this.sortType = sort;
+        this.filterType = type;
+        loc = new Location(kingdom, town);
+        startRequest(onGetListHandler);
+    }
+
+    public void getClientSortedBy (SortType sort, OrderType order, IServerAnswerHandler onGetListHandler ){
+        METHOD_NAME = GET_CLIENT_ADVERTS_LIST;
+        this.sortType = sort;
+        this.orderType = order;
+        startRequest(onGetListHandler);
+    }
+
+    public void getClientSortedBy (SortType sort, IServerAnswerHandler onGetListHandler ){
+        METHOD_NAME = GET_CLIENT_ADVERTS_LIST;
+        this.sortType = sort;
+        startRequest(onGetListHandler);
+    }
+
+    public void getClientFilteredByReward (FilterType type, int min, int max, IServerAnswerHandler onGetListHandler){
+        METHOD_NAME = GET_CLIENT_ADVERTS_LIST;
+        this.filterType = type;
+        minmax[0] = min;
+        minmax[1] = max;
+        startRequest(onGetListHandler);
+    }
+
+    public void getClientFilteredByReward (FilterType type, int min, int max, SortType sort, IServerAnswerHandler onGetListHandler){
+        METHOD_NAME = GET_CLIENT_ADVERTS_LIST;
+        this.filterType = type;
+        this.sortType = sort;
+        minmax[0] = min;
+        minmax[1] = max;
+        startRequest(onGetListHandler);
+    }
+
+    public void getClientFilteredByReward (FilterType type, int min, int max, SortType sort, OrderType order, IServerAnswerHandler onGetListHandler){
+        METHOD_NAME = GET_CLIENT_ADVERTS_LIST;
+        this.filterType = type;
+        this.sortType = sort;
+        this.orderType = order;
+        minmax[0] = min;
+        minmax[1] = max;
+        startRequest(onGetListHandler);
+    }
+
+    public void getClientFilteredByLocation (FilterType type, SortType sort, String kingdom, String town, IServerAnswerHandler onGetListHandler){
+        METHOD_NAME = GET_CLIENT_ADVERTS_LIST;
+        this.sortType = sort;
+        this.filterType = type;
+        loc = new Location(kingdom, town);
+        startRequest(onGetListHandler);
+    }
+
+    public void getClientFilteredByLocation (FilterType type, SortType sort, OrderType order, String kingdom, String town, IServerAnswerHandler onGetListHandler){
+        METHOD_NAME = GET_CLIENT_ADVERTS_LIST;
         this.sortType = sort;
         this.filterType = type;
         loc = new Location(kingdom, town);

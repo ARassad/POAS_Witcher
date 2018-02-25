@@ -51,7 +51,9 @@ public class UpdateAdvertRequest extends TokenServerRequest<Boolean> {
             params.put("text", text);
             this.text = null;
         }
-
+        if (header != null){
+            params.put("header", header);
+        }
         if (bounty != null) {
             params.put("bounty", this.bounty);
             this.bounty = null;
@@ -94,7 +96,7 @@ public class UpdateAdvertRequest extends TokenServerRequest<Boolean> {
         startRequest(onUpdateAdvertHandler);
     }
 
-    public void updateAdvert(long id, String text, String header, Long id_task_located,
+    public void updateAdvert(long id, String header, String text, Long id_task_located,
                              Integer bounty, LinkedList<Bitmap> imgsToAdd, LinkedList<Bitmap> imgsToRemove, IServerAnswerHandler onUpdateAdvertHandler){
         this.id = id;
         //this.status = status;

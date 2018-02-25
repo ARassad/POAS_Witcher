@@ -214,11 +214,11 @@ public class EditAdvertActivity extends AppCompatActivity {
 
     private void goBack(){
         Intent intent = new Intent();
-        intent.putExtra("header", title.getText().toString());
-        intent.putExtra("description", description.getText().toString());
-        intent.putExtra("bounty", cost.getText().toString());
-        intent.putExtra("kingdom", (String)kingdom.getSelectedItem());
-        intent.putExtra("city", (String) city.getSelectedItem());
+        intent.putExtra("header",       title.getText().toString());
+        intent.putExtra("description",  description.getText().toString());
+        intent.putExtra("bounty",       cost.getText().toString());
+        intent.putExtra("kingdom",      (String)kingdom.getSelectedItem());
+        intent.putExtra("city",         (String) city.getSelectedItem());
         setResult(RESULT_OK, intent);
         finish();
     }

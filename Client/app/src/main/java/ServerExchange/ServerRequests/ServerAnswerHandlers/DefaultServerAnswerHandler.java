@@ -11,8 +11,8 @@ import java.io.EOFException;
 
 public abstract class DefaultServerAnswerHandler<AnswerType> implements IServerAnswerHandler<AnswerType> {
 
-    Context context = null;
-    AlertDialog.Builder dlgAlert  = null;
+    protected Context context = null;
+    protected AlertDialog.Builder dlgAlert  = null;
 
     public DefaultServerAnswerHandler(Context context){
         this.context = context;

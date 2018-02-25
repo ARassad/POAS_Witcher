@@ -28,6 +28,7 @@ import java.util.LinkedList;
 
 import ServerExchange.Advert;
 import ServerExchange.Comment;
+import ServerExchange.Location;
 import ServerExchange.Profile;
 import ServerExchange.ProfilePart;
 import ServerExchange.ServerRequests.AddCommentContractRequest;
@@ -302,10 +303,16 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
             if (resultCode == RESULT_OK) {
                 //TODO
                 Intent intent = getIntent();
-                headerView.setText(intent.getStringExtra("header"));
-                descriptionView.setText(intent.getStringExtra("description"));
-                rewardView.setText(intent.getIntExtra("bounty", 1));
-                locationView.setText(intent.getStringExtra("kingdom") + ", " + intent.getStringExtra("city"));
+                String h = intent.getStringExtra("header");
+                if (h != null) headerView.setText(h);
+                String d = intent.getStringExtra("description");
+                if (d!=null) descriptionView.setText(d);
+                Integer b = intent.getIntExtra("bounty", 1);
+                if (b!= null) rewardView.setText(String.valueOf(b));
+                String k = intent.getStringExtra("kingdom");
+                String c = intent.getStringExtra("city");
+                if (k!= null && c!= null)
+                locationView.setText( new Location(k,c).toString());
             }
         }
     }
