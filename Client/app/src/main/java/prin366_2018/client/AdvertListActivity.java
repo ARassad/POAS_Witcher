@@ -57,7 +57,7 @@ public class AdvertListActivity extends AppCompatActivity
 
             for (Advert advert : answ){
                 //TODO: Возможны баги с id long  в int
-                setNewAdvert(GroupAdvert.WITCHER_NOT_CHOSEN, advert.getName(), advert.getInfo(), advert.getKingdom(), advert.getCity(), String.valueOf(advert.getReward()));
+                setNewAdvert(GroupAdvert.ALL_ADVERT, advert.getName(), advert.getInfo(), advert.getKingdom(), advert.getCity(), String.valueOf(advert.getReward()), advert.getId());
             }
         }
     }
@@ -116,10 +116,10 @@ public class AdvertListActivity extends AppCompatActivity
         getAdvertsRequest.getSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new onGetAverts(AdvertListActivity.this));
     }
 
-    private void setNewAdvert(GroupAdvert id, String title, String description, String kingdom, String city, String cost) {
+    private void setNewAdvert(GroupAdvert id, String title, String description, String kingdom, String city, String cost, long advertId) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
-        AdvertFragment newRow = new AdvertFragment(title, description, kingdom, city, cost);
+        AdvertFragment newRow = new AdvertFragment(title, description, kingdom, city, cost, advertId);
         int idxml = R.id.all_advert;
         switch (id) {
             case WITCHER_NOT_CHOSEN:
@@ -162,14 +162,17 @@ public class AdvertListActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == NEW_ADVERT) {
             if (resultCode == RESULT_OK) {
-                data.getStringExtra("title");
+                //Лучше обновим с сервера, а то не понятно, в какое место пихать
+                /*
                 setNewAdvert(GroupAdvert.WITCHER_NOT_CHOSEN,
                         data.getStringExtra("title"),
                         data.getStringExtra("description"),
                         data.getStringExtra("kingdom"),
                         data.getStringExtra("city"),
-                        data.getStringExtra("cost"));
-
+                        data.getStringExtra("cost"),
+                        data.getLongExtra("advertId", -1)
+                );
+                */
             }
         }
     }

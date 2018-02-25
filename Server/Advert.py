@@ -217,7 +217,8 @@ def get_advert(cursor, params):
     obj.kingdom = row[1]
 
     cursor.execute(
-        "select b.photo from Contract as a inner join Photo as b on a.id_list_photos = b.id_list_photos where a.id={}"
+        "select b.photo from Contract as a inner join Photo as b on a.id_list_photos = b.id_list_photos where \
+        a.id_list_photos={}"
         .format(id_list_photos))
     row = cursor.fetchall()
     obj.photoContract = Object()
@@ -229,6 +230,8 @@ def get_advert(cursor, params):
         obj.photoContract.photo[len(obj.photoContract.photo)] = ph
 
     status.object = obj
+    status.status = Status.Ok.value;
+    status.message = EventAdvert.Success.value
     return status.toJSON()
 
 

@@ -22,6 +22,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import ServerExchange.ImageConvert;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 import ServerExchange.ServerRequests.UpdateProfileRequest;
@@ -73,7 +74,7 @@ public class EditProfileActivity extends AppCompatActivity {
             intent.putExtra("name", name.getText().toString());
             intent.putExtra("aboutMe", aboutMe.getText().toString());
             if ( bitmap != null)
-                intent.putExtra("photo", encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, 100));
+                intent.putExtra("photo", ImageConvert.toBase64Str(bitmap));
             setResult(RESULT_OK, intent);
             finish();
         }
@@ -127,7 +128,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 saveRequest.updateProfile( newName.equals(oldName) ? null : newName,
                                             newAboutMe.equals(oldAboutMe) ? null : newAboutMe,
-                                            isPhotoChanged ? ((BitmapDrawable)image.getBackground()).getBitmap() : null,
+                                            isPhotoChanged  && bitmap != null ? bitmap : null, //TODO: Сделать получение картинки с виджета, а то криво
                                             oie);
             }
         });
@@ -143,22 +144,22 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
     }
-
+/*
     public static String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality)
     {
         ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
         image.compress(compressFormat, quality, byteArrayOS);
         return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
     }
-
+*/
     Bitmap bitmap;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-        ImageButton imageView = (ImageButton) findViewById(R.id.image);
+        //ImageButton imageView = (ImageButton) findViewById(R.id.image);
 
-        if (resultCode == RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case GALLERY_REQUEST:
                     isPhotoChanged = true;
@@ -169,7 +170,8 @@ public class EditProfileActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    imageView.setImageBitmap(bitmap);
+                    //imageView.setImageBitmap(bitmap);
+                    image.setImageBitmap(bitmap);
 
             }
         }

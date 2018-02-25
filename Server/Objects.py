@@ -48,7 +48,7 @@ class Status(Enum):
 class User(Enum):
     Login = "login"
     Password = "password"
-    IsWitcher = "witcher"
+    IsWitcher = "isWitcher"
     Token = "token"
     FCM_Token = "fcm_token"
 

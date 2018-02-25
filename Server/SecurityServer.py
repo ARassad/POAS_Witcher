@@ -75,7 +75,7 @@ paramsRequests = {
                                                   'sortype': {'asc': 'asc', 'desc': 'desc'}},
                                        'min_params': 1, 'count': 6, 'type_req': 1},
 
-    ApiMethod.Registration.value: {'params': {'login': 'login', 'password': 'password', 'witcher': 'witcher'},
+    ApiMethod.Registration.value: {'params': {'login': 'login', 'password': 'password', 'isWitcher': 'isWitcher'},
                                    'min_params': 3, 'count': 3, 'type_req': 0},
 
     ApiMethod.Authorization.value: {'params': {'login': 'login', 'password': 'password', 'fcm_token': 'fcm_token'},
