@@ -41,6 +41,8 @@ public class RegistrationTabActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
 
+    static final private int SAVE_DATA = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,9 +108,9 @@ public class RegistrationTabActivity extends AppCompatActivity {
         mRadioButtWitcher.setError(null);
         mRadioButtClient.setError(null);
 
-        String login = mLoginView.getText().toString();
-        String password = mPasswordView.getText().toString();
-        String passwordRepit = mPasswordRepitView.getText().toString();
+        final String login = mLoginView.getText().toString();
+        final String password = mPasswordView.getText().toString();
+        final String passwordRepit = mPasswordRepitView.getText().toString();
         boolean isWitcher = mRadioButtWitcher.isChecked();
         boolean isClient = mRadioButtClient.isChecked();
 
@@ -156,26 +158,37 @@ public class RegistrationTabActivity extends AppCompatActivity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
+            //showProgress(true);
 
-            Profile.ProfileType typeClient = Profile.ProfileType.WITCHER;
-            if ( isClient )
-                typeClient = Profile.ProfileType.CUSTOMER;
+            Profile.ProfileType typeClient = isWitcher ? Profile.ProfileType.WITCHER :
+                    Profile.ProfileType.CUSTOMER;
 
-            LocationsList.refillFromServer();
+            //LocationsList.refillFromServer();
+
             new RegistrationRequest().registration(login, password, typeClient, new DefaultServerAnswerHandler<Boolean>(RegistrationTabActivity.this) {
                 @Override
                 public void handle(Boolean answ) {
                     if (answ!= null && answ == true){
-                        startActivity( new Intent(RegistrationTabActivity.this, LoginActivity.class));
+                        showProgress(true);
+                        Intent intent = new Intent(RegistrationTabActivity.this, LoginActivity.class);
+
+                        intent.putExtra("email", login);
+                        intent.putExtra("password", password);
+
+
+                        startActivityForResult(intent, SAVE_DATA );
                     }
+                    else{
+                        View focusView = null;
+                        mLoginView.setError("Логин занят, придумайте другой");
+                        focusView = mLoginView;
+                    }
+
                 }
             });
             //mAuthTask = new UserLoginTask(email, password);
             //mAuthTask.execute((Void) null);
         }
-
-
 
         return true;
     }

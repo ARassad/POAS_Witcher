@@ -141,6 +141,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+
+        Intent intent = getIntent();
+        if ( intent != null ){
+            String oldLogin = intent.getStringExtra("email");
+            String oldPassword = intent.getStringExtra("password");
+
+            if ( oldLogin != null && isEmailValid(oldLogin))
+                mEmailView.setText(oldLogin);
+
+            if ( oldPassword != null && isPasswordValid(oldPassword))
+                mPasswordView.setText(oldPassword);
+        }
     }
 
     private void populateAutoComplete() {
