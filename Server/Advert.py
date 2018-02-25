@@ -105,7 +105,7 @@ def edit_advert(cursor, params):
             update_string += "status={},".format(params[Advert.Status.value])
             update_string += "last_update_status={},".format(last_update)
         if params.get(Advert.Header.value, None) is not None:
-            update_string += "header={},".format(params[Advert.Header.value])
+            update_string += "header=N'{}',".format(params[Advert.Header.value])
         update_string += "last_update={}".format(last_update)
 
         if params.get(Advert.DelPhoto.value, None) is not None:

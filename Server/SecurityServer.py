@@ -81,8 +81,22 @@ paramsRequests = {
     ApiMethod.Authorization.value: {'params': {'login': 'login', 'password': 'password', 'fcm_token': 'fcm_token'},
                                     'min_params': 3, 'count': 3, 'type_req': 0},
 
-    ApiMethod.GetContractClient.value: {'params': {'token': 'token'}, 'min_params': 1, 'count': 1, 'type_req': 1},
-    ApiMethod.GetContractWitcher.value: {'params': {'token': 'token'}, 'min_params': 1, 'count': 1, 'type_req': 1},
+    ApiMethod.GetContractClient.value: {'params': {'token': 'token',
+                                                  'filter': {'locate': {'town': 'town', 'kingdom': 'kingdom'},
+                                                             'bounty': {'min': 'min', 'max': 'max'}},
+                                                  'sort': {'alph': 'alph', 'locate': 'locate',
+                                                           'lastupdate': 'lastupdate'},
+                                                  'sortype': {'asc': 'asc', 'desc': 'desc'}},
+                                       'min_params': 1, 'count': 6, 'type_req': 1},
+
+    ApiMethod.GetContractWitcher.value: {'params': {'token': 'token',
+                                                  'filter': {'locate': {'town': 'town', 'kingdom': 'kingdom'},
+                                                             'bounty': {'min': 'min', 'max': 'max'}},
+                                                  'sort': {'alph': 'alph', 'locate': 'locate',
+                                                           'lastupdate': 'lastupdate'},
+                                                  'sortype': {'asc': 'asc', 'desc': 'desc'}},
+                                       'min_params': 1, 'count': 6, 'type_req': 1},
+
     ApiMethod.ContractComplited.value: {'params': {'token': 'token', 'id': 'id'}, 'min_params': 2, 'count': 2,
                                         'type_req': 1}}
 

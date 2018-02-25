@@ -158,7 +158,7 @@ public class RegistrationTabActivity extends AppCompatActivity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
+            //showProgress(true);
 
             Profile.ProfileType typeClient = isWitcher ? Profile.ProfileType.WITCHER :
                     Profile.ProfileType.CUSTOMER;
@@ -169,6 +169,7 @@ public class RegistrationTabActivity extends AppCompatActivity {
                 @Override
                 public void handle(Boolean answ) {
                     if (answ!= null && answ == true){
+                        showProgress(true);
                         Intent intent = new Intent(RegistrationTabActivity.this, LoginActivity.class);
 
                         intent.putExtra("email", login);
@@ -177,6 +178,12 @@ public class RegistrationTabActivity extends AppCompatActivity {
 
                         startActivityForResult(intent, SAVE_DATA );
                     }
+                    else{
+                        View focusView = null;
+                        mLoginView.setError("Логин занят, придумайте другой");
+                        focusView = mLoginView;
+                    }
+
                 }
             });
             //mAuthTask = new UserLoginTask(email, password);

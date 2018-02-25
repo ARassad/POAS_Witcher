@@ -131,7 +131,61 @@ def get_contract_client(cursor, params):
 
     if row is not None:
         id_client = row[0]
-        cursor.execute('select * from Contract where id_client={}'.format(id_client))
+        req = 'select * from Contract where id_client={} '.format(id_client)
+
+        filtr = params.get(Params.Filter.Name)
+        if filtr is not None:
+            req += " and "
+            if filtr == Params.Filter.Bounty:
+                min = params.get(Params.Min)
+                max = params.get(Params.Max)
+
+                if min is None or max is None:
+                    status.status = Status.Error.value
+                    obj.value = "ERROR:{}{}".format(EventGetListContracts.MinParamMiss if min is None else "",
+                                                    EventGetListContracts.MaxParamMiss if max is None else "")
+                else:
+                    req += " Bounty > {} and Bounty < {}".format(min, max)
+
+            elif filtr == Params.Filter.Locate:
+                town = params.get(Params.Town)
+                kingdom = params.get(Params.Kingdom)
+
+                if town is None and kingdom is None:
+                    status.status = Status.Error.value
+                    obj.value = EventGetListContracts.FilterLocateErr.value
+                else:
+                    req += " Contract.id_task_located in (select id from Town where"
+
+                    if town is not None:
+                        req += " Town.name = '{}'".format(town)
+
+                        if kingdom is not None:
+                            req += " and"
+                        else:
+                            req += ')'
+
+                    if kingdom is not None:
+                        req += " Town.id_kingdom in (select id from Kingdom where Kingdom.name = '{}'))".format(kingdom)
+
+        sort = params.get(Params.Sort.Name)
+        if sort is not None:
+            req += " order by"
+            if sort == Params.Sort.Alph:
+                req += " text"
+            elif sort == Params.Sort.Locate:
+                req += " id_task_located"
+            elif sort == Params.Sort.LastUpdate:
+                req += " last_update"
+            else:
+                status.status = Status.Error.value
+                obj.value = EventGetListContracts.SortErr.value
+
+            sort_type = params.get(Params.SortType.Name)
+            if sort_type is not None and sort_type == Params.SortType.Desc:
+                req += " desc"
+
+        cursor.execute(req)
         row = cursor.fetchall()
 
         obj.contracts = {}
@@ -169,9 +223,63 @@ def get_contract_witcher(cursor, params):
 
     if row is not None:
         id_witcher = row[0]
-        cursor.execute('select a.id, a.id_witcher, a.id_client, a.id_task_located, a.text, a.bounty, a.status, \
-                        a.last_update_status, a.last_update, a.header from Contract as a inner join Desired_Contract \
-                        as b on b.id_contract = a.id where b.id_witcher={} and a.status<=3'.format(id_witcher))
+        req = 'select a.id, a.id_witcher, a.id_client, a.id_task_located, a.text, a.bounty, a.status, \
+              a.last_update_status, a.last_update, a.header from Contract as a inner join Desired_Contract \
+              as b on b.id_contract = a.id where b.id_witcher={} and a.status<=3'.format(id_witcher)
+        filtr = params.get(Params.Filter.Name)
+        if filtr is not None:
+            req += " and "
+            if filtr == Params.Filter.Bounty:
+                min = params.get(Params.Min)
+                max = params.get(Params.Max)
+
+                if min is None or max is None:
+                    status.status = Status.Error.value
+                    obj.value = "ERROR:{}{}".format(EventGetListContracts.MinParamMiss if min is None else "",
+                                                    EventGetListContracts.MaxParamMiss if max is None else "")
+                else:
+                    req += " Bounty > {} and Bounty < {}".format(min, max)
+
+            elif filtr == Params.Filter.Locate:
+                town = params.get(Params.Town)
+                kingdom = params.get(Params.Kingdom)
+
+                if town is None and kingdom is None:
+                    status.status = Status.Error.value
+                    obj.value = EventGetListContracts.FilterLocateErr.value
+                else:
+                    req += " a.id_task_located in (select id from Town where"
+
+                    if town is not None:
+                        req += " Town.name = '{}'".format(town)
+
+                        if kingdom is not None:
+                            req += " and"
+                        else:
+                            req += ')'
+
+                    if kingdom is not None:
+                        req += " Town.id_kingdom in (select id from Kingdom where Kingdom.name = '{}'))".format(kingdom)
+
+        sort = params.get(Params.Sort.Name)
+        if sort is not None:
+            req += " order by"
+            if sort == Params.Sort.Alph:
+                req += " text"
+            elif sort == Params.Sort.Locate:
+                req += " id_task_located"
+            elif sort == Params.Sort.LastUpdate:
+                req += " last_update"
+            else:
+                status.status = Status.Error.value
+                obj.value = EventGetListContracts.SortErr.value
+
+            sort_type = params.get(Params.SortType.Name)
+            if sort_type is not None and sort_type == Params.SortType.Desc:
+                req += " desc"
+
+
+        cursor.execute(req)
         row = cursor.fetchall()
 
         obj.contracts = {}
