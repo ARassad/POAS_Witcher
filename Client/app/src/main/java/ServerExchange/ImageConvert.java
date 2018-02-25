@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by Dryush on 18.02.2018.
@@ -16,8 +17,14 @@ public class ImageConvert {
 
         if (base64Str == null)
             return null; //TODO : костыль
-        byte[] rawBitmap = Base64.decode(base64Str.getBytes(), Base64.DEFAULT);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(rawBitmap, 0, rawBitmap.length);
+        Bitmap bitmap = null;
+        try {
+            //byte[] rawBitmap = Base64.decode(base64Str.getBytes("UTF-8"), Base64.URL_SAFE);
+            byte[] rawBitmap = Base64.decode(base64Str.getBytes(), Base64.DEFAULT);
+            bitmap = BitmapFactory.decodeByteArray(rawBitmap, 0, rawBitmap.length);
+        } catch (Exception e) {
+            //e.printStackTrace();//Не должно быть такого
+        }
         return bitmap;
     }
 
