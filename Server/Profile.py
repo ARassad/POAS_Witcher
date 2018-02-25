@@ -109,16 +109,16 @@ def update_profile(cursor, params):
 
     if params.get(Profile.Photo.value, None) is not None:
         if id_photo is None:
-            cursor.execute("insert into Photo (id_list_photos, photo) values(null, {})"
+            cursor.execute("insert into Photo (id_list_photos, photo) values(null, '{}')"
                            .format(params[Profile.Photo.value]))
             cursor.execute("select max(id) from Photo")
             id_photo = cursor.fetchone()[0]
             cursor.execute("update Profile set id_photo={} where id={}".format(id_photo, id_prof))
         else:
-            cursor.execute("update Photo set photo={} where id={}".format(params[Profile.Photo.value], id_photo))
+            cursor.execute("update Photo set photo='{}' where id={}".format(params[Profile.Photo.value], id_photo))
 
     if params.get(Profile.Password.value, None) is not None:
-        cursor.execute("update Authorization_info set password={} where id={}".format(params[Profile.Password.value],
+        cursor.execute("update Authorization_info set password='{}' where id={}".format(params[Profile.Password.value],
                                                                                       id_auth))
 
     status = Object()

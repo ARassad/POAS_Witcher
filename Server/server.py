@@ -86,7 +86,7 @@ class HttpServer(BaseHTTPRequestHandler):
         self._set_headers()
         postvars = self.parse_POST()
         for key, val in postvars.items():
-            mstr = key
+            mstr = key + val[0]
         dct = json.loads(mstr)
 
         mymethod = self.requestline[10:-9]
