@@ -17,7 +17,7 @@ object:
 Регистрация:
 localhost/api/Reg
 Отправляемые данные:
-{'login': 'mkovalev', 'password': 'passwd', 'witcher': 1} json format
+{'login': 'mkovalev', 'password': 'passwd', 'isWwitcher': 1} json format
 Параметр witcher не обязателен, без него будет регистрироваться клиент
 Возвращаемые данные:
 status: OK / Error
