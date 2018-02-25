@@ -61,7 +61,7 @@ public class RegistrationRequest extends ServerRequest<Boolean>{
         this.login = login;
         this.password = Password.encode(password);
         this.isWitcher = type == Profile.ProfileType.WITCHER ? 1 : 0;
-        this.startRequest();
+        this.startRequest(onLoginHandler);
 
     }
 }
