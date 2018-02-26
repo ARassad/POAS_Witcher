@@ -82,9 +82,15 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
                 executorNameView.setText(answ.getExecutorName());
             }
             if (answ.getAuthorId() == LoginRequest.getLoggedUserId()){
-                getDesiredRequest.getDesired(answ.getId(), new onGetDesiredList(AdvertActivity.this));
+
                 ifCreatedByLoggedUser();
+                getDesiredRequest.getDesired(answ.getId(), new onGetDesiredList(AdvertActivity.this));
             }
+
+            if (LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER){
+                getDesiredRequest.getDesired(answ.getId(), new onGetDesiredList(AdvertActivity.this));
+            }
+
         }
     }
 
@@ -128,11 +134,27 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
         @Override
         public void handle(ArrayList<ProfilePart> answ) {
+
             if (LoginRequest.getLoggedUserType() == Profile.ProfileType.CUSTOMER){
+
                 for (ProfilePart profile : answ){
                     setNewResponder(profile.getName(), profile.getId());
                 }
             }
+
+            if (LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER){
+                Button buttonRespond = (Button)findViewById(R.id.button_respond);
+
+                for (ProfilePart profile : answ){
+                    if (LoginRequest.getLoggedUserId() == profile.getId()){
+                        buttonRespond.setEnabled(false);
+                        buttonRespond.setText("Вы откликнулись");
+                    }
+                }
+            }
+
+
+
 
         }
     }
@@ -191,6 +213,8 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
     private TextView headerView, descriptionView, authorNameView, rewardView, locationView, executorNameView;
     private TextView newCommentView;
+    private Button buttonRespond;
+
     private void connectViews(){
         headerView          = findViewById(R.id.text_title_advert);
         descriptionView     = findViewById(R.id.text_description);
@@ -263,15 +287,21 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
         typeface = Typeface.createFromAsset(getAssets(), "fonts/fa-solid-900.ttf");
 
-        Button buttonRespond = (Button)findViewById(R.id.button_respond);
+        buttonRespond = (Button)findViewById(R.id.button_respond);
         buttonRespond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (LoginRequest.getLoggedUserType()== Profile.ProfileType.WITCHER)
+                if (LoginRequest.getLoggedUserType()== Profile.ProfileType.WITCHER){
                     addWitcherInContractRequest.addWitcherInContract(advertId, new onAddWitcherInContractAnswer(AdvertActivity.this));
+                    buttonRespond.setEnabled(false);
+                    buttonRespond.setText("Вы откликнулись");
+                }
+
             }
         });
-
+        if (LoginRequest.getLoggedUserType() == Profile.ProfileType.CUSTOMER){
+            buttonRespond.setVisibility(View.GONE);
+        }
 
 
 
