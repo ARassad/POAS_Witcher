@@ -130,6 +130,8 @@ def get_contract_client(cursor, params):
 
     obj = Object()
     status = Object()
+    status.status = Status.Ok.value
+    obj.message = EventGetListContracts.SuccessGetListContracts.value
 
     if row is not None:
         id_client = row[0]
@@ -214,6 +216,7 @@ def get_contract_client(cursor, params):
             obj.contracts[len(obj.contracts)] = line
     else:
         Status.status = Status.Error.value
+        obj.message = "IncorrectToken"
 
     status.object = obj
     return status.toJSON()
@@ -226,6 +229,8 @@ def get_contract_witcher(cursor, params):
 
     obj = Object()
     status = Object()
+    status.status = Status.Ok.value
+    obj.message = EventGetListContracts.SuccessGetListContracts.value
 
     if row is not None:
         id_witcher = row[0]
@@ -311,6 +316,7 @@ def get_contract_witcher(cursor, params):
             obj.contracts[len(obj.contracts)] = line
     else:
         Status.status = Status.Error.value
+        obj.message = "IncorrectToken"
 
     status.object = obj
     return status.toJSON()
