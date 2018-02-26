@@ -96,6 +96,7 @@
 
                     <fragment
                         class="prin366_2018.client.SortingFragment"
+                        android:id="@+id/free_adverts_sort"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         tools:layout="@layout/fragment_sorting">
@@ -134,6 +135,7 @@
 
                             <fragment
                                 class="prin366_2018.client.SortingFragment"
+                                android:id ="@+id/witcher_not_chosen_adverts_sort"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 tools:layout="@layout/fragment_sorting">
@@ -175,6 +177,7 @@
 
                             <fragment
                                 class="prin366_2018.client.SortingFragment"
+                                android:id = "@+id/witcher_chosen_sort"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 tools:layout="@layout/fragment_sorting">

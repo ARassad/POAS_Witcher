@@ -50,7 +50,6 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
     static final private int SAVE_DATA = 2;
 
-
     private GetAdvertRequest getAdvertRequest = new GetAdvertRequest();
     private class onGetAdvert extends DefaultServerAnswerHandler<Advert>{
 
@@ -100,7 +99,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
             Collections.sort(answ, Comment.DateComparator);
             for (Comment comment : answ){
-                SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' HH:MM");
+                SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' HH:mm");
                 setNewComment(comment.getAuthorAvatar(),comment.getText(), formatForDateNow.format(comment.getDateOfCreate()));
             }
         }
@@ -271,7 +270,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
                     if (stringContainsSymbol == true){
 
-                        SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' HH:MM");
+                        SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' HH:mm");
                         setNewComment(Bitmap.createBitmap(120, 160, Bitmap.Config.ARGB_8888),
                                 text,
                                 formatForDateNow.format(new Date()));
