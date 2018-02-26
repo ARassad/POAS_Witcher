@@ -107,6 +107,10 @@ public class AdvertListActivity extends AppCompatActivity
                 startActivityForResult(intent, NEW_ADVERT);
             }
         });
+        if(LoginRequest.getLoggedUserType()== Profile.ProfileType.WITCHER)
+        {
+            buttonAddAdvert.setVisibility(View.GONE);
+        }
 
         //advertListSetting(false, false);
 

@@ -130,6 +130,8 @@ def get_contract_client(cursor, params):
 
     obj = Object()
     status = Object()
+    status.status = Status.Ok.value
+    obj.message = EventGetListContracts.SuccessGetListContracts.value
 
     if row is not None:
         id_client = row[0]
@@ -169,6 +171,10 @@ def get_contract_client(cursor, params):
 
                     if kingdom is not None:
                         req += " Town.id_kingdom in (select id from Kingdom where Kingdom.name = '{}'))".format(kingdom)
+
+        stat = params.get(Params.Status)
+        if stat is not None:
+            req += " and a.status={} ".format(stat)
 
         sort = params.get(Params.Sort.Name)
         if sort is not None:
@@ -210,6 +216,7 @@ def get_contract_client(cursor, params):
             obj.contracts[len(obj.contracts)] = line
     else:
         Status.status = Status.Error.value
+        obj.message = "IncorrectToken"
 
     status.object = obj
     return status.toJSON()
@@ -222,6 +229,8 @@ def get_contract_witcher(cursor, params):
 
     obj = Object()
     status = Object()
+    status.status = Status.Ok.value
+    obj.message = EventGetListContracts.SuccessGetListContracts.value
 
     if row is not None:
         id_witcher = row[0]
@@ -307,6 +316,7 @@ def get_contract_witcher(cursor, params):
             obj.contracts[len(obj.contracts)] = line
     else:
         Status.status = Status.Error.value
+        obj.message = "IncorrectToken"
 
     status.object = obj
     return status.toJSON()

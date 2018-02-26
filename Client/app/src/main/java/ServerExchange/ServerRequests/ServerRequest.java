@@ -203,6 +203,7 @@ public abstract class ServerRequest <AnswerType> {
             JsonServerAnswer serverAnswer = gson.fromJson(reader, JsonServerAnswerClass);
             JsonAnswerHandler(serverAnswer);
             isErrorInServerRequest = ! serverAnswer.isStatusOk();
+            errorMessage = serverAnswer.message;
             urlConnection.disconnect();
 
             return (AnswerType) serverAnswer.convert();

@@ -134,7 +134,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         registration.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, RegistrationTabActivity.class);
+                Intent intent = new Intent(LoginActivity.this, PhoneRegistration.class);
                 startActivity(intent);
             }
         });
@@ -255,6 +255,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     if (answ!= null && answ == true){
                         startActivity( new Intent(LoginActivity.this, ProfileActivity.class));
                     }
+                }
+
+                @Override
+                public void errorHandle(String message){
+
                 }
             });
             //mAuthTask = new UserLoginTask(email, password);

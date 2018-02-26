@@ -26,7 +26,7 @@ public class AddWitcherInContractRequest extends TokenServerRequest<Boolean> {
     protected ServerMethod getMethod() {
 
         HashMap<String, Object> params = new HashMap<>();
-        params.put("id_contract", id_contract);
+        params.put("id", id_contract);
 
         return new ServerMethod(ADD_WITCHER_IN_CONTRACT_METHOD_NAME, params);
     }
