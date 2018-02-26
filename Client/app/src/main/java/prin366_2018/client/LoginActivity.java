@@ -256,6 +256,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         startActivity( new Intent(LoginActivity.this, ProfileActivity.class));
                     }
                 }
+
+                @Override
+                public void errorHandle(String message){
+
+                }
             });
             //mAuthTask = new UserLoginTask(email, password);
             //mAuthTask.execute((Void) null);

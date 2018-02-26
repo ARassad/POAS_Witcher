@@ -16,15 +16,17 @@ import android.widget.TextView;
 public class ResponderFragment extends Fragment {
 
     private String respond, icon;
+    private long id_witcher;
 
     public ResponderFragment() {
         // Required empty public constructor
     }
 
     @SuppressLint("ValidFragment")
-    public ResponderFragment(String respond, String icon) {
+    public ResponderFragment(String respond, long id_witcher) {
         this.respond = respond;
-        this.icon = icon;
+        this.icon = null;
+        this.id_witcher = id_witcher;
     }
 
     @Override
@@ -34,6 +36,7 @@ public class ResponderFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_responder, container, false);
         ((TextView)view.findViewById(R.id.text_responder)).setText(respond);
         ((TextView)view.findViewById(R.id.text_status_responder)).setText(icon);
+        ((TextView)view.findViewById(R.id.id_respond)).setText(String.valueOf(id_witcher));
         return view;
     }
 

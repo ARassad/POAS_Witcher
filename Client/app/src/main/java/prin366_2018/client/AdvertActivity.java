@@ -32,6 +32,7 @@ import ServerExchange.Location;
 import ServerExchange.Profile;
 import ServerExchange.ProfilePart;
 import ServerExchange.ServerRequests.AddCommentContractRequest;
+import ServerExchange.ServerRequests.AddWitcherInContractRequest;
 import ServerExchange.ServerRequests.GetAdvertRequest;
 import ServerExchange.ServerRequests.GetAdvertsRequest;
 import ServerExchange.ServerRequests.GetCommentsRequest;
@@ -127,9 +128,12 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
         @Override
         public void handle(ArrayList<ProfilePart> answ) {
-            for (ProfilePart profile : answ){
-                //TODO: Заполнять список
+            if (LoginRequest.getLoggedUserType() == Profile.ProfileType.CUSTOMER){
+                for (ProfilePart profile : answ){
+                    setNewResponder(profile.getName(), profile.getId());
+                }
             }
+
         }
     }
 
@@ -143,6 +147,16 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
         @Override
         public void handle(Boolean answ) {
+
+        }
+    }
+
+    private AddWitcherInContractRequest addWitcherInContractRequest = new AddWitcherInContractRequest();
+    private class onAddWitcherInContractAnswer extends DefaultServerAnswerHandler<Boolean>{
+        public onAddWitcherInContractAnswer(Context context) {super(context);}
+
+        @Override
+        public void handle (Boolean answ){
 
         }
     }
@@ -249,6 +263,18 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
         typeface = Typeface.createFromAsset(getAssets(), "fonts/fa-solid-900.ttf");
 
+        Button buttonRespond = (Button)findViewById(R.id.button_respond);
+        buttonRespond.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (LoginRequest.getLoggedUserType()== Profile.ProfileType.WITCHER)
+                    addWitcherInContractRequest.addWitcherInContract(advertId, new onAddWitcherInContractAnswer(AdvertActivity.this));
+            }
+        });
+
+
+
+
         Button buttonSendComment = (Button)findViewById(R.id.imagebutton_send_comment);
         buttonSendComment.setTypeface(typeface);
         buttonSendComment.setText("\uf1d8");
@@ -329,10 +355,10 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         });
     }
 
-    private void setNewResponder(String witcher, String icon) {
+    private void setNewResponder(String witcher, long id) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
-        ResponderFragment respond = new ResponderFragment(witcher, icon);
+        ResponderFragment respond = new ResponderFragment(witcher, id);
         ft.add(R.id.list_responders, respond);
         ft.commit();
     }
