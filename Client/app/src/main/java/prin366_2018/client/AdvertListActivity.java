@@ -27,7 +27,10 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import ServerExchange.Advert;
 import ServerExchange.Profile;
@@ -35,8 +38,59 @@ import ServerExchange.ServerRequests.GetAdvertsRequest;
 import ServerExchange.ServerRequests.LoginRequest;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
 
+
 public class AdvertListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SortingFragment.OnFragmentInteractionListener {
+
+    private int freeAdvertsSortingId = -1, witcherChosenSotringId=-1, witcherNotChosenSotringId=-1, completedSotringId=-1, subscribedSotringId=-1;
+
+    @Override
+    public void onFragmentInteraction(int fragmentId, GetAdvertsRequest.SortType sortType, GetAdvertsRequest.OrderType orderType, GetAdvertsRequest.FilterType filterType, String kingdomFilter, String cityFilter, Integer minReward, Integer maxReward) {
+        if (LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER){
+            GroupAdvert groupAdvert = GroupAdvert.ALL_ADVERT;
+            Advert.AdvertStatus advertStatus = Advert.AdvertStatus.FREE;
+            if (fragmentId == freeAdvertsSortingId)         { groupAdvert = GroupAdvert.ALL_ADVERT; advertStatus = Advert.AdvertStatus.FREE;}
+            else if (fragmentId==completedSotringId)        { groupAdvert = GroupAdvert.EXECUTED;   advertStatus = Advert.AdvertStatus.COMPLETED; }
+            else if (fragmentId==subscribedSotringId)       { groupAdvert = GroupAdvert.SUBSRIBED;  advertStatus = Advert.AdvertStatus.FREE; }
+
+
+            OnGetAdverts onGetAdverts = new OnGetAdverts(AdvertListActivity.this, groupAdvert);
+            if (filterType == GetAdvertsRequest.FilterType.BY_LOCATE) {
+                getAdvertsRequest.getWitcherFilteredByLocation(advertStatus, filterType, sortType, orderType, kingdomFilter, cityFilter, onGetAdverts);
+            } else if (filterType == GetAdvertsRequest.FilterType.BY_REWARD) {
+                minReward = minReward == null ? 0 : minReward;
+                maxReward = maxReward == null ? Integer.MAX_VALUE : maxReward;
+
+                getAdvertsRequest.getWitcherFilteredByReward(advertStatus, filterType, minReward, maxReward, sortType, orderType, onGetAdverts);
+            } else {
+                getAdvertsRequest.getWitcherSortedBy(advertStatus, sortType, orderType, onGetAdverts);
+            }
+        }
+        else {
+            GroupAdvert groupAdvert = GroupAdvert.ALL_ADVERT;
+            Advert.AdvertStatus advertStatus = Advert.AdvertStatus.FREE;
+            if (fragmentId == freeAdvertsSortingId)            { groupAdvert = GroupAdvert.ALL_ADVERT;          advertStatus = Advert.AdvertStatus.FREE;}
+            else if (fragmentId == witcherChosenSotringId)     { groupAdvert = GroupAdvert.WITCHER_CHOSEN;      advertStatus = Advert.AdvertStatus.ASSIGNED_WITCHER;}
+            else if (fragmentId==witcherNotChosenSotringId)    { groupAdvert = GroupAdvert.WITCHER_NOT_CHOSEN;  advertStatus = Advert.AdvertStatus.FREE;}
+
+
+            OnGetAdverts onGetAdverts = new OnGetAdverts(AdvertListActivity.this, groupAdvert);
+
+            if (filterType == GetAdvertsRequest.FilterType.BY_LOCATE) {
+                getAdvertsRequest.getClientFilteredByLocation(advertStatus, filterType, sortType, orderType, kingdomFilter, cityFilter, onGetAdverts);
+            } else if (filterType == GetAdvertsRequest.FilterType.BY_REWARD) {
+                minReward = minReward == null ? 0 : minReward;
+                maxReward = maxReward == null ? Integer.MAX_VALUE : maxReward;
+
+                getAdvertsRequest.getClientFilteredByReward(advertStatus, filterType, minReward, maxReward, sortType, orderType, onGetAdverts);
+            }
+            else{
+                getAdvertsRequest.getClientSortedBy(advertStatus, sortType, orderType, onGetAdverts);
+            }
+
+        }
+    }
+
 
     public enum GroupAdvert {
         ALL_ADVERT,//все объявления
@@ -44,31 +98,62 @@ public class AdvertListActivity extends AppCompatActivity
         WITCHER_CHOSEN, //ведьмак выбран
         DURING, //Исполняются
         SUBSRIBED, //Подписаны
-        EXECUTED //Исполнены
+        EXECUTED; //Исполнены
+
+        private static Integer all, chosen, notchosen, dur, subsr, execut;
+        public static void init(){
+            all = R.id.all_advert;
+            chosen = R.id.adlist_witcher_chosen;
+            notchosen = R.id.adlist_witcher_not_chosen;
+            dur = R.id.adlist_during;
+            subsr = R.id.adlist_subsribed;
+            execut = R.id.adlist_executed;
+        }
+        public int toIdXml(){
+            switch (this) {
+                case ALL_ADVERT:
+                    return all;
+                case WITCHER_NOT_CHOSEN:
+                    return notchosen;
+                case WITCHER_CHOSEN:
+                    return chosen;
+                case DURING:
+                    return  dur;
+                case SUBSRIBED:
+                    return subsr;
+                case EXECUTED:
+                    return execut;
+                default: throw new RuntimeException("Добавил в GroupAdvert новое значение? Добавь и в метод toIdXml");
+            }
+        }
+
+
     };
     private static final int NEW_ADVERT = 2222;
 
     GetAdvertsRequest getAdvertsRequest = new GetAdvertsRequest();
 
-    class onGetAverts extends DefaultServerAnswerHandler<LinkedList<Advert>> {
+    class OnGetAdverts extends DefaultServerAnswerHandler<LinkedList<Advert>> {
 
-        public onGetAverts(Context context) {
+        public OnGetAdverts(Context context) {
             super(context);
         }
 
-        private GroupAdvert group = GroupAdvert.ALL_ADVERT;
-        public onGetAverts(Context cont, GroupAdvert group){
-            super(cont);
+        private GroupAdvert group;
+        public OnGetAdverts(Context context, GroupAdvert group){
+            super(context);
             this.group = group;
         }
 
         @Override
         public void handle( LinkedList<Advert> answ) {
-
+            refillAdvertsList(group, answ);
+            /*
             for (Advert advert : answ){
                 //TODO: Возможны баги с id long  в int
-                setNewAdvert(this.group, advert.getName(), advert.getInfo(), advert.getKingdom(), advert.getCity(), String.valueOf(advert.getReward()), advert.getId());
+                setNewAdvert(group, advert.getName(), advert.getInfo(), advert.getKingdom(), advert.getCity(), String.valueOf(advert.getReward()), advert.getId());
             }
+            */
         }
     }
 
@@ -83,6 +168,8 @@ public class AdvertListActivity extends AppCompatActivity
 
         ((TextView)findViewById(R.id.window_title)).setText("Объявл..");
         ((TextView)findViewById(R.id.window_title)).setTextSize(14);
+
+        GroupAdvert.init();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -114,7 +201,7 @@ public class AdvertListActivity extends AppCompatActivity
             buttonAddAdvert.setVisibility(View.GONE);
         }
 
-        //advertListSetting(false, false);
+        advertListSetting(LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER, true);
 
         setButton((Button)findViewById(R.id.button_witcher_not_chosen), findViewById(R.id.form_witcher_not_chosen));
         setButton((Button)findViewById(R.id.button_witcher_chosen), findViewById(R.id.form_witcher_chosen));
@@ -131,34 +218,42 @@ public class AdvertListActivity extends AppCompatActivity
             }
         });
 
-        //deleteAdvert(GroupAdvert.ALL_ADVERTS);
-        getAdvertsRequest.getFreeSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new onGetAverts(AdvertListActivity.this));
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        freeAdvertsSortingId = R.id.free_adverts_sort;
+        witcherChosenSotringId = R.id.witcher_chosen_sort;
+        witcherNotChosenSotringId = R.id.witcher_not_chosen_adverts_sort;
+        subscribedSotringId = witcherNotChosenSotringId;
+        completedSotringId = witcherChosenSotringId;
+        SortingFragment freeAdvertsSorting  = (SortingFragment) fragmentManager.findFragmentById(R.id.free_adverts_sort);
+        SortingFragment inProcessAdvertsSorting = (SortingFragment) fragmentManager.findFragmentById(R.id.witcher_not_chosen_adverts_sort);
+        SortingFragment completedAdvertsSorting = (SortingFragment) fragmentManager.findFragmentById(R.id.witcher_chosen_sort);
+        SortingFragment witcherNotChoosen = (SortingFragment) fragmentManager.findFragmentById(R.id.witcher_not_chosen_adverts_sort);
+        SortingFragment witcherChoosen = (SortingFragment) fragmentManager.findFragmentById(R.id.witcher_chosen_sort);
+
+        getAdvertsRequest.getFreeSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new OnGetAdverts(AdvertListActivity.this, GroupAdvert.ALL_ADVERT));
+
+        if ( LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER){
+            OnGetAdverts onGetAdvertsFillDuring = new OnGetAdverts(AdvertListActivity.this, GroupAdvert.DURING);
+            getAdvertsRequest.getWitcherSortedBy(Advert.AdvertStatus.IN_PROCESS, GetAdvertsRequest.SortType.BY_ALPHABET, onGetAdvertsFillDuring);
+        }
     }
 
+    private void refillAdvertsList(GroupAdvert groupAdvert,  List<Advert> adverts ){
+
+        ((LinearLayout)findViewById(groupAdvert.toIdXml())).removeAllViews();
+        for( Advert advert: adverts){
+            setNewAdvert(groupAdvert, advert.getName(), advert.getInfo(), advert.getKingdom(), advert.getCity(), String.valueOf(advert.getReward()), advert.getId());
+        }
+    }
     private void setNewAdvert(GroupAdvert id, String title, String description, String kingdom, String city, String cost, long advertId) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
         AdvertFragment newRow = new AdvertFragment(title, description, kingdom, city, cost, advertId);
-        int idxml = R.id.all_advert;
-        switch (id) {
-            case WITCHER_NOT_CHOSEN:
-                idxml = R.id.adlist_witcher_not_chosen;
-                break;
-            case WITCHER_CHOSEN:
-                idxml = R.id.adlist_witcher_chosen;
-                break;
-            case DURING:
-                idxml = R.id.adlist_during;
-                break;
-            case SUBSRIBED:
-                idxml = R.id.adlist_subsribed;
-                break;
-            case EXECUTED:
-                idxml = R.id.adlist_executed;
-                break;
-        }
+        int idxml = id.toIdXml();
+
         ft.add(idxml, newRow);
         ft.commit();
+
     }
 
     private void deleteAdverts(GroupAdvert id) {
@@ -287,8 +382,4 @@ public class AdvertListActivity extends AppCompatActivity
         });
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-        String stop = "debug";
-    }
 }

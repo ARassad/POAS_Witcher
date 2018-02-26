@@ -34,29 +34,44 @@ public class GetAdvertsRequest extends TokenServerRequest < LinkedList<Advert>> 
 
     private String METHOD_NAME ;
     private final String GET_FREE_ADVERTS_LIST = "Get_list_contract";
-    private final String GET_WITCHER_ADVERTS_LIST = "Get_list_contract";
-    private final String GET_CLIENT_ADVERTS_LIST= "Get_list_contract";
+    private final String GET_WITCHER_ADVERTS_LIST = "GetContractWitcher";
+    private final String GET_CLIENT_ADVERTS_LIST=   "GetContractClient";
 
-    private enum FilterType{
+
+    public enum FilterType{
         BY_LOCATE,
         BY_REWARD;
-        String toServerParam(){
+        public String toServerParam(){
             switch (this){
                 case BY_LOCATE: return "locate";
                 case BY_REWARD: return "bounty";
                 default: throw new RuntimeException("Добавь новый тип в метод GetAdvertsRequest.FilterType.toServerParams");
             }
         }
+        public static  FilterType fromInt(int type){
+            switch (type){
+                case 0 : return BY_REWARD;
+                case 1 : return BY_LOCATE;
+                default: throw new RuntimeException("не знаю такого фильтра");
+            }
+        }
     };
 
-    private enum OrderType{
+    public enum OrderType{
         IN_ASCENDING,
         IN_DESCENDING;
-        String toServerParam(){
+        public String toServerParam(){
             switch (this){
                 case IN_ASCENDING: return "asc";
                 case IN_DESCENDING: return "desc";
                 default: throw new RuntimeException("Добавь новый тип в метод GetAdvertsRequest.OrderType.toServerParams");
+            }
+        }
+        public static OrderType fromInt(int type){
+            switch (type){
+                case 0 : return  IN_ASCENDING;
+                case 1 : return  IN_DESCENDING;
+                default: throw  new RuntimeException("Не знаю такого порядка");
             }
         }
     };
@@ -66,12 +81,20 @@ public class GetAdvertsRequest extends TokenServerRequest < LinkedList<Advert>> 
         BY_ALPHABET,
         BY_DATE,
         BY_LOCATE;
-        String toServerParams() {
+        public String toServerParams() {
             switch (this) {
                 case BY_LOCATE: return "locate";
                 case BY_DATE:   return "lastupdate";
                 case BY_ALPHABET: return "alph";
                 default: throw new RuntimeException("Добавь новый тип в метод GetAdvertsRequest.SortType.toServerParams");
+            }
+        }
+        public static SortType fromInt(int type){
+            switch (type){
+                case 0 : return BY_ALPHABET;
+                case 1 : return BY_LOCATE;
+                case 2 : return BY_DATE;
+                default: throw  new RuntimeException("Не знаю такого типа сортировки");
             }
         }
     }
@@ -86,7 +109,7 @@ public class GetAdvertsRequest extends TokenServerRequest < LinkedList<Advert>> 
     private FilterType filterType;
     private int minmax[] = new int[2];
     private Location loc;
-
+    private Advert.AdvertStatus status;
 
 
 
@@ -116,11 +139,16 @@ public class GetAdvertsRequest extends TokenServerRequest < LinkedList<Advert>> 
 
         }
 
+        if (status != null){
+            params.put("status", status.toInt());
+        }
+
         this.sortType = DEFAULT_SORT_TYPE;
         this.orderType = DEFAULT_ORDER_TYPE;
         this.filterType = null;
         this.minmax = null;
         this.loc = null;
+        this.status = null;
 
         return new ServerMethod(METHOD_NAME, params);
     }
@@ -155,13 +183,15 @@ public class GetAdvertsRequest extends TokenServerRequest < LinkedList<Advert>> 
         public LinkedList<Advert> convert() {
             LinkedList<Advert> adverts = new LinkedList<>();
             LocationsList locsList = LocationsList.getInstance();
-            for (Map.Entry<String, JsonObj.OneContractJson> key_contract : object.contracts.entrySet()){
-                JsonObj.OneContractJson contract = key_contract.getValue();
-                java.util.Date update_time = new java.util.Date(contract.last_update * 1000);
-                Advert.AdvertStatus st = Advert.AdvertStatus.fromInt(contract.status);
-                Location loc = locsList.getById(contract.id_task_located);
-                Advert advert = new Advert(contract.id, contract.header, contract.text, null, loc, contract.bounty, contract.id_client,"", null, contract.id_witcher, "", st, update_time, null);
-                adverts.addLast(advert);
+            if (object != null && object.contracts!= null) {
+                for (Map.Entry<String, JsonObj.OneContractJson> key_contract : object.contracts.entrySet()) {
+                    JsonObj.OneContractJson contract = key_contract.getValue();
+                    java.util.Date update_time = new java.util.Date(contract.last_update * 1000);
+                    Advert.AdvertStatus st = Advert.AdvertStatus.fromInt(contract.status);
+                    Location loc = locsList.getById(contract.id_task_located);
+                    Advert advert = new Advert(contract.id, contract.header, contract.text, null, loc, contract.bounty, contract.id_client, "", null, contract.id_witcher, "", st, update_time, null);
+                    adverts.addLast(advert);
+                }
             }
             return adverts;
         }
@@ -223,115 +253,129 @@ public class GetAdvertsRequest extends TokenServerRequest < LinkedList<Advert>> 
         startRequest(onGetListHandler);
     }
 
-    public void getWitcherSortedBy (SortType sort, OrderType order, IServerAnswerHandler onGetListHandler ){
+    public void getWitcherSortedBy (Advert.AdvertStatus status, SortType sort, OrderType order, IServerAnswerHandler onGetListHandler ){
         METHOD_NAME = GET_WITCHER_ADVERTS_LIST;
         this.sortType = sort;
         this.orderType = order;
+        this.status = status;
         startRequest(onGetListHandler);
     }
 
-    public void getWitcherSortedBy (SortType sort, IServerAnswerHandler onGetListHandler ){
+    public void getWitcherSortedBy (Advert.AdvertStatus status, SortType sort, IServerAnswerHandler onGetListHandler ){
         METHOD_NAME = GET_WITCHER_ADVERTS_LIST;
         this.sortType = sort;
+        this.status = status;
         startRequest(onGetListHandler);
     }
 
-    public void getWitcherFilteredByReward (FilterType type, int min, int max, IServerAnswerHandler onGetListHandler){
+    public void getWitcherFilteredByReward ( Advert.AdvertStatus status, FilterType type, int min, int max, IServerAnswerHandler onGetListHandler){
         METHOD_NAME = GET_WITCHER_ADVERTS_LIST;
         this.filterType = type;
         minmax[0] = min;
         minmax[1] = max;
+        this.status = status;
         startRequest(onGetListHandler);
     }
 
-    public void getWitcherFilteredByReward (FilterType type, int min, int max, SortType sort, IServerAnswerHandler onGetListHandler){
+    public void getWitcherFilteredByReward ( Advert.AdvertStatus status, FilterType type, int min, int max, SortType sort, IServerAnswerHandler onGetListHandler){
         METHOD_NAME = GET_WITCHER_ADVERTS_LIST;
         this.filterType = type;
         this.sortType = sort;
         minmax[0] = min;
         minmax[1] = max;
+        this.status = status;
         startRequest(onGetListHandler);
     }
 
-    public void getWitcherFilteredByReward (FilterType type, int min, int max, SortType sort, OrderType order, IServerAnswerHandler onGetListHandler){
+    public void getWitcherFilteredByReward ( Advert.AdvertStatus status, FilterType type, int min, int max, SortType sort, OrderType order, IServerAnswerHandler onGetListHandler){
         METHOD_NAME = GET_WITCHER_ADVERTS_LIST;
-        this.filterType = type;
-        this.sortType = sort;
-        this.orderType = order;
-        minmax[0] = min;
-        minmax[1] = max;
-        startRequest(onGetListHandler);
-    }
-
-    public void getWitcherFilteredByLocation (FilterType type, SortType sort, String kingdom, String town, IServerAnswerHandler onGetListHandler){
-        METHOD_NAME = GET_WITCHER_ADVERTS_LIST;
-        this.sortType = sort;
-        this.filterType = type;
-        loc = new Location(kingdom, town);
-        startRequest(onGetListHandler);
-    }
-
-    public void getWitcherFilteredByLocation (FilterType type, SortType sort, OrderType order, String kingdom, String town, IServerAnswerHandler onGetListHandler){
-        METHOD_NAME = GET_WITCHER_ADVERTS_LIST;
-        this.sortType = sort;
-        this.filterType = type;
-        loc = new Location(kingdom, town);
-        startRequest(onGetListHandler);
-    }
-
-    public void getClientSortedBy (SortType sort, OrderType order, IServerAnswerHandler onGetListHandler ){
-        METHOD_NAME = GET_CLIENT_ADVERTS_LIST;
-        this.sortType = sort;
-        this.orderType = order;
-        startRequest(onGetListHandler);
-    }
-
-    public void getClientSortedBy (SortType sort, IServerAnswerHandler onGetListHandler ){
-        METHOD_NAME = GET_CLIENT_ADVERTS_LIST;
-        this.sortType = sort;
-        startRequest(onGetListHandler);
-    }
-
-    public void getClientFilteredByReward (FilterType type, int min, int max, IServerAnswerHandler onGetListHandler){
-        METHOD_NAME = GET_CLIENT_ADVERTS_LIST;
-        this.filterType = type;
-        minmax[0] = min;
-        minmax[1] = max;
-        startRequest(onGetListHandler);
-    }
-
-    public void getClientFilteredByReward (FilterType type, int min, int max, SortType sort, IServerAnswerHandler onGetListHandler){
-        METHOD_NAME = GET_CLIENT_ADVERTS_LIST;
-        this.filterType = type;
-        this.sortType = sort;
-        minmax[0] = min;
-        minmax[1] = max;
-        startRequest(onGetListHandler);
-    }
-
-    public void getClientFilteredByReward (FilterType type, int min, int max, SortType sort, OrderType order, IServerAnswerHandler onGetListHandler){
-        METHOD_NAME = GET_CLIENT_ADVERTS_LIST;
         this.filterType = type;
         this.sortType = sort;
         this.orderType = order;
         minmax[0] = min;
         minmax[1] = max;
+        this.status = status;
         startRequest(onGetListHandler);
     }
 
-    public void getClientFilteredByLocation (FilterType type, SortType sort, String kingdom, String town, IServerAnswerHandler onGetListHandler){
+    public void getWitcherFilteredByLocation ( Advert.AdvertStatus status, FilterType type, SortType sort, String kingdom, String town, IServerAnswerHandler onGetListHandler){
+        METHOD_NAME = GET_WITCHER_ADVERTS_LIST;
+        this.sortType = sort;
+        this.filterType = type;
+        loc = new Location(kingdom, town);
+        this.status = status;
+        startRequest(onGetListHandler);
+    }
+
+    public void getWitcherFilteredByLocation ( Advert.AdvertStatus status, FilterType type, SortType sort, OrderType order, String kingdom, String town, IServerAnswerHandler onGetListHandler){
+        METHOD_NAME = GET_WITCHER_ADVERTS_LIST;
+        this.sortType = sort;
+        this.filterType = type;
+        loc = new Location(kingdom, town);
+        this.status = status;
+        startRequest(onGetListHandler);
+    }
+
+    public void getClientSortedBy (Advert.AdvertStatus status, SortType sort, OrderType order, IServerAnswerHandler onGetListHandler ){
+        METHOD_NAME = GET_CLIENT_ADVERTS_LIST;
+        this.sortType = sort;
+        this.orderType = order;
+        this.status = status;
+        startRequest(onGetListHandler);
+    }
+
+    public void getClientSortedBy ( Advert.AdvertStatus status, SortType sort, IServerAnswerHandler onGetListHandler ){
+        METHOD_NAME = GET_CLIENT_ADVERTS_LIST;
+        this.sortType = sort;
+        this.status = status;
+        startRequest(onGetListHandler);
+    }
+
+    public void getClientFilteredByReward ( Advert.AdvertStatus status, FilterType type, int min, int max, IServerAnswerHandler onGetListHandler){
+        METHOD_NAME = GET_CLIENT_ADVERTS_LIST;
+        this.filterType = type;
+        minmax[0] = min;
+        minmax[1] = max;
+        this.status = status;
+        startRequest(onGetListHandler);
+    }
+
+    public void getClientFilteredByReward ( Advert.AdvertStatus status, FilterType type, int min, int max, SortType sort, IServerAnswerHandler onGetListHandler){
+        METHOD_NAME = GET_CLIENT_ADVERTS_LIST;
+        this.filterType = type;
+        this.sortType = sort;
+        minmax[0] = min;
+        minmax[1] = max;
+        this.status = status;
+        startRequest(onGetListHandler);
+    }
+
+    public void getClientFilteredByReward ( Advert.AdvertStatus status, FilterType type, int min, int max, SortType sort, OrderType order, IServerAnswerHandler onGetListHandler){
+        METHOD_NAME = GET_CLIENT_ADVERTS_LIST;
+        this.filterType = type;
+        this.sortType = sort;
+        this.orderType = order;
+        minmax[0] = min;
+        minmax[1] = max;
+        this.status = status;
+        startRequest(onGetListHandler);
+    }
+
+    public void getClientFilteredByLocation ( Advert.AdvertStatus status, FilterType type, SortType sort, String kingdom, String town, IServerAnswerHandler onGetListHandler){
         METHOD_NAME = GET_CLIENT_ADVERTS_LIST;
         this.sortType = sort;
         this.filterType = type;
         loc = new Location(kingdom, town);
+        this.status = status;
         startRequest(onGetListHandler);
     }
 
-    public void getClientFilteredByLocation (FilterType type, SortType sort, OrderType order, String kingdom, String town, IServerAnswerHandler onGetListHandler){
+    public void getClientFilteredByLocation ( Advert.AdvertStatus status, FilterType type, SortType sort, OrderType order, String kingdom, String town, IServerAnswerHandler onGetListHandler){
         METHOD_NAME = GET_CLIENT_ADVERTS_LIST;
         this.sortType = sort;
         this.filterType = type;
         loc = new Location(kingdom, town);
+        this.status = status;
         startRequest(onGetListHandler);
     }
 }
