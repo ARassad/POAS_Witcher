@@ -15,8 +15,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -119,6 +121,7 @@ public class AdvertListActivity extends AppCompatActivity
         setButton((Button)findViewById(R.id.button_during), findViewById(R.id.adlist_during));
         setButton((Button)findViewById(R.id.button_executed), findViewById(R.id.adlist_executed));
 
+        advertListSetting(LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER, false);
 
         ((Switch)findViewById(R.id.switch_advert)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -128,7 +131,7 @@ public class AdvertListActivity extends AppCompatActivity
             }
         });
 
-
+        //deleteAdvert(GroupAdvert.ALL_ADVERTS);
         getAdvertsRequest.getFreeSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new onGetAverts(AdvertListActivity.this));
     }
 
@@ -156,6 +159,32 @@ public class AdvertListActivity extends AppCompatActivity
         }
         ft.add(idxml, newRow);
         ft.commit();
+    }
+
+    private void deleteAdverts(GroupAdvert id) {
+        int idxml = R.id.all_advert;
+        switch (id) {
+            case WITCHER_NOT_CHOSEN:
+                idxml = R.id.adlist_witcher_not_chosen;
+                break;
+            case WITCHER_CHOSEN:
+                idxml = R.id.adlist_witcher_chosen;
+                break;
+            case DURING:
+                idxml = R.id.adlist_during;
+                break;
+            case SUBSRIBED:
+                idxml = R.id.adlist_subsribed;
+                break;
+            case EXECUTED:
+                idxml = R.id.adlist_executed;
+                break;
+        }
+        LinearLayout ll = (LinearLayout)findViewById(idxml);
+        int size = ll.getChildCount();
+        View sort = ll.getChildAt(0);
+        ((LinearLayout)ll).removeAllViews();
+        ((LinearLayout)ll).addView(sort);
     }
 
 
