@@ -8,6 +8,7 @@ class EventGetListContracts(Enum):
     MinParamMiss = "ParamMinMissing"
     MaxParamMiss = "ParamMaxMissing"
     TownParamMiss = "townParamMissing"
+    StatusParamMiss = "statusParamMissing"
     FilterLocateErr = "MissingTownandKingdomParams"
     SortErr = "ParamsSortError"
 
@@ -34,6 +35,7 @@ class Params:
     Max = "max"
     Town = "town"
     Kingdom = "kingdom"
+    Status = "status"
 
 
 def get_list_contracts(cursor, params):
@@ -225,7 +227,7 @@ def get_contract_witcher(cursor, params):
         id_witcher = row[0]
         req = 'select a.id, a.id_witcher, a.id_client, a.id_task_located, a.text, a.bounty, a.status, \
               a.last_update_status, a.last_update, a.header from Contract as a inner join Desired_Contract \
-              as b on b.id_contract = a.id where b.id_witcher={} and a.status<=3'.format(id_witcher)
+              as b on b.id_contract = a.id where b.id_witcher={}'.format(id_witcher)
         filtr = params.get(Params.Filter.Name)
         if filtr is not None:
             req += " and "
@@ -261,6 +263,10 @@ def get_contract_witcher(cursor, params):
                     if kingdom is not None:
                         req += " Town.id_kingdom in (select id from Kingdom where Kingdom.name = '{}'))".format(kingdom)
 
+        stat = params.get(Params.Status)
+        if stat is not None:
+            req += " and a.status={}".format(stat)
+
         sort = params.get(Params.Sort.Name)
         if sort is not None:
             req += " order by"
@@ -277,7 +283,6 @@ def get_contract_witcher(cursor, params):
             sort_type = params.get(Params.SortType.Name)
             if sort_type is not None and sort_type == Params.SortType.Desc:
                 req += " desc"
-
 
         cursor.execute(req)
         row = cursor.fetchall()
