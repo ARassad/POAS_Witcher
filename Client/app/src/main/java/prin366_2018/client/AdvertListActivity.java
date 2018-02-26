@@ -230,6 +230,11 @@ public class AdvertListActivity extends AppCompatActivity
             Intent intent = new Intent(AdvertListActivity.this, ProfileActivity.class);
             startActivity(intent);
         }
+        else if (id == R.id.nav_exit) {
+            Intent intent = new Intent(AdvertListActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

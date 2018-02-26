@@ -226,7 +226,7 @@ public class ProfileActivity extends AppCompatActivity
         //Метод установки новой строки в таблицу
         //setTableRow("18.03.2018", "Название", "Завершено");
         //Метод установки нового комментария
-        setNewComment(Bitmap.createBitmap(120, 160, Bitmap.Config.ARGB_8888), "Комментарий", "01.01.2001 - 19:00");
+        //setNewComment(Bitmap.createBitmap(120, 160, Bitmap.Config.ARGB_8888), "Комментарий", "01.01.2001 - 19:00");
 
 
 
@@ -283,6 +283,12 @@ public class ProfileActivity extends AppCompatActivity
             Intent intent = new Intent(ProfileActivity.this, AdvertListActivity.class);
             startActivity(intent);
         }
+        else if (id == R.id.nav_exit) {
+            Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

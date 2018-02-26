@@ -359,6 +359,11 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
             Intent intent = new Intent(AdvertActivity.this, ProfileActivity.class);
             startActivity(intent);
         }
+        else if (id == R.id.nav_exit) {
+            Intent intent = new Intent(AdvertActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
