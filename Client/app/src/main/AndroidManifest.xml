@@ -48,6 +48,11 @@
             android:name=".AdvertActivity"
             android:windowSoftInputMode="stateHidden">
         </activity>
+        <activity
+            android:name=".PhoneRegistration"
+            android:windowSoftInputMode="stateHidden"
+            android:configChanges="keyboard|orientation|screenSize">
+        </activity>
 
         <service
             android:name=".MyFirebaseMessagingService"

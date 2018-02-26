@@ -134,7 +134,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         registration.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, RegistrationTabActivity.class);
+                Intent intent = new Intent(LoginActivity.this, PhoneRegistration.class);
                 startActivity(intent);
             }
         });
