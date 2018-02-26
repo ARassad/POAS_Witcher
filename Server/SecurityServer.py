@@ -86,8 +86,9 @@ paramsRequests = {
                                                               'bounty': {'min': 'min', 'max': 'max'}},
                                                    'sort': {'alph': 'alph', 'locate': 'locate',
                                                             'lastupdate': 'lastupdate'},
-                                                   'sortype': {'asc': 'asc', 'desc': 'desc'}},
-                                        'min_params': 1, 'count': 6, 'type_req': 1},
+                                                   'sortype': {'asc': 'asc', 'desc': 'desc'},
+                                                   'status': 'status'},
+                                        'min_params': 1, 'count': 7, 'type_req': 1},
 
     ApiMethod.GetContractWitcher.value: {'params': {'token': 'token',
                                                     'filter': {'locate': {'town': 'town', 'kingdom': 'kingdom'},

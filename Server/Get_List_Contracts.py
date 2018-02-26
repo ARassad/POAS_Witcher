@@ -170,6 +170,10 @@ def get_contract_client(cursor, params):
                     if kingdom is not None:
                         req += " Town.id_kingdom in (select id from Kingdom where Kingdom.name = '{}'))".format(kingdom)
 
+        stat = params.get(Params.Status)
+        if stat is not None:
+            req += " and a.status={} ".format(stat)
+
         sort = params.get(Params.Sort.Name)
         if sort is not None:
             req += " order by"

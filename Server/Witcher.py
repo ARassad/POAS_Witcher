@@ -2,6 +2,7 @@ from Server.Objects import Object
 from Server.Objects import Status
 from Server.Advert import Advert
 from Server.Profile import User
+from Server.Advert import create_advert
 from Server.FCM import send_firebase_push
 from enum import Enum
 Advert.IDpost = "id_contract"
@@ -83,6 +84,19 @@ def answer_witcher(cursor, params):
 
 def refuse_contract(cursor, params):
     # создать копию объявления в зависимости от отказа и выставить статус
+    st = 4
+    cursor.execute("select * from Client where id_profile=(select id_profile from Token_Table where token='{}')"
+                   .format(params[User.Token.value]))
+    row = cursor.fetchone()
+    if row is None:
+        cursor.execute("select * from ")
+        #token
+    else:
+        st = 5
+
+
+
+
     status = Object()
     cursor.execute("update Contract set id_witcher=null status=0 where id={}"
                    .format(params[Advert.IDpost]))
