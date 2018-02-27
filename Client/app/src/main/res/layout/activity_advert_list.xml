@@ -37,16 +37,28 @@
                 android:layout_height="match_parent"
                 android:gravity="end">
 
+                <Button
+                    android:id="@+id/button_update_list"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/colorMain"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorHeader"
+                    android:contentDescription="Обновить" />
+
                 <Switch
                     android:id="@+id/switch_advert"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
-                    android:textSize="8sp"
                     android:checked="true"
+                    android:showText="true"
                     android:textOff="Все"
-                    android:textOn="Свои"/>
+                    android:textOn="Свои"
+                    android:textSize="8sp" />
 
                 <Button
                     android:id="@+id/button_add_advert"
