@@ -1,0 +1,876 @@
+[1mdiff --git a/Client/app/src/main/AndroidManifest.xml b/Client/app/src/main/AndroidManifest.xml[m
+[1mindex a21c04e..f285ad2 100644[m
+[1m--- a/Client/app/src/main/AndroidManifest.xml[m
+[1m+++ b/Client/app/src/main/AndroidManifest.xml[m
+[36m@@ -24,15 +24,18 @@[m
+         </activity>[m
+ [m
+         <activity[m
+[31m-            android:name=".ProfileActivity">[m
+[31m-[m
+[32m+[m[32m            android:name=".ProfileActivity"[m
+[32m+[m[32m            android:windowSoftInputMode="stateHidden">[m
+         </activity>[m
+ [m
+         <activity[m
+[31m-            android:name=".EditProfileActivity">[m
+[31m-[m
+[32m+[m[32m            android:name=".EditProfileActivity"[m
+[32m+[m[32m            android:windowSoftInputMode="stateHidden">[m
+         </activity>[m
+ [m
+[32m+[m[32m        <activity[m
+[32m+[m[32m            android:name=".AdvertListActivity">[m
+[32m+[m[32m        </activity>[m
+     </application>[m
+ [m
+ </manifest>[m
+\ No newline at end of file[m
+[1mdiff --git a/Client/app/src/main/java/ServerExchange/Location.java b/Client/app/src/main/java/ServerExchange/Location.java[m
+[1mindex 946407d..2b67d8b 100644[m
+[1m--- a/Client/app/src/main/java/ServerExchange/Location.java[m
+[1m+++ b/Client/app/src/main/java/ServerExchange/Location.java[m
+[36m@@ -10,17 +10,29 @@[m [mpackage ServerExchange;[m
+  * @author dryush[m
+  */[m
+ public class Location {[m
+[31m-    String kingdom;[m
+[32m+[m[32m    private String kingdom;[m
+     public String getKingdom(){[m
+         return kingdom;[m
+     }[m
+     [m
+[31m-    String city;[m
+[32m+[m[32m    private String city;[m
+     public String getCity(){[m
+         return city;[m
+     }[m
+ [m
+[31m-    public Location(String kingdom, String city){[m
+[32m+[m[32m    private Long id;[m
+[32m+[m[32m    public long getId(){[m
+[32m+[m[32m        return id;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    public Location(long id, String kingdom, String city){[m
+[32m+[m[32m        this.id = id;[m
+[32m+[m[32m        this.kingdom = kingdom;[m
+[32m+[m[32m        this.city = city;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m
+[32m+[m[32m    public Location( String kingdom, String city){[m
+         this.kingdom = kingdom;[m
+         this.city = city;[m
+     }[m
+[1mdiff --git a/Client/app/src/main/java/ServerExchange/LocationsList.java b/Client/app/src/main/java/ServerExchange/LocationsList.java[m
+[1mnew file mode 100644[m
+[1mindex 0000000..cfdf2f1[m
+[1m--- /dev/null[m
+[1m+++ b/Client/app/src/main/java/ServerExchange/LocationsList.java[m
+[36m@@ -0,0 +1,85 @@[m
+[32m+[m[32mpackage ServerExchange;[m
+[32m+[m
+[32m+[m[32mimport android.support.annotation.NonNull;[m
+[32m+[m
+[32m+[m[32mimport java.util.HashMap;[m
+[32m+[m[32mimport java.util.HashSet;[m
+[32m+[m[32mimport java.util.LinkedList;[m
+[32m+[m[32mimport java.util.TreeMap;[m
+[32m+[m[32mimport java.util.TreeSet;[m
+[32m+[m
+[32m+[m[32mimport ServerExchange.ServerRequests.GetLocationsListRequest;[m
+[32m+[m[32mimport ServerExchange.ServerRequests.IServerAnswerHandler;[m
+[32m+[m
+[32m+[m[32m/**[m
+[32m+[m[32m * Created by Dryush on 20.02.2018.[m
+[32m+[m[32m */[m
+[32m+[m
+[32m+[m[32mpublic class LocationsList {[m
+[32m+[m
+[32m+[m[32m    public static class City implements Comparable{[m
+[32m+[m[32m        private long id;[m
+[32m+[m[32m        public long getId(){[m
+[32m+[m[32m            return id;[m
+[32m+[m[32m        }[m
+[32m+[m[32m        private String name;[m
+[32m+[m[32m        public String getName(){[m
+[32m+[m[32m            return name;[m
+[32m+[m[32m        }[m
+[32m+[m[32m        public City(long id, String name){[m
+[32m+[m[32m            this.id = id;[m
+[32m+[m[32m            this.name = name;[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        @Override[m
+[32m+[m[32m        public int compareTo(@NonNull Object o) {[m
+[32m+[m[32m            City c = (City) o;[m
+[32m+[m[32m            return name.compareTo(c.name);[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m
+[32m+[m[32m        public int hashCode(){[m
+[32m+[m[32m            return name.hashCode();[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m[32m    private static TreeMap<String, TreeSet<City>> locs = new TreeMap<>();[m
+[32m+[m
+[32m+[m[32m    static class Filler implements IServerAnswerHandler< TreeMap<String, TreeSet<City>> >{[m
+[32m+[m
+[32m+[m[32m        @Override[m
+[32m+[m[32m        public void handle(TreeMap<String, TreeSet<City>> answ) {[m
+[32m+[m[32m            locs = answ;[m
+[32m+[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m
+[32m+[m[32m    }[m
+[32m+[m[32m    static Filler filler = new Filler();[m
+[32m+[m[32m    static GetLocationsListRequest request = new GetLocationsListRequest();[m
+[32m+[m[32m    public static void refillFromServer(){[m
+[32m+[m[32m        request.getLocations(filler);[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    private LocationsList(){[m
+[32m+[m[32m        if (locs.size() == 0){[m
+[32m+[m[32m            refillFromServer();[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    private static LocationsList inst = null;[m
+[32m+[m[32m    public static LocationsList getInstance(){[m
+[32m+[m[32m        if (inst == null){[m
+[32m+[m[32m            inst = new LocationsList();[m
+[32m+[m[32m        }[m
+[32m+[m[32m        return inst;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    public LinkedList<City> getCities(String kingdom){[m
+[32m+[m[32m        return new LinkedList<>(locs.get(kingdom));[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    public TreeSet<String> getKingdoms(){[m
+[32m+[m[32m        TreeSet<String> kingdms = (TreeSet<String>) locs.descendingKeySet();[m
+[32m+[m[32m        return kingdms;[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[1mdiff --git a/Client/app/src/main/java/ServerExchange/ProfilePart.java b/Client/app/src/main/java/ServerExchange/ProfilePart.java[m
+[1mnew file mode 100644[m
+[1mindex 0000000..bdfe0b5[m
+[1m--- /dev/null[m
+[1m+++ b/Client/app/src/main/java/ServerExchange/ProfilePart.java[m
+[36m@@ -0,0 +1,16 @@[m
+[32m+[m[32mpackage ServerExchange;[m
+[32m+[m
+[32m+[m[32m/**[m
+[32m+[m[32m * Created by Dryush on 20.02.2018.[m
+[32m+[m[32m */[m
+[32m+[m
+[32m+[m[32mpublic class ProfilePart {[m
+[32m+[m[32m    private long id;[m
+[32m+[m[32m    public long getId(){return id;};[m
+[32m+[m[32m    private String name;[m
+[32m+[m[32m    public String getName(){return name;}[m
+[32m+[m[32m    public ProfilePart(long id, String name){[m
+[32m+[m[32m        this.id = id;[m
+[32m+[m[32m        this.name = name;[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[1mdiff --git a/Client/app/src/main/java/ServerExchange/ServerRequests/AddCommentContractRequest.java b/Client/app/src/main/java/ServerExchange/ServerRequests/AddCommentContractRequest.java[m
+[1mnew file mode 100644[m
+[1mindex 0000000..0c8bb64[m
+[1m--- /dev/null[m
+[1m+++ b/Client/app/src/main/java/ServerExchange/ServerRequests/AddCommentContractRequest.java[m
+[36m@@ -0,0 +1,55 @@[m
+[32m+[m[32mpackage ServerExchange.ServerRequests;[m
+[32m+[m
+[32m+[m
+[32m+[m[32mimport java.io.IOException;[m
+[32m+[m[32mimport java.util.HashMap;[m
+[32m+[m
+[32m+[m[32m/**[m
+[32m+[m[32m * Created by Dima on 20.02.2018.[m
+[32m+[m[32m */[m
+[32m+[m
+[32m+[m[32mpublic class AddCommentContractRequest extends TokenServerRequest<Boolean> {[m
+[32m+[m
+[32m+[m[32m    @Override[m
+[32m+[m[32m    protected RequestType getRequestType(){ return RequestType.POST; }[m
+[32m+[m
+[32m+[m[32m    private String ADD_COMMENT_CONTRACT_METHOD_NAME = "AddCommentContract";[m
+[32m+[m
+[32m+[m[32m    private String text;[m
+[32m+[m[32m    private long profile_id;[m
+[32m+[m
+[32m+[m[32m    public AddCommentContractRequest(String address) {super(address);}[m
+[32m+[m[32m    public AddCommentContractRequest() {super();}[m
+[32m+[m
+[32m+[m
+[32m+[m[32m    @Override[m
+[32m+[m[32m    protected ServerMethod getMethod() {[m
+[32m+[m
+[32m+[m[32m        HashMap<String, Object> params = new HashMap<>();[m
+[32m+[m[32m        params.put("text", text);[m
+[32m+[m[32m        params.put("id", profile_id);[m
+[32m+[m
+[32m+[m[32m        return new ServerMethod(ADD_COMMENT_CONTRACT_METHOD_NAME, params);[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    class JsonAddCommentContractServerAnswer extends JsonServerAnswer{[m
+[32m+[m
+[32m+[m[32m        @Override[m
+[32m+[m[32m        public Boolean convert() {[m
+[32m+[m[32m            return isStatusOk();[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    @Override[m
+[32m+[m[32m    protected Class<? extends JsonServerAnswer> getJsonAnswerClass() {[m
+[32m+[m
+[32m+[m
+[32m+[m[32m        return AddCommentContractRequest.JsonAddCommentContractServerAnswer.class;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    public void addCommentContract(String text, long id, IServerAnswerHandler onAddCommentContractHandler)  {[m
+[32m+[m[32m        this.text = text;[m
+[32m+[m[32m        this.profile_id = id;[m
+[32m+[m[32m        startRequest(onAddCommentContractHandler);[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[1mdiff --git a/Client/app/src/main/java/ServerExchange/ServerRequests/AddCommentProfileRequest.java b/Client/app/src/main/java/ServerExchange/ServerRequests/AddCommentProfileRequest.java[m
+[1mindex e3e9654..5c3245c 100644[m
+[1m--- a/Client/app/src/main/java/ServerExchange/ServerRequests/AddCommentProfileRequest.java[m
+[1m+++ b/Client/app/src/main/java/ServerExchange/ServerRequests/AddCommentProfileRequest.java[m
+[36m@@ -47,7 +47,7 @@[m [mpublic class AddCommentProfileRequest extends TokenServerRequest<Boolean> {[m
+         return JsonAddCommentProfileServerAnswer.class;[m
+     }[m
+ [m
+[31m-    public void addCommentProfile(String text, long id, IServerAnswerHandler onAddCommentProfileHandler) throws IOException {[m
+[32m+[m[32m    public void addCommentProfile(String text, long id, IServerAnswerHandler onAddCommentProfileHandler) {[m
+         this.text = text;[m
+         this.profile_id = id;[m
+         startRequest(onAddCommentProfileHandler);[m
+[1mdiff --git a/Client/app/src/main/java/ServerExchange/ServerRequests/AddWitcherInContractRequest.java b/Client/app/src/main/java/ServerExchange/ServerRequests/AddWitcherInContractRequest.java[m
+[1mnew file mode 100644[m
+[1mindex 0000000..845a41e[m
+[1m--- /dev/null[m
+[1m+++ b/Client/app/src/main/java/ServerExchange/ServerRequests/AddWitcherInContractRequest.java[m
+[36m@@ -0,0 +1,52 @@[m
+[32m+[m[32mpackage ServerExchange.ServerRequests;[m
+[32m+[m
+[32m+[m
+[32m+[m[32mimport java.io.IOException;[m
+[32m+[m[32mimport java.util.HashMap;[m
+[32m+[m
+[32m+[m[32m/**[m
+[32m+[m[32m * Created by Dima on 20.02.2018.[m
+[32m+[m[32m */[m
+[32m+[m
+[32m+[m[32mpublic class AddWitcherInContractRequest extends TokenServerRequest<Boolean> {[m
+[32m+[m
+[32m+[m[32m    @Override[m
+[32m+[m[32m    protected RequestType getRequestType(){ return RequestType.POST; }[m
+[32m+[m
+[32m+[m[32m    private String ADD_WITCHER_IN_CONTRACT_METHOD_NAME = "AddWitcherInContract";[m
+[32m+[m
+[32m+[m[32m    private long id_contract;[m
+[32m+[m
+[32m+[m[32m    public AddWitcherInContractRequest(String address) {super(address);}[m
+[32m+[m[32m    public AddWitcherInContractRequest() {super();}[m
+[32m+[m
+[32m+[m
+[32m+[m[32m    @Override[m
+[32m+[m[32m    protected ServerMethod getMethod() {[m
+[32m+[m
+[32m+[m[32m        HashMap<String, Object> params = new HashMap<>();[m
+[32m+[m[32m        params.put("id_contract", id_contract);[m
+[32m+[m
+[32m+[m[32m        return new ServerMethod(ADD_WITCHER_IN_CONTRACT_METHOD_NAME, params);[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    class JsonAddWitcherInContractServerAnswer extends JsonServerAnswer{[m
+[32m+[m
+[32m+[m[32m        @Override[m
+[32m+[m[32m        public Boolean convert() {[m
+[32m+[m[32m            return isStatusOk();[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    @Override[m
+[32m+[m[32m    protected Class<? extends JsonServerAnswer> getJsonAnswerClass() {[m
+[32m+[m
+[32m+[m
+[32m+[m[32m        return AddWitcherInContractRequest.JsonAddWitcherInContractServerAnswer.class;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    public void addWitcherInContract(long id_contract, IServerAnswerHandler onAddWitcherInContractHandler) {[m
+[32m+[m[32m        this.id_contract = id_contract;[m
+[32m+[m[32m        startRequest(onAddWitcherInContractHandler);[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[1mdiff --git a/Client/app/src/main/java/ServerExchange/ServerRequests/AnswerWitcherInContractRequest.java b/Client/app/src/main/java/ServerExchange/ServerRequests/AnswerWitcherInContractRequest.java[m
+[1mindex f193b80..7beca95 100644[m
+[1m--- a/Client/app/src/main/java/ServerExchange/ServerRequests/AnswerWitcherInContractRequest.java[m
+[1m+++ b/Client/app/src/main/java/ServerExchange/ServerRequests/AnswerWitcherInContractRequest.java[m
+[36m@@ -27,9 +27,9 @@[m [mpublic class AnswerWitcherInContractRequest extends TokenServerRequest<Boolean>[m
+     @Override[m
+     protected ServerMethod getMethod() {[m
+ [m
+[31m-        HashMap<String, String> params = new HashMap<>();[m
+[31m-        params.put("status", String.valueOf(status));[m
+[31m-        params.put("id_contract", String.valueOf(id_contract));[m
+[32m+[m[32m        HashMap<String, Object> params = new HashMap<>();[m
+[32m+[m[32m        params.put("status", status);[m
+[32m+[m[32m        params.put("id_contract", id_contract);[m
+ [m
+         return new ServerMethod(ANSWER_WITCHER_IN_CONTRACT_METHOD_NAME, params);[m
+     }[m
+[36m@@ -38,7 +38,7 @@[m [mpublic class AnswerWitcherInContractRequest extends TokenServerRequest<Boolean>[m
+ [m
+         @Override[m
+         public Boolean convert() {[m
+[31m-            return status.equals("OK");[m
+[32m+[m[32m            return isStatusOk();[m
+         }[m
+     }[m
+ [m
+[36m@@ -47,18 +47,17 @@[m [mpublic class AnswerWitcherInContractRequest extends TokenServerRequest<Boolean>[m
+         return JsonAnswerWitcherInContractServerAnswer.class;[m
+     }[m
+ [m
+[31m-    //TODO: определить возможные статусы? Поговорить с Мишей[m
+[31m-    public void acceptToAdvert(long id_contract, IServerAnswerHandler onAnswerWitcherInContractHandler) throws IOException {[m
+[32m+[m[32m    public void acceptToAdvert(long id_contract, IServerAnswerHandler onAnswerWitcherInContractHandler) {[m
+         int newStatus = Advert.AdvertStatus.IN_PROCESS.toInt();[m
+         AnswerWitcherInContract(newStatus,id_contract, onAnswerWitcherInContractHandler);[m
+     }[m
+ [m
+[31m-    public void discardAdvert(long id_contract, IServerAnswerHandler onAnswerWitcherInContractHandler) throws IOException {[m
+[32m+[m[32m    public void discardAdvert(long id_contract, IServerAnswerHandler onAnswerWitcherInContractHandler)  {[m
+         int newStatus = Advert.AdvertStatus.FREE.toInt();[m
+         AnswerWitcherInContract(newStatus,id_contract, onAnswerWitcherInContractHandler);[m
+     }[m
+ [m
+[31m-    private void AnswerWitcherInContract(int status, long id_contract, IServerAnswerHandler onAnswerWitcherInContractHandler) throws IOException {[m
+[32m+[m[32m    private void AnswerWitcherInContract(int status, long id_contract, IServerAnswerHandler onAnswerWitcherInContractHandler) {[m
+         this.status = status;[m
+         this.id_contract = id_contract;[m
+         startRequest(onAnswerWitcherInContractHandler);[m
+[1mdiff --git a/Client/app/src/main/java/ServerExchange/ServerRequests/AuthorizationRequest.java b/Client/app/src/main/java/ServerExchange/ServerRequests/AuthorizationRequest.java[m
+[1mindex a9c137c..8c2cc30 100644[m
+[1m--- a/Client/app/src/main/java/ServerExchange/ServerRequests/AuthorizationRequest.java[m
+[1m+++ b/Client/app/src/main/java/ServerExchange/ServerRequests/AuthorizationRequest.java[m
+[36m@@ -31,7 +31,7 @@[m [mpublic class AuthorizationRequest extends LoginRequest<Boolean>{[m
+     @Override[m
+     protected ServerMethod getMethod() {[m
+ [m
+[31m-        HashMap<String, String> params = new HashMap<>();[m
+[32m+[m[32m        HashMap<String, Object> params = new HashMap<>();[m
+         params.put("login", login);[m
+         params.put("password", password);[m
+ [m
+[36m@@ -42,7 +42,7 @@[m [mpublic class AuthorizationRequest extends LoginRequest<Boolean>{[m
+ [m
+         @Override[m
+         public Boolean convert() {[m
+[31m-            return this.status.equals("OK");[m
+[32m+[m[32m            return isStatusOk();[m
+         }[m
+     }[m
+ [m
+[1mdiff --git a/Client/app/src/main/java/ServerExchange/ServerRequests/CreateAdvertRequest.java b/Client/app/src/main/java/ServerExchange/ServerRequests/CreateAdvertRequest.java[m
+[1mnew file mode 100644[m
+[1mindex 0000000..b514ed9[m
+[1m--- /dev/null[m
+[1m+++ b/Client/app/src/main/java/ServerExchange/ServerRequests/CreateAdvertRequest.java[m
+[36m@@ -0,0 +1,78 @@[m
+[32m+[m[32mpackage ServerExchange.ServerRequests;[m
+[32m+[m
+[32m+[m
+[32m+[m[32mimport android.graphics.Bitmap;[m
+[32m+[m
+[32m+[m[32mimport java.io.IOException;[m
+[32m+[m[32mimport java.util.ArrayList;[m
+[32m+[m[32mimport java.util.Base64;[m
+[32m+[m[32mimport java.util.HashMap;[m
+[32m+[m[32mimport java.util.LinkedList;[m
+[32m+[m
+[32m+[m[32mimport ServerExchange.Advert;[m
+[32m+[m[32mimport ServerExchange.ImageConvert;[m
+[32m+[m[32mimport ServerExchange.Location;[m
+[32m+[m
+[32m+[m[32m/**[m
+[32m+[m[32m * Created by Dima on 20.02.2018.[m
+[32m+[m[32m */[m
+[32m+[m
+[32m+[m[32mpublic class CreateAdvertRequest extends TokenServerRequest<Boolean> {[m
+[32m+[m
+[32m+[m[32m    @Override[m
+[32m+[m[32m    protected RequestType getRequestType(){ return RequestType.POST; }[m
+[32m+[m
+[32m+[m[32m    private String CREATE_ADVERT_METHOD_NAME = "CreateAdvert";[m
+[32m+[m
+[32m+[m[32m    private int id_task_located;[m
+[32m+[m[32m    private String text;[m
+[32m+[m[32m    private String header;[m
+[32m+[m[32m    private int bounty;[m
+[32m+[m[32m    private LinkedList<String> photos;[m
+[32m+[m
+[32m+[m[32m    public CreateAdvertRequest(String serverAddress) {[m
+[32m+[m[32m        super(serverAddress);[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    @Override[m
+[32m+[m[32m    protected ServerMethod getMethod() {[m
+[32m+[m
+[32m+[m[32m        HashMap<String, Object> params = new HashMap<>();[m
+[32m+[m[32m        params.put("id_task_located",this.id_task_located);[m
+[32m+[m[32m        params.put("text",text);[m
+[32m+[m[32m        params.put("header", header);[m
+[32m+[m[32m        params.put("bounty", this.bounty);[m
+[32m+[m[32m        params.put("photo", photos);[m
+[32m+[m
+[32m+[m[32m        return new ServerMethod(CREATE_ADVERT_METHOD_NAME, params);[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    @Override[m
+[32m+[m[32m    protected Class<? extends JsonServerAnswer> getJsonAnswerClass() {[m
+[32m+[m
+[32m+[m[32m        return CreateAdvertJsonServerAnswer.class;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m
+[32m+[m[32m    class CreateAdvertJsonServerAnswer extends JsonServerAnswer{[m
+[32m+[m
+[32m+[m[32m        @Override[m
+[32m+[m[32m        public Boolean convert() {[m
+[32m+[m[32m            return isStatusOk();[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    public void createAdvert(String header, String text, int bounty, int id_task_located,  ArrayList<Bitmap> photos, IServerAnswerHandler onCreateAdvertHandler)  {[m
+[32m+[m[32m        this.id_task_located = id_task_located;[m
+[32m+[m[32m        this.text = text;[m
+[32m+[m[32m        this.header = header;[m
+[32m+[m[32m        this.bounty = bounty;[m
+[32m+[m[32m        LinkedList<String> photoStrs = new LinkedList<>();[m
+[32m+[m[32m        for (Bitmap img : photos){[m
+[32m+[m[32m            photoStrs.addLast( ImageConvert.toBase64Str(img));[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        this.photos = photoStrs;[m
+[32m+[m[32m        startRequest(onCreateAdvertHandler);[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[1mdiff --git a/Client/app/src/main/java/ServerExchange/ServerRequests/GetAdvertRequest.java b/Client/app/src/main/java/ServerExchange/ServerRequests/GetAdvertRequest.java[m
+[1mindex 4fd10e8..0420155 100644[m
+[1m--- a/Client/app/src/main/java/ServerExchange/ServerRequests/GetAdvertRequest.java[m
+[1m+++ b/Client/app/src/main/java/ServerExchange/ServerRequests/GetAdvertRequest.java[m
+[36m@@ -1,10 +1,15 @@[m
+ package ServerExchange.ServerRequests;[m
+ [m
+[32m+[m[32mimport android.graphics.Bitmap;[m
+[32m+[m
+ import java.util.Date;[m
+ import java.util.HashMap;[m
+[32m+[m[32mimport java.util.LinkedList;[m
+[32m+[m[32mimport java.util.Map;[m
+ [m
+ import ServerExchange.Advert;[m
+ import ServerExchange.Comment;[m
+[32m+[m[32mimport ServerExchange.ImageConvert;[m
+ import ServerExchange.Location;[m
+ [m
+ /**[m
+[36m@@ -42,50 +47,54 @@[m [mpublic class GetAdvertRequest extends TokenServerRequest<Advert> {[m
+ [m
+     class AdvertJsonServerAnswer extends JsonServerAnswer{[m
+ [m
+[31m-        public class ClientJson{[m
+[31m-            public long id;[m
+[31m-            public String name;[m
+[31m-        }[m
+[31m-        public ClientJson client;[m
+[32m+[m[32m            public class ClientJson {[m
+[32m+[m[32m                public long id;[m
+[32m+[m[32m                public String name;[m
+[32m+[m[32m            }[m
+[32m+[m
+[32m+[m[32m            public ClientJson client;[m
+[32m+[m
+[32m+[m[32m            public class AdvertJson {[m
+[32m+[m[32m                public int bounty;[m
+[32m+[m[32m                public String header;[m
+[32m+[m
+[32m+[m[32m                public long id;[m
+[32m+[m[32m                public String kingdom;[m
+[32m+[m[32m                public long last_update;[m
+[32m+[m[32m                public long last_update_status;[m
+ [m
+[31m-        public class AdvertJson{[m
+[31m-            public int bounty;[m
+[31m-            class Comments{[m
+[31m-                public long count;[m
+[31m-                public long comments[];[m
+[32m+[m[32m                public class PhotosJson {[m
+[32m+[m[32m                    public long count;[m
+[32m+[m[32m                    public HashMap<String,String> photo;[m
+[32m+[m[32m                }[m
+[32m+[m
+[32m+[m[32m                public PhotosJson photoContact;[m
+[32m+[m[32m                public int status;[m
+[32m+[m[32m                public String text;[m
+[32m+[m[32m                public String town;[m
+             }[m
+[31m-            public Comments commentsContract;[m
+[31m-            //TODO: Напомнить про заголовок[m
+ [m
+[31m-            public long id;[m
+[31m-            public String kingdom;[m
+[31m-            public long last_update;[m
+[31m-            public long last_update_status;[m
+[32m+[m[32m            public AdvertJson object;[m
+ [m
+[31m-            public class PhotosJson{[m
+[31m-                public long count;[m
+[31m-                public long photo[];[m
+[32m+[m[32m            public class WitcherJson {[m
+[32m+[m[32m                public long id;[m
+[32m+[m[32m                public String name;[m
+             }[m
+[31m-            public PhotosJson photoContact;[m
+[31m-            public int status;[m
+[31m-            public String text;[m
+[31m-            public String town;[m
+[31m-        }[m
+[31m-        public AdvertJson object;[m
+ [m
+[31m-        public class WitcherJson{[m
+[31m-            public long id;[m
+[31m-            public String name;[m
+[31m-        }[m
+[31m-        public WitcherJson witcher;[m
+[32m+[m[32m            public WitcherJson witcher;[m
+ [m
+         @Override[m
+         public Advert convert() {[m
+[31m-            java.util.Date dateOfLastUpdate = new java.util.Date(object.last_update);[m
+[31m-            //TODO: Узнать, как приходят фотки[m
+[31m-            Advert advert = new Advert(object.id, "fix it", object.text, null, new Location(object.kingdom, object.town),[m
+[32m+[m[32m            java.util.Date dateOfLastUpdate = new java.util.Date(object.last_update * 1000);[m
+[32m+[m
+[32m+[m[32m            LinkedList<Bitmap> imgs = new LinkedList<>();[m
+[32m+[m[32m            for (Map.Entry<String, String> phEntry : object.photoContact.photo.entrySet()){[m
+[32m+[m[32m                imgs.addLast(ImageConvert.fromBase64Str(phEntry.getValue()));[m
+[32m+[m[32m            }[m
+[32m+[m
+[32m+[m[32m            Advert advert = new Advert(object.id, object.header, object.text, imgs, new Location(object.kingdom, object.town),[m
+                     object.bounty, client.id, null/*other method*/, witcher.id, Advert.AdvertStatus.fromInt(object.status),[m
+[31m-                    dateOfLastUpdate, null);[m
+[32m+[m[32m                    dateOfLastUpdate, null/*other method*/);[m
+             return advert;[m
+         }[m
+     }[m
+[1mdiff --git a/Client/app/src/main/java/ServerExchange/ServerRequests/GetAdvertsRequest.java b/Client/app/src/main/java/ServerExchange/ServerRequests/GetAdvertsRequest.java[m
+[1mindex 93e406c..f491d65 100644[m
+[1m--- a/Client/app/src/main/java/ServerExchange/ServerRequests/GetAdvertsRequest.java[m
+[1m+++ b/Client/app/src/main/java/ServerExchange/ServerRequests/GetAdvertsRequest.java[m
+[36m@@ -1,7 +1,10 @@[m
+ package ServerExchange.ServerRequests;[m
+ [m
+[32m+[m[32mimport android.widget.Switch;[m
+[32m+[m
+ import java.util.HashMap;[m
+ import java.util.LinkedList;[m
+[32m+[m[32mimport java.util.Map;[m
+ [m
+ import ServerExchange.Advert;[m
+ import ServerExchange.Location;[m
+[36m@@ -16,37 +19,62 @@[m [mpublic class GetAdvertsRequest extends ServerRequest < LinkedList<Advert>> {[m
+         sortType = DEFAULT_SORT_TYPE;[m
+         orderType = DEFAULT_ORDER_TYPE;[m
+     }[m
+[31m-    public GetAdvertsRequest(String address) {super(address);[m
+[32m+[m[32m    public GetAdvertsRequest(String address) {[m
+[32m+[m[32m        super(address);[m
+         sortType = DEFAULT_SORT_TYPE;[m
+         orderType = DEFAULT_ORDER_TYPE;[m
+     }[m
+ [m
+[32m+[m[32m    @Override[m
+[32m+[m[32m    public RequestType getRequestType(){[m
+[32m+[m[32m        return RequestType.GET;[m
+[32m+[m[32m    }[m
+[32m+[m
+     private String GETLIST_METHOD_NAME = "Get_list_contract";[m
+     private enum FilterType{[m
+         BY_LOCATE,[m
+         BY_REWARD;[m
+[32m+[m[32m        String toServerParam(){[m
+[32m+[m[32m            switch (this){[m
+[32m+[m[32m                case BY_LOCATE: return "locate";[m
+[32m+[m[32m                case BY_REWARD: return "bounte";[m
+[32m+[m[32m                default: throw new RuntimeException("Добавь новый тип в метод GetAdvertsRequest.FilterType.toServerParams");[m
+[32m+[m[32m            }[m
+[32m+[m[32m        }[m
+     };[m
+ [m
+     private enum OrderType{[m
+         IN_ASCENDING,[m
+         IN_DESCENDING;[m
+[32m+[m[32m        String toServerParam(){[m
+[32m+[m[32m            switch (this){[m
+[32m+[m[32m                case IN_ASCENDING: return "asc";[m
+[32m+[m[32m                case IN_DESCENDING: return "desc";[m
+[32m+[m[32m                default: throw new RuntimeException("Добавь новый тип в метод GetAdvertsRequest.OrderType.toServerParams");[m
+[32m+[m[32m            }[m
+[32m+[m[32m        }[m
+     };[m
+ [m
+[31m-    private enum SortType{[m
+[31m-        BY_REWARD,[m
+[32m+[m[32m    public enum SortType{[m
+[32m+[m[32m        //BY_REWARD,[m
+         BY_ALPHABET,[m
+         BY_DATE,[m
+         BY_LOCATE;[m
+[32m+[m[32m        String toServerParams() {[m
+[32m+[m[32m            switch (this) {[m
+[32m+[m[32m                case BY_LOCATE: return "locate";[m
+[32m+[m[32m                case BY_DATE:   return "lastupdate";[m
+[32m+[m[32m                case BY_ALPHABET: return "alph";[m
+[32m+[m[32m                default: throw new RuntimeException("Добавь новый тип в метод GetAdvertsRequest.SortType.toServerParams");[m
+[32m+[m[32m            }[m
+[32m+[m[32m        }[m
+     }[m
+ [m
+ [m
+[31m-    private HashMap<FilterType, String> FILTER_TYPE_NAMES;[m
+[31m-    private HashMap<OrderType, String> ORDER_NAMES;[m
+[31m-    private HashMap<SortType, String> SORT_NAMES;[m
+ [m
+ [m
+     private SortType sortType;[m
+[31m-    private SortType DEFAULT_SORT_TYPE = SortType.BY_REWARD;[m
+[32m+[m[32m    private SortType DEFAULT_SORT_TYPE = SortType.BY_ALPHABET;[m
+     private OrderType orderType;[m
+     private OrderType DEFAULT_ORDER_TYPE = OrderType.IN_ASCENDING;[m
+     private FilterType filterType;[m
+[36m@@ -62,11 +90,14 @@[m [mpublic class GetAdvertsRequest extends ServerRequest < LinkedList<Advert>> {[m
+         HashMap<String, Object> params = new HashMap<>();[m
+ [m
+         if (sortType != null){[m
+[31m-            params.put("sort", SORT_NAMES.get(sortType));[m
+[31m-            params.put("order", ORDER_NAMES.get(orderType));[m
+[32m+[m[32m            params.put("sort", sortType.toServerParams());[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        if (orderType != null){[m
+[32m+[m[32m            params.put("order", orderType.toServerParam());[m
+         }[m
+[31m-        else if (filterType != null){[m
+[31m-            params.put("filter", FILTER_TYPE_NAMES.get(filterType));[m
+[32m+[m[32m        if (filterType != null){[m
+[32m+[m[32m            params.put("filter", filterType.toServerParam());[m
+ [m
+             if (filterType == FilterType.BY_REWARD){[m
+                 params.put("min", this.minmax[0]);[m
+[36m@@ -94,28 +125,32 @@[m [mpublic class GetAdvertsRequest extends ServerRequest < LinkedList<Advert>> {[m
+     }[m
+ [m
+     class AdvertServerAnswer extends JsonServerAnswer{[m
+[31m-[m
+[31m-        class OneContractJson{[m
+[31m-            int bounty;[m
+[31m-            String header;[m
+[31m-            long id;[m
+[31m-            long id_client;[m
+[31m-            long id_list_comments; //TODO: Узнать, что это, хотя не важно[m
+[31m-            long id_list_photos; //В целом нужно ли?[m
+[31m-            long id_task_located; // TODO: попросить локации строкой[m
+[31m-            long id_witcher; //Иcполнитель[m
+[31m-            long last_update;[m
+[31m-            long last_update_status;[m
+[31m-            int status;[m
+[31m-            String text;[m
+[32m+[m[32m        class JsonObj {[m
+[32m+[m[32m            class OneContractJson {[m
+[32m+[m[32m                int bounty;[m
+[32m+[m[32m                String header;[m
+[32m+[m[32m                long id;[m
+[32m+[m[32m                long id_client;[m
+[32m+[m[32m                long id_list_comments; //TODO: Узнать, что это, хотя не важно[m
+[32m+[m[32m                long id_list_photos; //В целом нужно ли?[m
+[32m+[m[32m                long id_task_located; // TODO: попросить локации строкой[m
+[32m+[m[32m                long id_witcher; //Иcполнитель[m
+[32m+[m[32m                long last_update;[m
+[32m+[m[32m                long last_update_status;[m
+[32m+[m[32m                int status;[m
+[32m+[m[32m                String text;[m
+[32m+[m[32m            }[m
+[32m+[m[32m            HashMap<String,OneContractJson> contracts;[m
+         }[m
+[32m+[m[32m        JsonObj object;[m
+[32m+[m
+ [m
+[31m-        OneContractJson contracts [];[m
+         @Override[m
+         public LinkedList<Advert> convert() {[m
+             LinkedList<Advert> adverts = new LinkedList<>();[m
+[31m-            for (OneContractJson contract : contracts){[m
+[31m-                java.util.Date update_time = new java.util.Date(contract.last_update); //TODO: Проверить нужно ли домножение на 1000[m
+[32m+[m[32m            for (Map.Entry<String, JsonObj.OneContractJson> key_contract : object.contracts.entrySet()){[m
+[32m+[m[32m                JsonObj.OneContractJson contract = key_contract.getValue();[m
+[32m+[m[32m                java.util.Date update_time = new java.util.Date(contract.last_update * 1000);[m
+                 Advert.AdvertStatus st = Advert.AdvertStatus.fromInt(contract.status);[m
+                 Advert advert = new Advert(contract.id, contract.header, contract.text, null, new Location(null, null), contract.bounty, contract.id_client, null, contract.id_witcher, st, update_time, null);[m
+                 adverts.addLast(advert);[m
+[1mdiff --git a/Client/app/src/main/java/ServerExchange/ServerRequests/GetCommentsRequest.java b/Client/app/src/main/java/ServerExchange/ServerRequests/GetCommentsRequest.java[m
+[1mindex a60f7fb..4c875a3 100644[m
+[1m--- a/Client/app/src/main/java/ServerExchange/ServerRequests/GetCommentsRequest.java[m
+[1m+++ b/Client/app/src/main/java/ServerExchange/ServerRequests/GetCommentsRequest.java[m
+[36m@@ -3,6 +3,7 @@[m [mpackage ServerExchange.ServerRequests;[m
+ import java.util.Date;[m
+ import java.util.HashMap;[m
+ import java.util.LinkedList;[m
+[32m+[m[32mimport java.util.Map;[m
+ [m
+ import ServerExchange.Comment;[m
+ import ServerExchange.ImageConvert;[m
+[36m@@ -57,13 +58,14 @@[m [mpublic class GetCommentsRequest extends TokenServerRequest<LinkedList<Comment>>[m
+             public long id;[m
+             public String text;[m
+         }[m
+[31m-        JsonComment comments[];[m
+[32m+[m[32m        HashMap<String,JsonComment> comments;[m
+ [m
+         @Override[m
+         public LinkedList<Comment> convert() {[m
+             LinkedList<Comment> coms = new LinkedList<>();[m
+[31m-            for (JsonComment com : comments){[m
+[31m-                Date date = new java.util.Date(com.date_of_create); //TODO: проверить нужно ли умножаьт на 1000[m
+[32m+[m[32m            for (Map.Entry<String, JsonComment> comEm : comments.entrySet()){[m
+[32m+[m[32m                JsonComment com = comEm.getValue();[m
+[32m+[m[32m                Date date = new java.util.Date(com.date_of_create * 1000);[m
+                 coms.addLast( new Comment(com.id, com.text, com.author_id, com.author_name, date, ImageConvert.fromBase64Str(com.photo)));[m
+             }[m
+             return coms;[m
+[1mdiff --git a/Client/app/src/main/java/ServerExchange/ServerRequests/GetLocationsListRequest.java b/Client/app/src/main/java/ServerExchange/ServerRequests/GetLocationsListRequest.java[m
+[1mnew file mode 100644[m
+[1mindex 0000000..857f526[m
+[1m--- /dev/null[m
+[1m+++ b/Client/app/src/main/java/ServerExchange/ServerRequests/GetLocationsListRequest.java[m
+[36m@@ -0,0 +1,68 @@[m
+[32m+[m[32mpackage ServerExchange.ServerRequests;[m
+[32m+[m
+[32m+[m[32mimport java.util.HashMap;[m
+[32m+[m[32mimport java.util.HashSet;[m
+[32m+[m[32mimport java.util.LinkedList;[m
+[32m+[m[32mimport java.util.Map;[m
+[32m+[m[32mimport java.util.Set;[m
+[32m+[m[32mimport java.util.TreeMap;[m
+[32m+[m
+[32m+[m[32mimport ServerExchange.Location;[m
+[32m+[m[32mimport ServerExchange.LocationsList;[m
+[32m+[m
+[32m+[m[32m/**[m
+[32m+[m[32m * Created by Dryush on 20.02.2018.[m
+[32m+[m[32m */[m
+[32m+[m
+[32m+[m[32mpublic class GetLocationsListRequest extends TokenServerRequest<TreeMap<String, HashSet<LocationsList.City>>> {[m
+[32m+[m[32m    @Override[m
+[32m+[m[32m    protected RequestType getRequestType() {[m
+[32m+[m[32m        return RequestType.GET;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    private static String METHOD_NAME = "GetTowns";[m
+[32m+[m
+[32m+[m[32m    @Override[m
+[32m+[m[32m    protected ServerMethod getMethod() {[m
+[32m+[m[32m        return new ServerMethod( METHOD_NAME, new HashMap<String,Object>());[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    public class LocationsJsonAnswer extends JsonServerAnswer{[m
+[32m+[m
+[32m+[m[32m        public long count_kingdoms;[m
+[32m+[m[32m        public class JsonTownsList{[m
+[32m+[m[32m            public class JsonTown{[m
+[32m+[m[32m                public long id_town;[m
+[32m+[m[32m                public String name_town;[m
+[32m+[m[32m            }[m
+[32m+[m[32m            public long count_town;[m
+[32m+[m[32m            public HashMap<String, JsonTown> town;[m
+[32m+[m[32m        }[m
+[32m+[m[32m        public HashMap<String, JsonTownsList> kingdoms;[m
+[32m+[m
+[32m+[m[32m        @Override[m
+[32m+[m[32m        public TreeMap<String, HashSet<LocationsList.City>> convert() {[m
+[32m+[m[32m            TreeMap<String, HashSet<LocationsList.City>> locs = new TreeMap<>();[m
+[32m+[m
+[32m+[m[32m            for (Map.Entry< String, JsonTownsList> kt: kingdoms.entrySet()){[m
+[32m+[m[32m                JsonTownsList towns = kt.getValue();[m
+[32m+[m[32m                HashSet<LocationsList.City> citySet = new HashSet<>();[m
+[32m+[m[32m                for (Map.Entry<String, JsonTownsList.JsonTown> town : towns.town.entrySet()){[m
+[32m+[m[32m                    citySet.add( new LocationsList.City(town.getValue().id_town, town.getValue().name_town));[m
+[32m+[m[32m                }[m
+[32m+[m[32m                locs.put(kt.getKey(), citySet);[m
+[32m+[m[32m            }[m
+[32m+[m
+[32m+[m[32m            return locs;[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    @Override[m
+[32m+[m[32m    protected Class<? extends JsonServerAnswer> getJsonAnswerClass() {[m
+[32m+[m[32m        return LocationsJsonAnswer.class;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    public void getLocations(IServerAnswerHandler onAnswer){[m
+[32m+[m[32m        startRequest(onAnswer);[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[1mdiff --git a/Client/app/src/main/java/ServerExchange/ServerRequests/GetProfileRequest.java b/Client/app/src/main/java/ServerExchange/ServerRequests/GetProfileRequest.java[m
+[1mindex 89b2f59..f0784d1 100644[m
+[1m--- a/Client/app/src/main/java/ServerExchange/ServerRequests/GetProfileRequest.java[m
+[1m+++ b/Client/app/src/main/java/ServerExchange/ServerRequests/GetProfileRequest.java[m
+[36m@@ -2,6 +2,7 @@[m [mpackage ServerExchange.ServerRequests;[m
+ [m
+ import java.util.HashMap;[m
+ import java.util.LinkedList;[m
+[32m+[m[32mimport java.util.Map;[m
+ [m
+ import ServerExchange.Advert;[m
+ import ServerExchange.AdvertCard;[m
+[36m@@ -39,37 +40,44 @@[m [mpublic class GetProfileRequest extends TokenServerRequest<Profile> {[m
+     }[m
+ [m
+     class ProfileJsonServerAnswer extends JsonServerAnswer{[m
+[31m-        public class HistoryContractJson{[m
+[31m-            public String header;[m
+[31m-            public long id_client;[m
+[31m-            public long id_contract;[m
+[31m-            public long id_witcher;[m
+[31m-            public long last_update;[m
+[31m-            public long last_status_update;[m
+[31m-            public int status;[m
+[31m-        }[m
+[31m-        public class HistoryContainerJson{[m
+[31m-            public long count;[m
+[31m-            public HistoryContractJson contract[];[m
+[32m+[m[32m        public class JsonObj {[m
+[32m+[m[32m            public class HistoryContractJson {[m
+[32m+[m[32m                public String header;[m
+[32m+[m[32m                public long id_client;[m
+[32m+[m[32m                public long id_contract;[m
+[32m+[m[32m                public long id_witcher;[m
+[32m+[m[32m                public long last_update;[m
+[32m+[m[32m                public long last_status_update;[m
+[32m+[m[32m                public int status;[m
+[32m+[m[32m            }[m
+[32m+[m
+[32m+[m[32m            public class HistoryContainerJson {[m
+[32m+[m[32m                public long count;[m
+[32m+[m[32m                public HashMap<String, HistoryContractJson> contract;[m
+[32m+[m[32m            }[m
+[32m+[m
+[32m+

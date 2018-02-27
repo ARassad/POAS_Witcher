@@ -3,10 +3,8 @@ package ServerExchange.ServerRequests;
 import android.os.AsyncTask;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 
 import java.io.BufferedReader;
-import java.io.EOFException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -283,15 +281,15 @@ public abstract class ServerRequest <AnswerType> {
 
 
     }
-
-    RequestProcess rp;
+    
+    
     protected void startRequest(IServerAnswerHandler handler){
-       rp = new RequestProcess( handler, getJsonAnswerClass()) ;
-       rp.execute();
+        RequestProcess rp = new RequestProcess( handler, getJsonAnswerClass());
+        rp.execute();
     }
 
     protected void startRequest(){
-        rp = new RequestProcess( null, getJsonAnswerClass());
+        RequestProcess rp = new RequestProcess( null, getJsonAnswerClass());
         rp.execute();
     }
 

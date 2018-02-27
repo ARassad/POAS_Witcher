@@ -43,10 +43,11 @@
                     android:layout_height="match_parent"
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
-                    android:textSize="12sp"
-                    android:checked="true"
-                    android:textOff="Все"
-                    android:textOn="Свои"/>
+                    android:autoSizeMaxTextSize="20pt"
+                    android:textOff="Свои"
+                    android:textOn="Все"
+                    android:showText="true"
+                    android:checked="true"/>
 
                 <Button
                     android:id="@+id/button_add_advert"
@@ -109,7 +110,7 @@
 
                 <LinearLayout
                     android:id="@+id/form_all_advert"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">

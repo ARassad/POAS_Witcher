@@ -143,7 +143,7 @@ public class SortingFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 if (position > 0) {
-                    cityFilter = cities[position-1];
+                    cityFilter = cities[position];
                 }
                 else{
                     cityFilter = null;

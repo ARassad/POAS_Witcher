@@ -48,7 +48,5 @@
     <!-- Strings related to advert list -->
     <string name="sort">Сортировка и фильтры</string>
     <string name="edit_advert">Объявление</string>
-    <string name="switch_all_ru_str">Все</string>
-    <string name="switch_my_ru_str">Свои</string>
 
 </resources>

@@ -1,8 +1,11 @@
 package ServerExchange.ServerRequests;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.TreeMap;
 
 import ServerExchange.Advert;
 import ServerExchange.Location;
@@ -13,7 +16,7 @@ import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
  * Created by Dryush on 13.02.2018.
  */
 
-public class GetAdvertsRequest extends TokenServerRequest < LinkedList<Advert>> {
+public class GetAdvertsRequest extends TokenServerRequest < ArrayList<Advert>> {
 
     public GetAdvertsRequest() {
         super();
@@ -133,8 +136,12 @@ public class GetAdvertsRequest extends TokenServerRequest < LinkedList<Advert>> 
                 params.put("max", this.minmax[1]);
             }
             else if (filterType == FilterType.BY_LOCATE){
-                params.put("kingdom", this.loc.getKingdom());
-                params.put("town", this.loc.getCity());
+                if ( this.loc.getKingdom() != null) {
+                    params.put("kingdom", this.loc.getKingdom());
+                }
+                if ( this.loc.getCity() != null) {
+                    params.put("town", this.loc.getCity());
+                }
             }
 
         }
@@ -174,23 +181,27 @@ public class GetAdvertsRequest extends TokenServerRequest < LinkedList<Advert>> 
                 int status;
                 String text;
             }
-            HashMap<String,OneContractJson> contracts;
+            TreeMap<String,OneContractJson> contracts;
         }
         JsonObj object;
 
 
         @Override
-        public LinkedList<Advert> convert() {
-            LinkedList<Advert> adverts = new LinkedList<>();
-            LocationsList locsList = LocationsList.getInstance();
+        public ArrayList<Advert> convert() {
+            ArrayList<Advert> adverts = new ArrayList<>();
             if (object != null && object.contracts!= null) {
+                int size = object.contracts.size();
+                adverts = new ArrayList<Advert>(Arrays.asList(new Advert[size]));
+
+                LocationsList locsList = LocationsList.getInstance();
+
                 for (Map.Entry<String, JsonObj.OneContractJson> key_contract : object.contracts.entrySet()) {
                     JsonObj.OneContractJson contract = key_contract.getValue();
                     java.util.Date update_time = new java.util.Date(contract.last_update * 1000);
                     Advert.AdvertStatus st = Advert.AdvertStatus.fromInt(contract.status);
                     Location loc = locsList.getById(contract.id_task_located);
                     Advert advert = new Advert(contract.id, contract.header, contract.text, null, loc, contract.bounty, contract.id_client, "", null, contract.id_witcher, "", st, update_time, null);
-                    adverts.addLast(advert);
+                    adverts.set(Integer.parseInt(key_contract.getKey()), advert );
                 }
             }
             return adverts;

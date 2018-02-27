@@ -134,9 +134,9 @@ public class AdvertListActivity extends AppCompatActivity
         DURING, //Исполняются
         SUBSRIBED, //Подписаны
         EXECUTED; //Исполнены
-
+/*
         private static Integer all, chosen, notchosen, dur, subsr, execut;
-        /*
+
         public static void init() {
             all = R.id.all_advert;
             chosen = R.id.adlist_witcher_chosen;
@@ -170,7 +170,7 @@ public class AdvertListActivity extends AppCompatActivity
     private static final int NEW_ADVERT = 2222;
 
 
-    class OnGetAdverts extends DefaultServerAnswerHandler<LinkedList<Advert>> {
+    class OnGetAdverts extends DefaultServerAnswerHandler <ArrayList<Advert>> {
 
         public OnGetAdverts(Context context) {
             super(context);
@@ -183,7 +183,7 @@ public class AdvertListActivity extends AppCompatActivity
         }
 
         @Override
-        public void handle( LinkedList<Advert> answ) {
+        public void handle( ArrayList<Advert> answ) {
             refillAdvertsList(group, answ);
             /*
             for (Advert advert : answ){
