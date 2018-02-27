@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import ServerExchange.Advert;
+import ServerExchange.LocationsList;
 import ServerExchange.Profile;
 import ServerExchange.ServerRequests.GetAdvertsRequest;
 import ServerExchange.ServerRequests.LoginRequest;
@@ -205,7 +206,7 @@ public class AdvertListActivity extends AppCompatActivity
         ((TextView)findViewById(R.id.window_title)).setText("Объявления");
         ((TextView)findViewById(R.id.window_title)).setTextSize(14);
 
-
+        LocationsList.refillFromServer();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -220,17 +221,6 @@ public class AdvertListActivity extends AppCompatActivity
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/fa-solid-900.ttf");
 
-        // Кнопка обновить список
-        Button buttonUpdateList = (Button)findViewById(R.id.button_update_list);
-        buttonUpdateList.setTypeface(typeface);
-        buttonUpdateList.setText("\uf2f1");
-        buttonUpdateList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                deleteAdverts(GroupAdvert.ALL_ADVERT);
-                getAdvertsRequest.getFreeSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new onGetAverts(AdvertListActivity.this));
-            }
-        });
 
         //Кнопка добавить объявление
         Button buttonAddAdvert = (Button)findViewById(R.id.button_add_advert);
