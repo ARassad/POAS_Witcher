@@ -53,4 +53,5 @@ def authorization(cursor, params):
     else:
         status.message = EventAuth.PasswordIncorrect.value
 
+    print(status.toJSON())
     return status.toJSON()

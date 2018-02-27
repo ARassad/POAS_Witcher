@@ -75,6 +75,7 @@ def create_advert(cursor, params):
         status.message = EventAdvert.WitcherCreator.value
 
     status.object = obj
+    print(status.toJSON())
     return status.toJSON()
 
 
@@ -134,6 +135,7 @@ def edit_advert(cursor, params):
         status.status = Status.Error.value
         status.message = EventAdvert.WitcherCreator.value
 
+    print(status.toJSON())
     return status.toJSON()
 
 
@@ -172,6 +174,7 @@ def delete_advert(cursor, params):
         status.status = Status.Error.value
         status.message = EventAdvert.WitcherCreator.value
 
+    print(status.toJSON())
     return status.toJSON()
 
 
@@ -232,6 +235,7 @@ def get_advert(cursor, params):
     status.object = obj
     status.status = Status.Ok.value;
     status.message = EventAdvert.Success.value
+    print(status.toJSON())
     return status.toJSON()
 
 
@@ -253,6 +257,7 @@ def add_witcher_in_contract(cursor, params):
         status.status = Status.Error.value
         status.message = EventAdvert.ClientAsWitcher.value
 
+    print(status.toJSON())
     return status.toJSON()
 
 
@@ -277,6 +282,7 @@ def get_profile_desired_contract(cursor, params):
         obj.witchers.witcher[len(obj.witchers.witcher)] = profile
 
     status.object = obj
+    print(status.toJSON())
     return status.toJSON()
 
 
@@ -290,4 +296,5 @@ def write_comment_contract(cursor, params):
     status = Object()
     status.status = Status.Ok.value
 
+    print(status.toJSON())
     return status.toJSON()

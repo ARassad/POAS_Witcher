@@ -23,4 +23,5 @@ def get_towns(cursor, params):
             town.name_town = j[1]
             status.kingdoms[kingdoms].town[len(status.kingdoms[kingdoms].town)] = town
 
+    print(status.toJSON())
     return status.toJSON()

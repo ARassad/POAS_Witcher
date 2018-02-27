@@ -120,6 +120,7 @@ def get_list_contracts(cursor, params):
             obj.contracts[n] = contr
 
     status.object = obj
+    print(status.toJSON())
     return status.toJSON()
 
 
@@ -219,6 +220,7 @@ def get_contract_client(cursor, params):
         obj.message = "IncorrectToken"
 
     status.object = obj
+    print(status.toJSON())
     return status.toJSON()
 
 
@@ -319,4 +321,5 @@ def get_contract_witcher(cursor, params):
         obj.message = "IncorrectToken"
 
     status.object = obj
+    print(status.toJSON())
     return status.toJSON()

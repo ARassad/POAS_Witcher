@@ -49,4 +49,5 @@ def registration(cursor, params):
         status.status = Status.Error.value
         status.message = EventRegistration.LoginExist.value
 
+    print(status.toJSON())
     return status.toJSON()

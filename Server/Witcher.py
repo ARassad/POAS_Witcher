@@ -44,6 +44,7 @@ def select_witcher(cursor, params):
         status.status = Status.Ok.value
         status.message = EventWitcher.WitcherSelect.value
 
+    print(status.toJSON())
     return status.toJSON()
 
 
@@ -79,6 +80,7 @@ def answer_witcher(cursor, params):
         status.status = Status.Error.value
         status.message = EventWitcher.ClientSelect.value
 
+    print(status.toJSON())
     return status.toJSON()
 
 
@@ -103,6 +105,7 @@ def refuse_contract(cursor, params):
     status.status = Status.Ok.value
     status.message = EventWitcher.Success.value
 
+    print(status.toJSON())
     return status.toJSON()
 
 
@@ -128,4 +131,5 @@ def contract_complited(cursor, params):
     else:
         status.status = Status.Error.value
 
+    print(status.toJSON())
     return status.toJSON()

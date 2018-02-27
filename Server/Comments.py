@@ -41,4 +41,5 @@ def get_list_comment(cursor, params):
         obj.id_comments[len(obj.id_comments)] = comm
 
     status.object = obj
+    print(status.toJSON())
     return status.toJSON()
