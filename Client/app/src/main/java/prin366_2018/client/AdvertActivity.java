@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -421,6 +423,9 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
             startActivity(intent);
         }
         else if (id == R.id.nav_exit) {
+            // TODO: Добавить пере Firebase запрос к серверу на выход из профиля
+            // TODO: ExitProfile: token
+            FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(AdvertActivity.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);

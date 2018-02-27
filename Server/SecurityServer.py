@@ -100,7 +100,10 @@ paramsRequests = {
                                          'min_params': 1, 'count': 7, 'type_req': 1},
 
     ApiMethod.ContractComplited.value: {'params': {'token': 'token', 'id': 'id'}, 'min_params': 2, 'count': 2,
-                                        'type_req': 1}}
+                                        'type_req': 1},
+
+    ApiMethod.ExitProfile.value: {'params': {'token': 'token'}, 'min_params': 1, 'count': 1,
+                                  'type_req': 1}}
 
 
 def security_requests(method, params, isget=1):
