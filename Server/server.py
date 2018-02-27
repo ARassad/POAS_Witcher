@@ -7,6 +7,7 @@ from Server.Get_List_Contracts import get_contract_witcher
 from Server.Profile import get_profile
 from Server.Profile import update_profile
 from Server.Profile import write_comment_profile
+from Server.Profile import exit_profile
 from Server.Advert import create_advert
 from Server.Advert import edit_advert
 from Server.Advert import delete_advert
@@ -35,25 +36,26 @@ from Server.Objects import ApiMethod
 api_methods_get, api_methods_post = {}, {}
 api_methods_post[ApiMethod.Authorization.value] = authorization
 api_methods_post[ApiMethod.Registration.value] = registration
-api_methods_get[ApiMethod.GetListContracts.value] = get_list_contracts
-api_methods_get[ApiMethod.GetProfile.value] = get_profile
 api_methods_post[ApiMethod.EditProfile.value] = update_profile
 api_methods_post[ApiMethod.AddCommentProfile.value] = write_comment_profile
 api_methods_post[ApiMethod.CreateAdvert.value] = create_advert
 api_methods_post[ApiMethod.EditAdvert.value] = edit_advert
-api_methods_get[ApiMethod.DeleteAdvert.value] = delete_advert
-api_methods_get[ApiMethod.GetAdvert.value] = get_advert
 api_methods_post[ApiMethod.AddWitcherInContract.value] = add_witcher_in_contract
-api_methods_get[ApiMethod.GetWitcherDesiredContract.value] = get_profile_desired_contract
 api_methods_post[ApiMethod.AddCommentContract.value] = write_comment_contract
 api_methods_post[ApiMethod.SelectWitcherInContract.value] = select_witcher
 api_methods_post[ApiMethod.AnswerWitcherInContract.value] = answer_witcher
 api_methods_post[ApiMethod.RefuseContract.value] = refuse_contract
+api_methods_get[ApiMethod.GetAdvert.value] = get_advert
+api_methods_get[ApiMethod.GetWitcherDesiredContract.value] = get_profile_desired_contract
+api_methods_get[ApiMethod.DeleteAdvert.value] = delete_advert
+api_methods_get[ApiMethod.GetListContracts.value] = get_list_contracts
+api_methods_get[ApiMethod.GetProfile.value] = get_profile
 api_methods_get[ApiMethod.GetListComments.value] = get_list_comment
 api_methods_get[ApiMethod.GetTowns.value] = get_towns
 api_methods_get[ApiMethod.GetContractClient.value] = get_contract_client
 api_methods_get[ApiMethod.GetContractWitcher.value] = get_contract_witcher
 api_methods_get[ApiMethod.ContractComplited.value] = contract_complited
+api_methods_get[ApiMethod.ExitProfile.value] = exit_profile
 
 
 class HttpServer(BaseHTTPRequestHandler):

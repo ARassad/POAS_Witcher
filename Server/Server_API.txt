@@ -161,6 +161,9 @@ localhost/api?method=Get_list_contract&token=b5ad4e9f2bdedb278dd91ce0e8043fce
 	Если locate, то должны быть параметры town или kingdom
 	Если bounty, то должны быть параметры min или max
 
+Выйти из профиля
+localhost/api?method=ExitProfile&token=b5ad4e9f2bdedb278dd91ce0e8043fce
+
 Опциональный параметр sort может равняться alph, locate, lastupdate
 	Опциональный для sort, параметр sortype может быть asc, desc 
 Samples

@@ -138,3 +138,16 @@ def write_comment_profile(cursor, params):
     status.status = Status.Ok.value
 
     return status.toJSON()
+
+
+def exit_profile(cursor, params):
+    status = Object()
+    status.status = Status.Ok.value
+    cursor.execute("select id_profile from Token_Table where token={}".format(params[User.Token.value]))
+    row = cursor.fecthone()
+    if row is not None:
+        id_profile = row[0]
+        cursor.execute("delete Token_Table where id_profile={}".format(id_profile))
+        cursor.execute("delete FCM_Token where id_profile={}".format(id_profile))
+
+    return status.toJSON()
