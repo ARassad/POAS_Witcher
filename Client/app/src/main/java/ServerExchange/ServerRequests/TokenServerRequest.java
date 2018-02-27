@@ -14,12 +14,12 @@ public abstract class TokenServerRequest<AnswerType> extends ServerRequest<Answe
         super(serverAddress);
     }
 
-    /**
+    /** TODO: убрать комментарий перед переходом на новую авторизацию
      * После полного портирования авторизации на номер телефона, необходимо будет отправлять
      * tokenFcmAuth на сервер, с авторизации убираем принятие токена от сервера.
      */
     static private String debugToken = "b5ad4e9f2bdedb278dd91ce0e8043fce";
-    static private String tokenFcmAuth ;//= FirebaseAuth.getInstance().getCurrentUser().getUid();
+    //static private String tokenFcmAuth = FirebaseAuth.getInstance().getCurrentUser().getUid();
     static private String token = debugToken;
     protected HashMap<String,Object> basicMethodParams(){
         HashMap<String, Object> params = super.basicMethodParams();
