@@ -421,6 +421,8 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
             startActivity(intent);
         }
         else if (id == R.id.nav_exit) {
+            // TODO: Добавить пере Firebase запрос к серверу на выход из профиля
+            // TODO: ExitProfile: token
             Intent intent = new Intent(AdvertActivity.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
