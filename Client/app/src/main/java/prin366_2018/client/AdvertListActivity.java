@@ -202,7 +202,7 @@ public class AdvertListActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advert_list);
 
-        ((TextView)findViewById(R.id.window_title)).setText("Объявл..");
+        ((TextView)findViewById(R.id.window_title)).setText("Объявления");
         ((TextView)findViewById(R.id.window_title)).setTextSize(14);
 
 
@@ -219,6 +219,18 @@ public class AdvertListActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(AdvertListActivity.this);
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/fa-solid-900.ttf");
+
+        // Кнопка обновить список
+        Button buttonUpdateList = (Button)findViewById(R.id.button_update_list);
+        buttonUpdateList.setTypeface(typeface);
+        buttonUpdateList.setText("\uf2f1");
+        buttonUpdateList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteAdverts(GroupAdvert.ALL_ADVERT);
+                getAdvertsRequest.getFreeSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new onGetAverts(AdvertListActivity.this));
+            }
+        });
 
         //Кнопка добавить объявление
         Button buttonAddAdvert = (Button)findViewById(R.id.button_add_advert);
