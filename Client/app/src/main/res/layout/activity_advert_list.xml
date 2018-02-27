@@ -37,6 +37,17 @@
                 android:layout_height="match_parent"
                 android:gravity="end">
 
+                <Switch
+                    android:id="@+id/switch_advert"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:textSize="12sp"
+                    android:checked="true"
+                    android:textOff="Все"
+                    android:textOn="Свои"/>
+
                 <Button
                     android:id="@+id/button_add_advert"
                     android:layout_width="40dp"
@@ -71,13 +82,33 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
             <LinearLayout
+                android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+
+            <LinearLayout
+                android:id="@+id/full_form_all_adverts"
+                android:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/button_all_adverts"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_gravity="start"
+                    android:text="Все доступные объявления"
+                    android:textSize="16sp"
+                    android:background="@drawable/frame_button">
+                </Button>
+
                 <LinearLayout
-                    android:id="@+id/all_advert"
+                    android:id="@+id/form_all_advert"
                     android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -91,123 +122,151 @@
                         tools:layout="@layout/fragment_sorting">
                     </fragment>
 
+                    <LinearLayout
+                        android:id="@+id/adlist_all_adverts"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                    </LinearLayout>
+
                 </LinearLayout>
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/full_form_my_adverts"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
                 <LinearLayout
-                    android:id="@+id/full_form"
+                    android:id="@+id/full_form_witcher_not_chosen"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <Button
+                        android:id="@+id/button_witcher_not_chosen"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_gravity="start"
+                        android:text="Ведьмак не выбран"
+                        android:textSize="16sp"
+                        android:background="@drawable/frame_button">
+                    </Button>
+
                     <LinearLayout
-                        android:id="@+id/full_form_witcher_not_chosen"
-                        android:visibility="gone"
+                        android:id="@+id/form_witcher_not_chosen"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <Button
-                            android:id="@+id/button_witcher_not_chosen"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_gravity="start"
-                            android:text="Ведьмак не выбран"
-                            android:textSize="16sp"
-                            android:background="@drawable/frame_button">
-                        </Button>
-
-                        <LinearLayout
-                            android:id="@+id/form_witcher_not_chosen"
+                        <fragment
+                            class="prin366_2018.client.SortingFragment"
+                            android:id ="@+id/witcher_not_chosen_adverts_sort"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <fragment
-                                class="prin366_2018.client.SortingFragment"
-                                android:id ="@+id/witcher_not_chosen_adverts_sort"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                tools:layout="@layout/fragment_sorting">
-                            </fragment>
-
-                            <LinearLayout
-                                android:id="@+id/adlist_witcher_not_chosen"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/full_form_witcher_chosen"
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <Button
-                            android:id="@+id/button_witcher_chosen"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_gravity="start"
-                            android:text="Ведьмак выбран"
-                            android:textSize="16sp"
-                            android:background="@drawable/frame_button">
-                        </Button>
+                            tools:layout="@layout/fragment_sorting">
+                        </fragment>
 
                         <LinearLayout
-                            android:id="@+id/form_witcher_chosen"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <fragment
-                                class="prin366_2018.client.SortingFragment"
-                                android:id = "@+id/witcher_chosen_sort"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                tools:layout="@layout/fragment_sorting">
-                            </fragment>
-
-                            <LinearLayout
-                                android:id="@+id/adlist_witcher_chosen"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/form_during"
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <Button
-                            android:id="@+id/button_during"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_gravity="start"
-                            android:text="Исполняются"
-                            android:textSize="16sp"
-                            android:background="@drawable/frame_button">
-                        </Button>
-
-                        <LinearLayout
-                            android:id="@+id/adlist_during"
+                            android:id="@+id/adlist_witcher_not_chosen"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
                         </LinearLayout>
 
                     </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/full_form_witcher_chosen"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/button_witcher_chosen"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_gravity="start"
+                        android:text="Ведьмак выбран"
+                        android:textSize="16sp"
+                        android:background="@drawable/frame_button">
+                    </Button>
+
+                    <LinearLayout
+                        android:id="@+id/form_witcher_chosen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <fragment
+                            class="prin366_2018.client.SortingFragment"
+                            android:id = "@+id/witcher_chosen_sort"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:layout="@layout/fragment_sorting">
+                        </fragment>
+
+                        <LinearLayout
+                            android:id="@+id/adlist_witcher_chosen"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/form_during"
+                    android:visibility="visible"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/button_during"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_gravity="start"
+                        android:text="Исполняются"
+                        android:textSize="16sp"
+                        android:background="@drawable/frame_button">
+                    </Button>
+
+                    <LinearLayout
+                        android:id="@+id/adlist_during"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/full_form_subsribed"
+                    android:visibility="visible"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/button_subsribed"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_gravity="start"
+                        android:text="Подписан"
+                        android:textSize="16sp"
+                        android:background="@drawable/frame_button">
+                    </Button>
 
                     <LinearLayout
                         android:id="@+id/form_subscribed"
@@ -216,15 +275,13 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <Button
-                            android:id="@+id/button_subsribed"
+                        <fragment
+                            class="prin366_2018.client.SortingFragment"
+                            android:id = "@+id/witcher_subsribed_sort"
                             android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_gravity="start"
-                            android:text="Подписан"
-                            android:textSize="16sp"
-                            android:background="@drawable/frame_button">
-                        </Button>
+                            android:layout_height="wrap_content"
+                            tools:layout="@layout/fragment_sorting">
+                        </fragment>
 
                         <LinearLayout
                             android:id="@+id/adlist_subsribed"
@@ -235,32 +292,38 @@
 
                     </LinearLayout>
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/full_form_executed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/button_executed"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_gravity="start"
+                        android:text="Исполнены"
+                        android:textSize="16sp"
+                        android:background="@drawable/frame_button">
+                    </Button>
+
                     <LinearLayout
                         android:id="@+id/form_executed"
                         android:layout_width="match_parent"
+                        android:visibility="gone"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <Switch
-                            android:id="@+id/switch_advert"
+                        <fragment
+                            class="prin366_2018.client.SortingFragment"
+                            android:id = "@+id/executed_sort"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="10dp"
-                            android:layout_marginRight="10dp"
-                            android:checked="true"
-                            android:textOff="Все"
-                            android:textOn="Свои"
-                            android:textSize="8sp" />
-
-                        <Button
-                            android:id="@+id/button_executed"
-                            android:layout_width="match_parent"
-                            android:layout_height="30dp"
-                            android:layout_gravity="start"
-                            android:text="Исполнены"
-                            android:textSize="16sp"
-                            android:background="@drawable/frame_button">
-                        </Button>
+                            tools:layout="@layout/fragment_sorting">
+                        </fragment>
 
                         <LinearLayout
                             android:id="@+id/adlist_executed"
@@ -268,13 +331,10 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
                         </LinearLayout>
-
                     </LinearLayout>
-
                 </LinearLayout>
-
             </LinearLayout>
-
+            </LinearLayout>
         </ScrollView>
 
         <android.support.design.widget.NavigationView

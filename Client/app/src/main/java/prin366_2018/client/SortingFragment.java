@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import java.lang.reflect.Array;
@@ -46,8 +47,8 @@ public class SortingFragment extends Fragment {
     private Integer minBountyFilter;
     private Integer maxBountyFilter;
 
-    String[] kingdoms = new String[0];
-    String[] cities = new String[0];
+    private String[] kingdoms;
+    private String[] cities;
 
 
     private void setButton(Button button, final View v) {
@@ -67,12 +68,9 @@ public class SortingFragment extends Fragment {
     private Button buttonSearch;
     private Spinner spinnerSort, spinnerOrder, spinnerFilter, spinnerKingdom, spinnerCity;
     private EditText minBountyEdit, maxBountyEdit;
+    private LinearLayout rewardSettingsGroup, locationSettingsGroup;
 
-    void initElements(View view){
-
-        buttonSearch        = view.findViewById(R.id.button_find);
-
-        spinnerSort         = view.findViewById(R.id.spinner_sort_main);
+    void setListeners(){
         spinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -85,7 +83,6 @@ public class SortingFragment extends Fragment {
             }
         });
 
-        spinnerOrder        = view.findViewById(R.id.spinner_sort_other);
         spinnerOrder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -98,38 +95,41 @@ public class SortingFragment extends Fragment {
             }
         });
 
-        spinnerFilter       = view.findViewById(R.id.spinner_filter);
-        spinnerFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if( position <= 1) {
-                    filterType = GetAdvertsRequest.FilterType.fromInt(position);
-                }
-                filterType = null;
-                kingdomFilter = null;
-                cityFilter = null;
-                minBountyFilter = null;
-                maxBountyFilter = null;
 
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                filterType = null;
-            }
-        });
-
-        spinnerKingdom      = view.findViewById(R.id.spinner_kingdom);
         spinnerKingdom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                kingdomFilter = kingdoms[position];
 
-                cities =   locationsList.getCitiesStr(kingdoms[0]).toArray(cities);
-                ArrayList<String> notChosenVal = new ArrayList<String>(1);
-                notChosenVal.add("Любой");
-                Collections.addAll(notChosenVal, cities);
+                try {
+
+                    //Видишь костыли? Я тоже, исправлятьна свой страх и риск 5-часовой отладки
+
+                    //Выбранное королевство
+                    kingdomFilter = kingdoms[position];
+                    //"Массив" с записью "Любой"
+                    ArrayList<String> notChosenVal = new ArrayList<String>(0);
+                    notChosenVal.add("Любой");
+
+                    //Получаем города, соответсвующие королевству из списка
+                    String cities_[] = new String[0];
+                    cities_ =   locationsList.getCitiesStr(kingdomFilter).toArray(cities_);
+                    //Добавляем "Любой" в массив городов
+                    Collections.addAll(notChosenVal, cities_);
+                    cities_ = notChosenVal.toArray(cities_);
+                    //Изменяем венешний список, чтоб потом определить, какой именно город выбрали
+                    cities = cities_;
+                    //обновляем спинер городов
+                    setSpinner(spinnerCity, cities, "Города");
+                /*
+
                 cities = notChosenVal.toArray(cities);
+                //setSpinner((Spinner)view.findViewById(R.id.spinner_city), cities, "Города");
+
+                */
+                } catch(Exception e){
+                    String stopme;
+                }
 
             }
             @Override
@@ -138,10 +138,10 @@ public class SortingFragment extends Fragment {
             }
         });
 
-        spinnerCity         = view.findViewById(R.id.spinner_city);
         spinnerCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                 if (position > 0) {
                     cityFilter = cities[position-1];
                 }
@@ -150,13 +150,13 @@ public class SortingFragment extends Fragment {
                 }
             };
 
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 cityFilter = null;
             }
         });
 
-        minBountyEdit       = view.findViewById(R.id.edit_startcost);
         minBountyEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -174,7 +174,6 @@ public class SortingFragment extends Fragment {
             }
         });
 
-        maxBountyEdit       = view.findViewById(R.id.edit_endcost);
         maxBountyEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -192,31 +191,101 @@ public class SortingFragment extends Fragment {
             }
         });
 
+
+        spinnerFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+
+
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if( position >= 1 && position<=2) {
+                    filterType = GetAdvertsRequest.FilterType.fromInt(position-1);
+                }
+
+                switch(position) {
+                    case 0:
+                        locationSettingsGroup.setVisibility(View.GONE);
+                        rewardSettingsGroup.setVisibility(View.GONE);
+                        filterType = null;
+                        kingdomFilter = null;
+                        cityFilter = null;
+                        minBountyFilter = null;
+                        maxBountyFilter = null;
+                        break;
+                    case 1:
+                        locationSettingsGroup.setVisibility(View.GONE);
+                        rewardSettingsGroup.setVisibility(View.VISIBLE);
+                        kingdomFilter = null;
+                        cityFilter = null;
+                        //setSpinner((Spinner)view.findViewById(R.id.spinner_kingdom), kingdoms, "Королевства");
+                        break;
+                    case 2:
+                        locationSettingsGroup.setVisibility(View.VISIBLE);
+                        rewardSettingsGroup.setVisibility(View.GONE);
+                        minBountyFilter = null;
+                        maxBountyFilter = null;
+
+
+
+                        break;
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                filterType = null;
+            }
+        });
+    }
+
+    void initElements(View view){
+
+        rewardSettingsGroup = view.findViewById(R.id.rewards);
+        spinnerSort         = view.findViewById(R.id.spinner_sort_main);
+        spinnerOrder        = view.findViewById(R.id.spinner_sort_other);
+        spinnerFilter       = view.findViewById(R.id.spinner_filter);
+        spinnerKingdom      = view.findViewById(R.id.spinner_kingdom);
+        spinnerCity         = view.findViewById(R.id.spinner_city);
+        minBountyEdit       = view.findViewById(R.id.edit_startcost);
+        maxBountyEdit       = view.findViewById(R.id.edit_endcost);
+
+
+        locationSettingsGroup = view.findViewById(R.id.locations);
+
+
+
     }
 
     void getDataFromViews(){
 
     }
 
-    LocationsList locationsList = LocationsList.getInstance();
+    LocationsList locationsList;
 
 
+    int fragmentId;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
+        locationsList = LocationsList.getInstance();
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_sorting, container, false);
 
-        initElements(view);
+        fragmentId = this.getId();
+
+        buttonSearch        = view.findViewById(R.id.button_find);
         //String[] sort1 = { "Награде", "Названию", "Локации", "Дате" };
         String[] sort1 = { "Названию", "Локации", "Дате" };
 
         String[] sort2 = { "Возрастанию", "Убыванию" };
         final String[] filter = { "Не задано", "Награде", "Локации" };
 
+        kingdoms = new String[0];
         kingdoms = locationsList.getKingdoms().toArray(kingdoms);
 
-
+        String cities[] = new String[0];
         cities =   locationsList.getCitiesStr(kingdoms[0]).toArray(cities);
         ArrayList<String> notChosenVal = new ArrayList<>();
         notChosenVal.add("Любой");
@@ -226,9 +295,12 @@ public class SortingFragment extends Fragment {
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onFragmentInteraction(v.getId(),sortType, orderType, filterType, kingdomFilter, cityFilter, minBountyFilter, maxBountyFilter);
+                mListener.onFragmentInteraction(fragmentId,sortType, orderType, filterType, kingdomFilter, cityFilter, minBountyFilter, maxBountyFilter);
             }
         });
+
+        initElements(view);
+
 
         setButton((Button)view.findViewById(R.id.button_sort), view.findViewById(R.id.form_sort));
 
@@ -238,28 +310,8 @@ public class SortingFragment extends Fragment {
         setSpinner((Spinner)view.findViewById(R.id.spinner_kingdom), kingdoms, "Королевства");
         setSpinner((Spinner)view.findViewById(R.id.spinner_city), cities, "Города");
 
+        setListeners();
 
-
-        ((Spinner)view.findViewById(R.id.spinner_filter)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View v, int i, long l) {
-                switch(i) {
-                    case 0:
-                        view.findViewById(R.id.locations).setVisibility(View.GONE);
-                        view.findViewById(R.id.rewards).setVisibility(View.VISIBLE);
-                        break;
-                    case 1:
-                        view.findViewById(R.id.locations).setVisibility(View.VISIBLE);
-                        view.findViewById(R.id.rewards).setVisibility(View.GONE);
-                        break;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
         return view;
     }
 

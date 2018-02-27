@@ -213,7 +213,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
     private TextView headerView, descriptionView, authorNameView, rewardView, locationView, executorNameView;
     private TextView newCommentView;
-    private Button buttonRespond;
+    private Button buttonRespond, buttonResponders;
 
     private void connectViews(){
         headerView          = findViewById(R.id.text_title_advert);
@@ -284,6 +284,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         setButton((Button)findViewById(R.id.button_description), (TextView)findViewById(R.id.text_description));
         setButton((Button)findViewById(R.id.button_images), findViewById(R.id.images_advert));
         setButton((Button)findViewById(R.id.button_comments), findViewById(R.id.comments_list));
+        setButton((Button)findViewById(R.id.button_responders), findViewById((R.id.list_responders)));
 
         typeface = Typeface.createFromAsset(getAssets(), "fonts/fa-solid-900.ttf");
 
@@ -299,6 +300,10 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
             }
         });
+        buttonResponders = (Button)findViewById(R.id.button_responders);
+        if (LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER){
+            buttonResponders.setVisibility(View.GONE);
+        }
         if (LoginRequest.getLoggedUserType() == Profile.ProfileType.CUSTOMER){
             buttonRespond.setVisibility(View.GONE);
         }

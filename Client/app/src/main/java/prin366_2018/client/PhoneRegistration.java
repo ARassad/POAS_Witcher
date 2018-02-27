@@ -55,7 +55,6 @@ public class PhoneRegistration extends AppCompatActivity implements View.OnClick
     private Button mStartButton;
     private Button mVerifyButton;
     private Button mResendButton;
-    private Button mSignOutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +72,7 @@ public class PhoneRegistration extends AppCompatActivity implements View.OnClick
         mStartButton = findViewById(R.id.button_start_verification);
         mVerifyButton = findViewById(R.id.button_verify_phone);
         mResendButton = findViewById(R.id.button_resend);
-        //mSignOutButton = findViewById(R.id.sign_out_button);
+        //mSignOutButton = findViewById(R.id.nav_exit);
 
         // Assign click listeners
         mStartButton.setOnClickListener(this);
@@ -107,9 +106,6 @@ public class PhoneRegistration extends AppCompatActivity implements View.OnClick
                 updateUI(STATE_VERIFY_SUCCESS, credential);
                 // [END_EXCLUDE]
                 signInWithPhoneAuthCredential(credential);
-
-                Intent intent = new Intent(PhoneRegistration.this, RegistrationTabActivity.class);
-                startActivity(intent);
             }
 
             @Override
@@ -125,12 +121,6 @@ public class PhoneRegistration extends AppCompatActivity implements View.OnClick
                     // Invalid request
                     // [START_EXCLUDE]
                     mPhoneNumberField.setError("Invalid phone number.");
-                    // [END_EXCLUDE]
-                } else if (e instanceof FirebaseTooManyRequestsException) {
-                    // The SMS quota for the project has been exceeded
-                    // [START_EXCLUDE]
-                    //Snackbar.make(findViewById(android.R.id.content), "Quota exceeded.",
-                    //       Snackbar.LENGTH_SHORT).show();
                     // [END_EXCLUDE]
                 }
 
@@ -236,6 +226,9 @@ public class PhoneRegistration extends AppCompatActivity implements View.OnClick
                             FirebaseUser user = task.getResult().getUser();
                             // [START_EXCLUDE]
                             updateUI(STATE_SIGNIN_SUCCESS, user);
+
+                            Intent intent = new Intent(PhoneRegistration.this, RegistrationTabActivity.class);
+                            startActivity(intent);
                             // [END_EXCLUDE]
                         } else {
                             // Sign in failed, display a message and update the UI
@@ -255,11 +248,6 @@ public class PhoneRegistration extends AppCompatActivity implements View.OnClick
                 });
     }
     // [END sign_in_with_phone]
-
-    private void signOut() {
-        mAuth.signOut();
-        updateUI(STATE_INITIALIZED);
-    }
 
     private void updateUI(int uiState) {
         updateUI(uiState, mAuth.getCurrentUser(), null);
@@ -364,9 +352,6 @@ public class PhoneRegistration extends AppCompatActivity implements View.OnClick
             case R.id.button_resend:
                 resendVerificationCode(mPhoneNumberField.getText().toString(), mResendToken);
                 break;
-            /*case R.id.sign_out_button:
-                signOut();
-                break;*/
         }
     }
 }

@@ -146,7 +146,7 @@ public class GetAdvertsRequest extends TokenServerRequest < LinkedList<Advert>> 
         this.sortType = DEFAULT_SORT_TYPE;
         this.orderType = DEFAULT_ORDER_TYPE;
         this.filterType = null;
-        this.minmax = null;
+        this.minmax = new int[2];
         this.loc = null;
         this.status = null;
 

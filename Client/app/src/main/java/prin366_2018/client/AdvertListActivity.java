@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 import ServerExchange.Advert;
 import ServerExchange.Profile;
@@ -38,6 +39,17 @@ import ServerExchange.ServerRequests.GetAdvertsRequest;
 import ServerExchange.ServerRequests.LoginRequest;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
 
+/*
+
+    ОСТОРОЖНО!
+    ПРОСМОТР ДАННОГО КОДА ЗАПРЕЩЁН ДЛЯ ЛИЦ НЕ ДОСТИГШИХ 18 ЛЕТ И БЕРЕМЕННЫМ ЖЕНЩИНАМ!
+    ПРОДОЛЖАЯ ПРОСМОТР ДАННОГО КОДА ВЫ ПОДТВЕРЖДАЕТЕ СВОЮ ОСВЕДОМЛЁННОСТЬ О НАЛИЧИИ ШОК-КОНТЕНТА
+    И ОТКАЗЫВАЕТЕСЬ ОТ ПРАВА ПОДАТЬ В СУД НА АВТОРА ЗА ПОЛУЧЕННЫЙ МОРАЛЬНЫЙ И ФИЗИЧЕСКИЙ ВРЕД
+    ОТ ПОПЫТОК ДЕБАГА И РЕФАКТОРИНГА ДАННОГО КОДА
+
+    данное соглашение также распространяется  на класс SortingFragment
+
+ */
 
 public class AdvertListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SortingFragment.OnFragmentInteractionListener {
@@ -46,11 +58,32 @@ public class AdvertListActivity extends AppCompatActivity
 
     @Override
     public void onFragmentInteraction(int fragmentId, GetAdvertsRequest.SortType sortType, GetAdvertsRequest.OrderType orderType, GetAdvertsRequest.FilterType filterType, String kingdomFilter, String cityFilter, Integer minReward, Integer maxReward) {
-        if (LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER){
+
+        GetAdvertsRequest getAdvertsRequest = new GetAdvertsRequest();
+        //Function getFil
+
+        if (fragmentId == freeAdvertsSortingId){
             GroupAdvert groupAdvert = GroupAdvert.ALL_ADVERT;
             Advert.AdvertStatus advertStatus = Advert.AdvertStatus.FREE;
-            if (fragmentId == freeAdvertsSortingId)         { groupAdvert = GroupAdvert.ALL_ADVERT; advertStatus = Advert.AdvertStatus.FREE;}
-            else if (fragmentId==completedSotringId)        { groupAdvert = GroupAdvert.EXECUTED;   advertStatus = Advert.AdvertStatus.COMPLETED; }
+
+            OnGetAdverts onGetAdverts = new OnGetAdverts(AdvertListActivity.this, groupAdvert);
+            if (filterType == GetAdvertsRequest.FilterType.BY_LOCATE) {
+                getAdvertsRequest.getFreeFilteredByLocation( filterType, sortType, orderType, kingdomFilter, cityFilter, onGetAdverts);
+            } else if (filterType == GetAdvertsRequest.FilterType.BY_REWARD) {
+                minReward = minReward == null ? 0 : minReward;
+                maxReward = maxReward == null ? Integer.MAX_VALUE : maxReward;
+
+                getAdvertsRequest.getFreeFilteredByReward( filterType, minReward, maxReward, sortType, orderType, onGetAdverts);
+            } else {
+                getAdvertsRequest.getFreeSortedBy( sortType, orderType, onGetAdverts);
+            }
+        }
+        else if (LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER){
+            GroupAdvert groupAdvert = GroupAdvert.ALL_ADVERT;
+            Advert.AdvertStatus advertStatus = Advert.AdvertStatus.FREE;
+            //if (fragmentId == freeAdvertsSortingId)         { groupAdvert = GroupAdvert.ALL_ADVERT; advertStatus = Advert.AdvertStatus.FREE;}
+            //else
+            if (fragmentId==completedSotringId)        { groupAdvert = GroupAdvert.EXECUTED;   advertStatus = Advert.AdvertStatus.COMPLETED; }
             else if (fragmentId==subscribedSotringId)       { groupAdvert = GroupAdvert.SUBSRIBED;  advertStatus = Advert.AdvertStatus.FREE; }
 
 
@@ -69,8 +102,9 @@ public class AdvertListActivity extends AppCompatActivity
         else {
             GroupAdvert groupAdvert = GroupAdvert.ALL_ADVERT;
             Advert.AdvertStatus advertStatus = Advert.AdvertStatus.FREE;
-            if (fragmentId == freeAdvertsSortingId)            { groupAdvert = GroupAdvert.ALL_ADVERT;          advertStatus = Advert.AdvertStatus.FREE;}
-            else if (fragmentId == witcherChosenSotringId)     { groupAdvert = GroupAdvert.WITCHER_CHOSEN;      advertStatus = Advert.AdvertStatus.ASSIGNED_WITCHER;}
+            //if (fragmentId == freeAdvertsSortingId)            { groupAdvert = GroupAdvert.ALL_ADVERT;          advertStatus = Advert.AdvertStatus.FREE;}
+            //else
+            if (fragmentId == witcherChosenSotringId)     { groupAdvert = GroupAdvert.WITCHER_CHOSEN;      advertStatus = Advert.AdvertStatus.ASSIGNED_WITCHER;}
             else if (fragmentId==witcherNotChosenSotringId)    { groupAdvert = GroupAdvert.WITCHER_NOT_CHOSEN;  advertStatus = Advert.AdvertStatus.FREE;}
 
 
@@ -101,7 +135,8 @@ public class AdvertListActivity extends AppCompatActivity
         EXECUTED; //Исполнены
 
         private static Integer all, chosen, notchosen, dur, subsr, execut;
-        public static void init(){
+        /*
+        public static void init() {
             all = R.id.all_advert;
             chosen = R.id.adlist_witcher_chosen;
             notchosen = R.id.adlist_witcher_not_chosen;
@@ -109,6 +144,7 @@ public class AdvertListActivity extends AppCompatActivity
             subsr = R.id.adlist_subsribed;
             execut = R.id.adlist_executed;
         }
+
         public int toIdXml(){
             switch (this) {
                 case ALL_ADVERT:
@@ -126,12 +162,12 @@ public class AdvertListActivity extends AppCompatActivity
                 default: throw new RuntimeException("Добавил в GroupAdvert новое значение? Добавь и в метод toIdXml");
             }
         }
+        */
 
 
     };
     private static final int NEW_ADVERT = 2222;
 
-    GetAdvertsRequest getAdvertsRequest = new GetAdvertsRequest();
 
     class OnGetAdverts extends DefaultServerAnswerHandler<LinkedList<Advert>> {
 
@@ -169,7 +205,7 @@ public class AdvertListActivity extends AppCompatActivity
         ((TextView)findViewById(R.id.window_title)).setText("Объявл..");
         ((TextView)findViewById(R.id.window_title)).setTextSize(14);
 
-        GroupAdvert.init();
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -201,12 +237,14 @@ public class AdvertListActivity extends AppCompatActivity
             buttonAddAdvert.setVisibility(View.GONE);
         }
 
-        advertListSetting(LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER, true);
+
 
         setButton((Button)findViewById(R.id.button_witcher_not_chosen), findViewById(R.id.form_witcher_not_chosen));
         setButton((Button)findViewById(R.id.button_witcher_chosen), findViewById(R.id.form_witcher_chosen));
         setButton((Button)findViewById(R.id.button_during), findViewById(R.id.adlist_during));
-        setButton((Button)findViewById(R.id.button_executed), findViewById(R.id.adlist_executed));
+        setButton((Button)findViewById(R.id.button_executed), findViewById(R.id.form_executed));
+        setButton((Button)findViewById(R.id.button_subsribed), findViewById(R.id.form_subscribed));
+        setButton((Button)findViewById(R.id.button_all_adverts), findViewById(R.id.form_all_advert));
 
         advertListSetting(LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER, false);
 
@@ -214,51 +252,38 @@ public class AdvertListActivity extends AppCompatActivity
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // в зависимости от значения isChecked выводим нужные группы объявлений
-                advertListSetting(LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER, !isChecked);
+                advertListSetting(LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER, isChecked);
             }
         });
+
+        advertListSetting(LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER, true);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         freeAdvertsSortingId = R.id.free_adverts_sort;
         witcherChosenSotringId = R.id.witcher_chosen_sort;
         witcherNotChosenSotringId = R.id.witcher_not_chosen_adverts_sort;
-        subscribedSotringId = witcherNotChosenSotringId;
-        completedSotringId = witcherChosenSotringId;
-        SortingFragment freeAdvertsSorting  = (SortingFragment) fragmentManager.findFragmentById(R.id.free_adverts_sort);
-        SortingFragment inProcessAdvertsSorting = (SortingFragment) fragmentManager.findFragmentById(R.id.witcher_not_chosen_adverts_sort);
-        SortingFragment completedAdvertsSorting = (SortingFragment) fragmentManager.findFragmentById(R.id.witcher_chosen_sort);
-        SortingFragment witcherNotChoosen = (SortingFragment) fragmentManager.findFragmentById(R.id.witcher_not_chosen_adverts_sort);
-        SortingFragment witcherChoosen = (SortingFragment) fragmentManager.findFragmentById(R.id.witcher_chosen_sort);
+        subscribedSotringId = R.id.witcher_subsribed_sort;
+        completedSotringId = R.id.executed_sort;
+        SortingFragment freeAdvertsSorting  = (SortingFragment) fragmentManager.findFragmentById(freeAdvertsSortingId);
+        SortingFragment inProcessAdvertsSorting = (SortingFragment) fragmentManager.findFragmentById(witcherChosenSotringId);
+        SortingFragment completedAdvertsSorting = (SortingFragment) fragmentManager.findFragmentById(completedSotringId);
+        SortingFragment witcherNotChosen = (SortingFragment) fragmentManager.findFragmentById(witcherNotChosenSotringId);
+        SortingFragment witcherChosen = (SortingFragment) fragmentManager.findFragmentById(witcherChosenSotringId);
 
-        getAdvertsRequest.getFreeSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new OnGetAdverts(AdvertListActivity.this, GroupAdvert.ALL_ADVERT));
+        new GetAdvertsRequest().getFreeSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new OnGetAdverts(AdvertListActivity.this, GroupAdvert.ALL_ADVERT));
+
+        //GroupAdvert.init();
 
         if ( LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER){
             OnGetAdverts onGetAdvertsFillDuring = new OnGetAdverts(AdvertListActivity.this, GroupAdvert.DURING);
-            getAdvertsRequest.getWitcherSortedBy(Advert.AdvertStatus.IN_PROCESS, GetAdvertsRequest.SortType.BY_ALPHABET, onGetAdvertsFillDuring);
+            new GetAdvertsRequest().getWitcherSortedBy(Advert.AdvertStatus.IN_PROCESS, GetAdvertsRequest.SortType.BY_ALPHABET, onGetAdvertsFillDuring);
         }
     }
 
     private void refillAdvertsList(GroupAdvert groupAdvert,  List<Advert> adverts ){
 
-        ((LinearLayout)findViewById(groupAdvert.toIdXml())).removeAllViews();
-        for( Advert advert: adverts){
-            setNewAdvert(groupAdvert, advert.getName(), advert.getInfo(), advert.getKingdom(), advert.getCity(), String.valueOf(advert.getReward()), advert.getId());
-        }
-    }
-    private void setNewAdvert(GroupAdvert id, String title, String description, String kingdom, String city, String cost, long advertId) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-        AdvertFragment newRow = new AdvertFragment(title, description, kingdom, city, cost, advertId);
-        int idxml = id.toIdXml();
-
-        ft.add(idxml, newRow);
-        ft.commit();
-
-    }
-
-    private void deleteAdverts(GroupAdvert id) {
-        int idxml = R.id.all_advert;
-        switch (id) {
+        int idxml = R.id.adlist_all_adverts;
+        switch (groupAdvert) {
             case WITCHER_NOT_CHOSEN:
                 idxml = R.id.adlist_witcher_not_chosen;
                 break;
@@ -275,11 +300,32 @@ public class AdvertListActivity extends AppCompatActivity
                 idxml = R.id.adlist_executed;
                 break;
         }
-        LinearLayout ll = (LinearLayout)findViewById(idxml);
+        //((LinearLayout)findViewById(groupAdvert.toIdXml())).removeAllViews();
+        //if ( groupAdvert != GroupAdvert.DURING)
+        deleteAdverts(idxml);
+        for( Advert advert: adverts){
+            setNewAdvert(idxml, advert.getName(), advert.getInfo(), advert.getKingdom(), advert.getCity(), String.valueOf(advert.getReward()), advert.getId());
+        }
+    }
+
+    private void setNewAdvert(int idXml, String title, String description, String kingdom, String city, String cost, long advertId) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        AdvertFragment newRow = new AdvertFragment(title, description, kingdom, city, cost, advertId);
+
+
+        ft.add(idXml, newRow);
+        ft.commit();
+
+    }
+
+    private void deleteAdverts(int idXml) {
+        LinearLayout ll = (LinearLayout)findViewById(idXml);
         int size = ll.getChildCount();
         View sort = ll.getChildAt(0);
         ((LinearLayout)ll).removeAllViews();
-        ((LinearLayout)ll).addView(sort);
+        //if ( idXml != R.id.adlist_during || LoginRequest.getLoggedUserType() == Profile.ProfileType.CUSTOMER)
+        //    ((LinearLayout)ll).addView(sort);
     }
 
 
@@ -326,23 +372,23 @@ public class AdvertListActivity extends AppCompatActivity
      */
     private void advertListSetting(boolean isWitcher, boolean isAllAdvert) {
         if (isAllAdvert) {
-            findViewById(R.id.all_advert).setVisibility(View.VISIBLE);
-            findViewById(R.id.full_form).setVisibility(View.GONE);
+            findViewById(R.id.full_form_all_adverts).setVisibility(View.VISIBLE);
+            findViewById(R.id.full_form_my_adverts).setVisibility(View.GONE);
         }
         else {
-            findViewById(R.id.all_advert).setVisibility(View.GONE);
-            findViewById(R.id.full_form).setVisibility(View.VISIBLE);
+            findViewById(R.id.full_form_all_adverts).setVisibility(View.GONE);
+            findViewById(R.id.full_form_my_adverts).setVisibility(View.VISIBLE);
             if (isWitcher) {
                 findViewById(R.id.full_form_witcher_not_chosen).setVisibility(View.GONE);
                 findViewById(R.id.full_form_witcher_chosen).setVisibility(View.GONE);
                 findViewById(R.id.form_during).setVisibility(View.VISIBLE);
-                findViewById(R.id.form_subscribed).setVisibility(View.VISIBLE);
+                findViewById(R.id.full_form_subsribed).setVisibility(View.VISIBLE);
             }
             else {
                 findViewById(R.id.full_form_witcher_not_chosen).setVisibility(View.VISIBLE);
                 findViewById(R.id.full_form_witcher_chosen).setVisibility(View.VISIBLE);
                 findViewById(R.id.form_during).setVisibility(View.GONE);
-                findViewById(R.id.form_subscribed).setVisibility(View.GONE);
+                findViewById(R.id.full_form_subsribed).setVisibility(View.GONE);
             }
         }
     }
