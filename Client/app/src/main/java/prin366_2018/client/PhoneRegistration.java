@@ -55,7 +55,6 @@ public class PhoneRegistration extends AppCompatActivity implements View.OnClick
     private Button mStartButton;
     private Button mVerifyButton;
     private Button mResendButton;
-    private View mSignOutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,12 +121,6 @@ public class PhoneRegistration extends AppCompatActivity implements View.OnClick
                     // Invalid request
                     // [START_EXCLUDE]
                     mPhoneNumberField.setError("Invalid phone number.");
-                    // [END_EXCLUDE]
-                } else if (e instanceof FirebaseTooManyRequestsException) {
-                    // The SMS quota for the project has been exceeded
-                    // [START_EXCLUDE]
-                    //Snackbar.make(findViewById(android.R.id.content), "Quota exceeded.",
-                    //       Snackbar.LENGTH_SHORT).show();
                     // [END_EXCLUDE]
                 }
 
@@ -256,11 +249,6 @@ public class PhoneRegistration extends AppCompatActivity implements View.OnClick
     }
     // [END sign_in_with_phone]
 
-    private void signOut() {
-        mAuth.signOut();
-        updateUI(STATE_INITIALIZED);
-    }
-
     private void updateUI(int uiState) {
         updateUI(uiState, mAuth.getCurrentUser(), null);
     }
@@ -364,9 +352,6 @@ public class PhoneRegistration extends AppCompatActivity implements View.OnClick
             case R.id.button_resend:
                 resendVerificationCode(mPhoneNumberField.getText().toString(), mResendToken);
                 break;
-            /*case R.id.nav_exit:
-                signOut();
-                break;*/
         }
     }
 }
