@@ -116,7 +116,7 @@ def list_contract(cursor, params, **kwargs):
     if sort is not None:
         req += " order by"
         if sort == Params.Sort.Alph:
-            req += " text"
+            req += " header"
         elif sort == Params.Sort.Locate:
             req += " id_task_located"
         elif sort == Params.Sort.LastUpdate:
@@ -148,7 +148,7 @@ def list_contract(cursor, params, **kwargs):
             line.town = towns[0]
             line.kingdom = towns[1]
         else:
-            raise AttributeError  # Заменить на вывод в лог
+            print("(GET_LIST_COMMENTS) У таблицы бд или выходного списка не найден атрибут id_task_located")
 
         obj.contracts[N] = line
 
