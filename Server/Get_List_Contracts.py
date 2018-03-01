@@ -101,18 +101,11 @@ def list_contract(cursor, params, **kwargs):
                 status.status = Status.Error.value
                 obj.value = EventGetListContracts.FilterLocateErr.value
             else:
-                req += " id_task_located in (select id from Town where"
-
                 if town is not None:
-                    req += " Town.name = '{}'".format(town)
-
-                    if kingdom is not None:
-                        req += " and"
-                    else:
-                        req += ')'
+                    req += " town = '{}' {} ".format(town, "and " if kingdom is not None else "")
 
                 if kingdom is not None:
-                    req += " Town.id_kingdom in (select id from Kingdom where Kingdom.name = '{}'))".format(kingdom)
+                    req += " kingdom = '{}' ".format(kingdom)
 
     stat = params.get(Params.Status)
     if stat is not None and (kwargs.get('id_witcher') is not None or kwargs.get('id_client') is not None):
