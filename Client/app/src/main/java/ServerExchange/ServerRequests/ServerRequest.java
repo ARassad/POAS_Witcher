@@ -49,7 +49,7 @@ public abstract class ServerRequest <AnswerType> {
     private String serverAddress;
     private final String PROTOCOL = "http://";
 
-    enum RequestType{
+    protected enum RequestType{
         GET,
         POST
     }

@@ -45,6 +45,7 @@ import ServerExchange.Profile;
 import ServerExchange.ServerRequests.AddCommentProfileRequest;
 import ServerExchange.ServerRequests.GetCommentsRequest;
 import ServerExchange.ServerRequests.GetProfileRequest;
+import ServerExchange.ServerRequests.LoginRequest;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 
@@ -188,8 +189,9 @@ public class ProfileActivity extends AppCompatActivity
 
         //Вот здесь я пишу код (Андрей)
         //profileRequest.getProfile(9, new onGetProfile(ProfileActivity.this));
-        profileRequest.getLoggedProfile(new onGetProfile(ProfileActivity.this));
-        getCommentsRequest.getLoggedProfile(new onGetComments(ProfileActivity.this));
+        long profileId = getIntent().getLongExtra("profileId", LoginRequest.getLoggedUserId());
+        profileRequest.getProfile(profileId, new onGetProfile(ProfileActivity.this));
+        getCommentsRequest.getProfileComments(profileId, new onGetComments(ProfileActivity.this));
 
         Button buttonSendComment = (Button)findViewById(R.id.imagebutton_send_comment);
         buttonSendComment.setTypeface(typeface);

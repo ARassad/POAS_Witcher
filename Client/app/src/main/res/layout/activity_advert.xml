@@ -156,30 +156,54 @@
                         android:text="Исполнитель"
                         android:textSize="20sp"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="end">
 
-                        <Button
-                            android:id="@+id/button_delete_executor"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_marginEnd="10dp"
-                            android:layout_marginRight="10dp"/>
-                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <Button
                         android:id="@+id/button_respond"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/frame_text_about"
+                        android:visibility="gone"
                         android:text="Откликнуться"/>
+
+                    <Button
+                        android:id="@+id/button_accept_answ"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/frame_text_about"
+                        android:visibility="gone"
+                        android:text="Принять заказ"/>
+
+                    <Button
+                        android:id="@+id/button_discard_answ"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/frame_text_about"
+                        android:visibility="gone"
+                        android:text="Отказаться"/>
+
+                    <Button
+                        android:id="@+id/button_set_completed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/frame_text_about"
+                        android:visibility="gone"
+                        android:text="Сообщить о выполнении"/>
+
+
+                    <Button
+                        android:id="@+id/button_discard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/frame_text_about"
+                        android:visibility="gone"
+                        android:text="Я мудак"/>
                 </LinearLayout>
 
                 <LinearLayout
