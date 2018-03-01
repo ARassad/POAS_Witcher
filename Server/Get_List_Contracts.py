@@ -63,7 +63,7 @@ def list_contract(cursor, params, **kwargs):
     obj = Object()
     status = Object()
     status.status = Status.Error.value
-    obj.message = "FUCKING SHIT SHUT UP THIS FUCKING WINDOW SCUM"
+    obj.message = "Неопознанная ошибка в методу Get List Contracts"
 
     req = 'select * from Contract'
     req += " inner join \
