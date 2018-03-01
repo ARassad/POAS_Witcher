@@ -132,24 +132,25 @@ def list_contract(cursor, params, **kwargs):
     cursor.execute(req)
     row = cursor.fetchall()
 
+    cursor.execute("select name from sys.columns where object_id = OBJECT_ID('dbo.Contract')")
+    headers = cursor.fetchall()
+
     obj.contracts = {}
-    for i in row:
+    for N, i in enumerate(row):
         line = Object()
-        line.id = i[0]
-        line.id_witcher = i[1]
-        line.id_client = i[2]
-        line.text = i[4]
-        line.bounty = i[5]
-        line.status = i[6]
-        line.last_update_status = i[7]
-        line.last_update = i[8]
-        line.header = i[9]
-        cursor.execute('select a.name, b.name from Town as a inner join Kingdom as b on a.id_kingdom = b.id \
-                          where a.id={}'.format(i[3]))
-        towns = cursor.fetchone()
-        line.town = towns[0]
-        line.kingdom = towns[1]
-        obj.contracts[len(obj.contracts)] = line
+        for n, head in enumerate(headers):
+            setattr(line, head[0], i[n])
+
+        if hasattr(line, 'id_task_located'):
+            cursor.execute('select a.name, b.name from Town as a inner join Kingdom as b on a.id_kingdom = b.id \
+                            where a.id={}'.format(line.id_task_located))
+            towns = cursor.fetchone()
+            line.town = towns[0]
+            line.kingdom = towns[1]
+        else:
+            raise AttributeError  # Заменить на вывод в лог
+
+        obj.contracts[N] = line
 
     status.object = obj
     return status.toJSON()
