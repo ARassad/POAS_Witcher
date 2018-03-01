@@ -1,6 +1,8 @@
 package prin366_2018.client;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -16,8 +18,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,8 +35,8 @@ import ServerExchange.Profile;
 import ServerExchange.ProfilePart;
 import ServerExchange.ServerRequests.AddCommentContractRequest;
 import ServerExchange.ServerRequests.AddWitcherInContractRequest;
+import ServerExchange.ServerRequests.AnswerWitcherInContractRequest;
 import ServerExchange.ServerRequests.GetAdvertRequest;
-import ServerExchange.ServerRequests.GetAdvertsRequest;
 import ServerExchange.ServerRequests.GetCommentsRequest;
 import ServerExchange.ServerRequests.GetWitcherDesiredContractRequest;
 import ServerExchange.ServerRequests.LoginRequest;
@@ -44,16 +44,71 @@ import ServerExchange.ServerRequests.RefuseContractRequest;
 import ServerExchange.ServerRequests.RemoveAdvertRequest;
 import ServerExchange.ServerRequests.SelectExecutorRequest;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
+import ServerExchange.ServerRequests.SetAdvertCompleteRequest;
 
-
-import static prin366_2018.client.ProfileActivity.decodeBase64;
-
-public class AdvertActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class AdvertActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
+        , ResponderFragment.OnResponderClick
+        {
 
 
     static final private int SAVE_DATA = 2;
 
     private GetAdvertRequest getAdvertRequest = new GetAdvertRequest();
+
+
+    @Override
+    public void onSetExecutor(final long witcher_id) {
+        AlertDialog.Builder dlgb = new AlertDialog.Builder(AdvertActivity.this);
+        dlgb.setTitle("Выбор Ведьмака исполнителем");
+        dlgb.setCancelable(true);
+
+        if (advert.getExecutorId() == null) {
+            dlgb.setMessage("Вы уверены,что хотите назначить этого Ведьмака?");
+
+            dlgb.setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    new SelectExecutorRequest().SelectWitcherInContract(witcher_id, advertId, new DefaultServerAnswerHandler<Boolean>(AdvertActivity.this) {
+                        @Override
+                        public void handle(Boolean answ) {
+                            advert.setExecutorId(witcher_id);
+                        }
+                    });
+                }
+            });
+            dlgb.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    //Игнорчииик)))
+                }
+            });
+            dlgb.create().show();
+        } else {
+            dlgb.setMessage("На текущий момент исполнителем назначен другой Ведьмак");
+            dlgb.create().show();
+        }
+    }
+
+    @Override
+    public void onGetDesiredWitcherProfile(long witcher_id) {
+        Intent intent = new Intent(AdvertActivity.this, ProfileActivity.class);
+        intent.putExtra("profileId", witcher_id);
+        startActivity(intent);
+    }
+
+
+    private class onBooleanAnswer extends DefaultServerAnswerHandler<Boolean> {
+        public onBooleanAnswer(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void handle(Boolean answ) {
+
+        }
+    }
+
+
     private class onGetAdvert extends DefaultServerAnswerHandler<Advert>{
 
         public onGetAdvert(Context context) {
@@ -82,6 +137,17 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
             }
             if (answ.getExecutorId() != null) {
                 executorNameView.setText(answ.getExecutorName());
+
+                if (answ.getExecutorId() == LoginRequest.getLoggedUserId()){
+                    if (answ.getStatus() == Advert.AdvertStatus.ASSIGNED_WITCHER){
+                        buttonAcceptAnsw.setVisibility(View.VISIBLE);
+                        buttonDiscardAnsw.setVisibility(View.VISIBLE);
+                    }
+                    else if (answ.getStatus()== Advert.AdvertStatus.IN_PROCESS){
+                        buttonComplete.setVisibility(View.VISIBLE);
+                        buttonDiscard.setVisibility(View.VISIBLE);
+                    }
+                }
             }
             if (answ.getAuthorId() == LoginRequest.getLoggedUserId()){
 
@@ -92,7 +158,6 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
             if (LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER){
                 getDesiredRequest.getDesired(answ.getId(), new onGetDesiredList(AdvertActivity.this));
             }
-
         }
     }
 
@@ -145,12 +210,15 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
             }
 
             if (LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER){
-                Button buttonRespond = (Button)findViewById(R.id.button_respond);
+                if (advert.getExecutorId() != LoginRequest.getLoggedUserId()) {
 
-                for (ProfilePart profile : answ){
-                    if (LoginRequest.getLoggedUserId() == profile.getId()){
-                        buttonRespond.setEnabled(false);
-                        buttonRespond.setText("Вы откликнулись");
+                    for (ProfilePart profile : answ) {
+                        if (LoginRequest.getLoggedUserId() == profile.getId()) {
+                            buttonRespond.setVisibility(View.VISIBLE);
+                            buttonRespond.setEnabled(false);
+                            buttonRespond.setText("Вы откликнулись");
+                            break;
+                        }
                     }
                 }
             }
@@ -163,17 +231,6 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
     //TODO: upend
     private SelectExecutorRequest selectExecutorRequest = new SelectExecutorRequest();
-    private class onSelectExecutorAnswer extends DefaultServerAnswerHandler<Boolean>{
-
-        public onSelectExecutorAnswer(Context context) {
-            super(context);
-        }
-
-        @Override
-        public void handle(Boolean answ) {
-
-        }
-    }
 
     private AddWitcherInContractRequest addWitcherInContractRequest = new AddWitcherInContractRequest();
     private class onAddWitcherInContractAnswer extends DefaultServerAnswerHandler<Boolean>{
@@ -215,7 +272,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
     private TextView headerView, descriptionView, authorNameView, rewardView, locationView, executorNameView;
     private TextView newCommentView;
-    private Button buttonRespond, buttonResponders;
+    private Button buttonRespond, buttonResponders, buttonAcceptAnsw, buttonDiscardAnsw, buttonDiscard, buttonComplete;
 
     private void connectViews(){
         headerView          = findViewById(R.id.text_title_advert);
@@ -225,6 +282,50 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         locationView        = findViewById(R.id.text_kingdom_city_advert);
         executorNameView    = findViewById(R.id.text_executor);
         newCommentView      = findViewById(R.id.input_comment);
+
+        buttonAcceptAnsw    = findViewById(R.id.button_accept_answ);
+        buttonDiscardAnsw   = findViewById(R.id.button_discard_answ);
+        buttonDiscard       = findViewById(R.id.button_discard);
+        buttonComplete      = findViewById(R.id.button_set_completed);
+
+        buttonRespond       = findViewById(R.id.button_respond);
+    }
+
+    private void setOnClickButtons(){
+        buttonAcceptAnsw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AnswerWitcherInContractRequest().acceptToAdvert(advertId, new onBooleanAnswer( AdvertActivity.this));
+            }
+        });
+
+        buttonDiscardAnsw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AnswerWitcherInContractRequest().discardAdvert(advertId, new onBooleanAnswer( AdvertActivity.this));
+            }
+        });
+
+        buttonDiscard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new RefuseContractRequest().RefuseContract(advertId, new onBooleanAnswer( AdvertActivity.this));
+            }
+        });
+
+        buttonComplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new SetAdvertCompleteRequest().setComplete(advertId, new onBooleanAnswer( AdvertActivity.this));
+            }
+        });
+
+        buttonRespond.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new RefuseContractRequest().RefuseContract(advertId, new onBooleanAnswer( AdvertActivity.this));
+            }
+        });
     }
 
     private Typeface typeface;
@@ -288,9 +389,9 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         setButton((Button)findViewById(R.id.button_comments), findViewById(R.id.comments_list));
         setButton((Button)findViewById(R.id.button_responders), findViewById((R.id.list_responders)));
 
+
         typeface = Typeface.createFromAsset(getAssets(), "fonts/fa-solid-900.ttf");
 
-        buttonRespond = (Button)findViewById(R.id.button_respond);
         buttonRespond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

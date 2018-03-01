@@ -9,8 +9,8 @@
 
     tools:context="prin366_2018.client.ResponderFragment">
 
-    <TextView
-        android:id="@+id/text_responder"
+    <Button
+        android:id="@+id/button_get_responder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
-            android:id="@+id/text_status_responder"
+            android:id="@+id/button_set_executor"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:gravity="center_vertical"

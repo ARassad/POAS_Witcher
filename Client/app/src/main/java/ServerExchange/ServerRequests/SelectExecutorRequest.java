@@ -49,7 +49,7 @@ public class SelectExecutorRequest extends TokenServerRequest<Boolean> {
         return JsonSelectWitcherInContractServerAnswer.class;
     }
 
-    public void SelectWitcherInContract(long id_witcher, long id_contract, IServerAnswerHandler onSelectWitcherInContractHandler) throws IOException {
+    public void SelectWitcherInContract(long id_witcher, long id_contract, IServerAnswerHandler onSelectWitcherInContractHandler) {
         this.id_witcher = id_witcher;
         this.id_contract = id_contract;
         startRequest(onSelectWitcherInContractHandler);
