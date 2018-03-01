@@ -60,19 +60,18 @@ def get_contract_witcher(cursor, params):
 
 
 def list_contract(cursor, params, **kwargs):
-    req = 'select * from Contract'
+    obj = Object()
+    status = Object()
+    status.status = Status.Error.value
+    obj.message = "FUCKING SHIT SHUT UP THIS FUCKING WINDOW SCUM"
 
+    req = 'select * from Contract'
     req += " inner join \
                 (select town, kingdom, idT from ((select [Town].name as town, [Town].id_kingdom, \
                 [Town].id as idT from [Town] ) as T\
                 inner join \
                 (select [Kingdom].name as kingdom, [Kingdom].id as idK From [Kingdom]) as K on T.id_kingdom = K.idK) )\
                  as TK on id_task_located = TK.idT"
-
-    obj = Object()
-    status = Object()
-    status.status = Status.Error.value
-    obj.message = "FUCKING SHIT SHUT UP THIS FUCKING WINDOW SCUM"
 
     if kwargs.get('id_witcher') is not None:
         req += ' inner join Desired_Contract on Desired_Contract.id_contract = Contract.id \
@@ -122,19 +121,21 @@ def list_contract(cursor, params, **kwargs):
     sort = params.get(Params.Sort.Name)
 
     if sort is not None:
+        sort_type_desc = params.get(Params.SortType.Name) is not None \
+                         and params.get(Params.SortType.Name) == Params.SortType.Desc
+
         req += " order by"
         if sort == Params.Sort.Alph:
             req += " header"
         elif sort == Params.Sort.Locate:
-            req += " id_task_located"
+            req += " kingdom {}, town".format("desc" if sort_type_desc else "")
         elif sort == Params.Sort.LastUpdate:
             req += " last_update"
         else:
             status.status = Status.Error.value
             obj.value = EventGetListContracts.SortErr.value
 
-        sort_type = params.get(Params.SortType.Name)
-        if sort_type is not None and sort_type == Params.SortType.Desc:
+        if sort_type_desc:
             req += " desc"
 
     cursor.execute(req)
