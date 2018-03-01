@@ -62,16 +62,23 @@ def get_contract_witcher(cursor, params):
 def list_contract(cursor, params, **kwargs):
     req = 'select * from Contract'
 
+    req += " inner join \
+                (select town, kingdom, idT from ((select [Town].name as town, [Town].id_kingdom, \
+                [Town].id as idT from [Town] ) as T\
+                inner join \
+                (select [Kingdom].name as kingdom, [Kingdom].id as idK From [Kingdom]) as K on T.id_kingdom = K.idK) )\
+                 as TK on id_task_located = TK.idT"
+
     obj = Object()
     status = Object()
-    status.status = Status.Ok.value
-    obj.message = EventGetListContracts.SuccessGetListContracts.value
+    status.status = Status.Error.value
+    obj.message = "FUCKING SHIT SHUT UP THIS FUCKING WINDOW SCUM"
 
     if kwargs.get('id_witcher') is not None:
         req += ' inner join Desired_Contract on Desired_Contract.id_contract = Contract.id \
                  where Desired_Contract.id_witcher={}'.format(kwargs.get('id_witcher'))
     elif kwargs.get('id_client') is not None:
-        req += ' where id_client={}'
+        req += ' where id_client={}'.format(kwargs.get('id_client'))
 
     filtr = params.get(Params.Filter.Name)
     if filtr is not None:
@@ -113,6 +120,7 @@ def list_contract(cursor, params, **kwargs):
         req += " and status={}".format(stat)
 
     sort = params.get(Params.Sort.Name)
+
     if sort is not None:
         req += " order by"
         if sort == Params.Sort.Alph:
@@ -131,26 +139,18 @@ def list_contract(cursor, params, **kwargs):
 
     cursor.execute(req)
     row = cursor.fetchall()
-
-    cursor.execute("select name from sys.columns where object_id = OBJECT_ID('dbo.Contract')")
-    headers = cursor.fetchall()
+    headers = tuple(cursor.description)
 
     obj.contracts = {}
     for N, i in enumerate(row):
+
         line = Object()
         for n, head in enumerate(headers):
             setattr(line, head[0], i[n])
 
-        if hasattr(line, 'id_task_located'):
-            cursor.execute('select a.name, b.name from Town as a inner join Kingdom as b on a.id_kingdom = b.id \
-                            where a.id={}'.format(line.id_task_located))
-            towns = cursor.fetchone()
-            line.town = towns[0]
-            line.kingdom = towns[1]
-        else:
-            print("(GET_LIST_COMMENTS) У таблицы бд или выходного списка не найден атрибут id_task_located")
-
         obj.contracts[N] = line
 
     status.object = obj
+    status.status = Status.Ok.value
+    obj.message = EventGetListContracts.SuccessGetListContracts.value
     return status.toJSON()
