@@ -144,9 +144,18 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
                         buttonDiscardAnsw.setVisibility(View.VISIBLE);
                     }
                     else if (answ.getStatus()== Advert.AdvertStatus.IN_PROCESS){
-                        buttonComplete.setVisibility(View.VISIBLE);
+                        if (LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER) {
+                            buttonComplete.setVisibility(View.VISIBLE);
+                        }
                         buttonDiscard.setVisibility(View.VISIBLE);
                     }
+                }
+            }
+            else {
+                executorNameView.setText("не выбран");
+
+                if (LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER) {
+                    buttonRespond.setVisibility(View.VISIBLE);
                 }
             }
             if (answ.getAuthorId() == LoginRequest.getLoggedUserId()){
@@ -323,7 +332,9 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         buttonRespond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new RefuseContractRequest().RefuseContract(advertId, new onBooleanAnswer( AdvertActivity.this));
+                addWitcherInContractRequest.addWitcherInContract(advertId, new onAddWitcherInContractAnswer(AdvertActivity.this));
+                buttonRespond.setEnabled(false);
+                buttonRespond.setText("Вы откликнулись");
             }
         });
     }
@@ -371,6 +382,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         setContentView(R.layout.activity_advert);
 
         connectViews();
+        setOnClickButtons();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -392,17 +404,10 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
         typeface = Typeface.createFromAsset(getAssets(), "fonts/fa-solid-900.ttf");
 
-        buttonRespond.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (LoginRequest.getLoggedUserType()== Profile.ProfileType.WITCHER){
-                    addWitcherInContractRequest.addWitcherInContract(advertId, new onAddWitcherInContractAnswer(AdvertActivity.this));
-                    buttonRespond.setEnabled(false);
-                    buttonRespond.setText("Вы откликнулись");
-                }
+        if (LoginRequest.getLoggedUserType()== Profile.ProfileType.WITCHER) {
 
-            }
-        });
+        }
+
         buttonResponders = (Button)findViewById(R.id.button_responders);
         if (LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER){
             buttonResponders.setVisibility(View.GONE);

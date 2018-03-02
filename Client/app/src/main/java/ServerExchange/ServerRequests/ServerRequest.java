@@ -44,7 +44,6 @@ public abstract class ServerRequest <AnswerType> {
     private final String API = "api?";
 
 
-
     private static String defaultServerAddress = "localhost/";
     private String serverAddress;
     private final String PROTOCOL = "http://";
@@ -134,7 +133,9 @@ public abstract class ServerRequest <AnswerType> {
 
     protected AnswerType doRequest(ServerMethod method, Class< ? extends JsonServerAnswer> JsonServerAnswerClass) {
 
+
         HttpURLConnection urlConnection = null;
+        LinkedList<String> strs = new LinkedList<>();
 
         String request = PROTOCOL + serverAddress + API;
         if ( getRequestType() == RequestType.POST ) {
@@ -167,7 +168,7 @@ public abstract class ServerRequest <AnswerType> {
             urlConnection.setDoInput(true);
             urlConnection.setRequestMethod(strRequestMethod);
 
-            urlConnection.connect();
+            //urlConnection.connect();
 
             Gson gson = new Gson();
 
@@ -182,25 +183,16 @@ public abstract class ServerRequest <AnswerType> {
             }
 
             //TODO: Возможно это будет вызывать ошибку
-            //if (urlConnection.getResponseCode() !=  HttpURLConnection.HTTP_OK){
-            //    throw new ServerException( urlConnection.getResponseMessage());
-            //}
+            if (urlConnection.getResponseCode() !=  HttpURLConnection.HTTP_OK){
+               throw new ServerException( urlConnection.getResponseMessage());
+            }
 
-            InputStream in = urlConnection.getInputStream();
-            InputStreamReader inReader = new InputStreamReader(in);
-            BufferedReader reader = new BufferedReader(inReader);
 
-            LinkedList<String> strs = new LinkedList<>();
-            // Это код считывания того, что пиршло, испольщуется для дебага
-            /*
-            try {
-                while (true) {
-                    String str = reader.readLine();
-                    strs.add(str);
-                }
-            } catch(Exception eee) {}
-            */
-            JsonServerAnswer serverAnswer = gson.fromJson(reader, JsonServerAnswerClass);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader ( ( urlConnection.getInputStream() ) ) );
+
+            //Thread.sleep(1000);
+            JsonServerAnswer serverAnswer = gson.fromJson(br, JsonServerAnswerClass);
             JsonAnswerHandler(serverAnswer);
             isErrorInServerRequest = ! serverAnswer.isStatusOk();
             errorMessage = serverAnswer.message;
