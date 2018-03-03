@@ -150,6 +150,12 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
                         buttonDiscard.setVisibility(View.VISIBLE);
                     }
                 }
+
+                if ( answ.getAuthorId() == LoginRequest.getLoggedUserId()){
+                    if ( answ.getStatus() == Advert.AdvertStatus.IN_PROCESS || answ.getStatus() == Advert.AdvertStatus.ASSIGNED_WITCHER) {
+                        buttonDiscard.setVisibility(View.VISIBLE);
+                    }
+                }
             }
             else {
                 executorNameView.setText("не выбран");
@@ -161,6 +167,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
             if (answ.getAuthorId() == LoginRequest.getLoggedUserId()){
 
                 ifCreatedByLoggedUser();
+
                 getDesiredRequest.getDesired(answ.getId(), new onGetDesiredList(AdvertActivity.this));
             }
 
@@ -370,6 +377,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
                 removeAdvertRequest.removeAdvert(advertId, new onRemoveAdvertAnswer(AdvertActivity.this));
             }
         });
+
     }
 
 
