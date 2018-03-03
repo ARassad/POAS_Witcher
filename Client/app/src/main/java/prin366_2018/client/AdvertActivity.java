@@ -150,6 +150,10 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
                             buttonComplete.setVisibility(View.VISIBLE);
                         }
                         buttonDiscard.setVisibility(View.VISIBLE);
+                        if (LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER)
+                            buttonDiscard.setText("Отказаться от дальнейшего выполнения заказа");
+                        else
+                            buttonDiscard.setText("Отказаться от услуг ведьмака");
                     }
                 }
 
@@ -321,6 +325,9 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
             @Override
             public void onClick(View view) {
                 new AnswerWitcherInContractRequest().acceptToAdvert(advertId, new onBooleanAnswer( AdvertActivity.this));
+                buttonAcceptAnsw.setEnabled(false);
+                buttonAcceptAnsw.setText("Вы приняли заказ");
+                buttonDiscardAnsw.setVisibility(View.GONE);
             }
         });
 
@@ -328,6 +335,9 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
             @Override
             public void onClick(View view) {
                 new AnswerWitcherInContractRequest().discardAdvert(advertId, new onBooleanAnswer( AdvertActivity.this));
+                buttonDiscardAnsw.setEnabled(false);
+                buttonDiscardAnsw.setText("Вы отказались");
+                buttonAcceptAnsw.setVisibility(View.GONE);
             }
         });
 
@@ -335,6 +345,12 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
             @Override
             public void onClick(View view) {
                 new RefuseContractRequest().RefuseContract(advertId, new onBooleanAnswer( AdvertActivity.this));
+                buttonDiscard.setEnabled(false);
+                if (LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER)
+                    buttonDiscard.setText("Вы отказались от дальнейшего выполнения");
+                else
+                    buttonDiscard.setText("Вы отказались от услуг ведьмака");
+                buttonComplete.setVisibility(View.GONE);
             }
         });
 
@@ -342,6 +358,9 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
             @Override
             public void onClick(View view) {
                 new SetAdvertCompleteRequest().setComplete(advertId, new onBooleanAnswer( AdvertActivity.this));
+                buttonComplete.setEnabled(false);
+                buttonComplete.setText("Вы сообщили о выполнении заказа");
+                buttonDiscard.setVisibility(View.GONE);
             }
         });
 
