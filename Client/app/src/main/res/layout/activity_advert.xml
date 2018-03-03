@@ -203,7 +203,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/frame_text_about"
                         android:visibility="gone"
-                        android:text="Я мудак"/>
+                        android:text="Отказаться от ведьмака"/>
                 </LinearLayout>
 
                 <LinearLayout
