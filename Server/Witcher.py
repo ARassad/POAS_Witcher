@@ -27,8 +27,10 @@ def select_witcher(cursor, params):
     status = Object()
 
     if row is not None:
+        cursor.execute("select id from Witcher where id_profile={}".format(params[Witcher.IDpost.value]))
+        id_witcher = cursor.fetchone()[0]
         cursor.execute("update Contract set id_witcher={} where id={}"
-                       .format(params[Witcher.IDpost.value], params[Advert.IDpost]))
+                       .format(id_witcher, params[Advert.IDpost]))
 
         cursor.execute("select header from Contract where id={}".format(params[Advert.IDpost]))
         cont = cursor.fetchone()[0]
