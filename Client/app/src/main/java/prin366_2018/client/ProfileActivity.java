@@ -73,6 +73,7 @@ public class ProfileActivity extends AppCompatActivity
     TextView aboutMe;
     TextView role;
     ImageView image;
+    Button buttonEdit;
 
     static final private int RESULT_CANCEL = 0;
     static final private int RESULT_OK = 1;
@@ -95,6 +96,7 @@ public class ProfileActivity extends AppCompatActivity
         @Override
         public void handle(Profile answ) {
 
+            author_id = answ.getId();
             name.setText(answ.getName() != null ? answ.getName() : "NoName");
 
             aboutMe.setText( answ.getInfo() != null ? answ.getInfo() : "Nobody");
@@ -108,6 +110,10 @@ public class ProfileActivity extends AppCompatActivity
             ArrayList<AdvertCard> history = answ.getHistory();
             for (AdvertCard historyElem : history){
                 setTableRow(df.format(historyElem.getLastStatusUpdate()), historyElem.getAdvertHeader(), historyElem.getStatus().toRuString(), historyElem.getAdvertId());
+            }
+
+            if (author_id != LoginRequest.getLoggedUserId()){
+                buttonEdit.setVisibility(View.GONE);
             }
         }
     }
@@ -149,7 +155,8 @@ public class ProfileActivity extends AppCompatActivity
    }
 
     private GetCommentsRequest getCommentsRequest = new GetCommentsRequest();
-
+    long profileId = -1;
+    long author_id = -1;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,7 +188,7 @@ public class ProfileActivity extends AppCompatActivity
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/fa-solid-900.ttf");
 
-        final Button buttonEdit = (Button)findViewById(R.id.button_edit);
+        buttonEdit = (Button)findViewById(R.id.button_edit);
         buttonEdit.setTypeface(typeface);
         buttonEdit.setText("\uf044");
         buttonEdit.setOnClickListener(new View.OnClickListener() {
@@ -197,9 +204,11 @@ public class ProfileActivity extends AppCompatActivity
             }
         });
 
+
+
         //Вот здесь я пишу код (Андрей)
         //profileRequest.getProfile(9, new onGetProfile(ProfileActivity.this));
-        final long profileId = getIntent().getLongExtra("profileId", LoginRequest.getLoggedUserId());
+        profileId = getIntent().getLongExtra("profileId", LoginRequest.getLoggedUserId());
         profileRequest.getProfile(profileId, new onGetProfile(ProfileActivity.this));
         getCommentsRequest.getProfileComments(profileId, new onGetComments(ProfileActivity.this));
 
