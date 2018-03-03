@@ -36,9 +36,7 @@ def select_witcher(cursor, params):
         cont = cursor.fetchone()[0]
         title = 'Вы выбраны для выполнения контракта!'
         body = 'Контракт ' + cont
-        cursor.execute("select id_profile from Witcher where id={}".format(params[Witcher.IDpost.value]))
-        id_sender = cursor.fetchone()[0]
-        send_firebase_push(cursor, body, title, id_sender)
+        send_firebase_push(cursor, body, title, Witcher.IDpost.value)
 
         status.status = Status.Ok.value
         status.message = EventWitcher.Success.value
