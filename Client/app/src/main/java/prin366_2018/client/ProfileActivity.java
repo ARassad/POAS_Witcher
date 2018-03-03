@@ -95,9 +95,11 @@ public class ProfileActivity extends AppCompatActivity
                 image.setImageBitmap(answ.getImage());
             }
 
+            Locale local = new Locale("ru","RU");
+            DateFormat df = DateFormat.getDateInstance(DateFormat.DEFAULT, local);
             ArrayList<AdvertCard> history = answ.getHistory();
             for (AdvertCard historyElem : history){
-                setTableRow(historyElem.getLastStatusUpdate().toString(), historyElem.getAdvertHeader(), historyElem.getStatus().toRuString());
+                setTableRow(df.format(historyElem.getLastStatusUpdate()), historyElem.getAdvertHeader(), historyElem.getStatus().toRuString());
             }
         }
     }
