@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 
@@ -22,6 +23,7 @@ public class TableRowStoryAdvertFragment extends Fragment {
     private String date;
     private String title;
     private String status;
+    private long advert_id;
 
     public TableRowStoryAdvertFragment() {
         date = "01.01.1000";
@@ -30,19 +32,28 @@ public class TableRowStoryAdvertFragment extends Fragment {
     }
 
     @SuppressLint("ValidFragment")
-    public TableRowStoryAdvertFragment(String _date, String _title, String _status) {
+    public TableRowStoryAdvertFragment(String _date, String _title, String _status, long advert_id) {
         date = _date;
         title = _title;
         status = _status;
+        this.advert_id = advert_id;
     }
 
+    Button buttonHeader;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_table_row_story_advert, container, false);
         ((TextView)view.findViewById(R.id.tablerow_date)).setText(date);
-        ((TextView)view.findViewById(R.id.tablerow_title)).setText(title);
+        buttonHeader = view.findViewById(R.id.btn_title);
+        buttonHeader.setText(title);
+        buttonHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onHeaderClick(advert_id);
+            }
+        });
         ((TextView)view.findViewById(R.id.tablerow_status)).setText(status);
         return view;
     }
@@ -75,6 +86,6 @@ public class TableRowStoryAdvertFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
+        void onHeaderClick(long advert_id);
     }
 }
