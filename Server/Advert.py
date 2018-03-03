@@ -203,11 +203,14 @@ def get_advert(cursor, params):
         status.witcher = witcher
 
     cursor.execute(
-        "select id, name from Profile where id=(select id_profile from Client where id={})".format(id_client))
+        "select id, name, id_photo from Profile where id=(select id_profile from Client where id={})".format(id_client))
     row = cursor.fetchone()
     client = Object()
     client.id = row[0]
     client.name = row[1]
+    if row[2] is not None:
+        cursor.execute("select photo from Photo where id={}".format(row[2]))
+        client.photo = cursor.fetchone()[0]
     status.client = client
 
     cursor.execute("select a.name, b.name from Town as a inner join Kingdom as b on a.id_kingdom=b.id where a.id={}"
