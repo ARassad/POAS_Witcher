@@ -11,7 +11,7 @@
         <item
             android:id="@+id/nav_advert"
             android:icon="@drawable/ic_library_books_black_24dp"
-            android:title="Мои объявления" />
+            android:title="Объявления" />
     </group>
 
     <item

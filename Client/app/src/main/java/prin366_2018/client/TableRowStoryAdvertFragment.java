@@ -2,6 +2,7 @@ package prin366_2018.client;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -46,14 +47,14 @@ public class TableRowStoryAdvertFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_table_row_story_advert, container, false);
         ((TextView)view.findViewById(R.id.tablerow_date)).setText(date);
-        buttonHeader = view.findViewById(R.id.btn_title);
-        buttonHeader.setText(title);
-        buttonHeader.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.frag).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                mListener.onHeaderClick(advert_id);
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AdvertActivity.class);
+                startActivity(intent);
             }
         });
+        ((TextView)view.findViewById(R.id.tablerow_title)).setText(title);
         ((TextView)view.findViewById(R.id.tablerow_status)).setText(status);
         return view;
     }

@@ -173,7 +173,8 @@
                         android:id="@+id/table_advert_story"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:stretchColumns="*">
+                        android:stretchColumns="*"
+                        android:shrinkColumns="*">
 
                         <ProgressBar
                             style="?android:attr/progressBarStyleLarge"

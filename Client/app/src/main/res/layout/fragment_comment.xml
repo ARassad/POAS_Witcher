@@ -12,13 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/image_comment"
-            android:layout_width="60dp"
-            android:layout_height="80dp"
-            android:layout_margin="10dp"
-            app:srcCompat="@android:drawable/ic_menu_camera"/>
-
         <TextView
             android:id="@+id/text_comment"
             android:layout_width="match_parent"

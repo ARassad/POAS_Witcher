@@ -38,7 +38,6 @@ public class CommentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_comment, container, false);
-        ((ImageView)view.findViewById(R.id.image_comment)).setImageBitmap(bitmap);
         ((TextView)view.findViewById(R.id.text_comment)).setText(text);
         ((TextView)view.findViewById(R.id.text_date_time)).setText(dateTime);
         return view;

@@ -1,25 +1,28 @@
 <TableRow
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frag"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:clickable="true"
+    android:focusable="true"
+    android:onClick="OnClick"
     tools:context="prin366_2018.client.TableRowStoryAdvertFragment">
 
     <TextView
         android:id="@+id/tablerow_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:textSize="18sp"
         android:textColor="#000000"
         android:textAlignment="center"
-        android:layout_gravity="left"
         android:text="-----------------"
         android:background="@drawable/frame_table_row" />
 
-    <Button
-        android:id="@+id/btn_title"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/tablerow_title"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/frame_table_row"
         android:text="-----------------"
@@ -29,11 +32,11 @@
 
     <TextView
         android:id="@+id/tablerow_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@drawable/frame_table_row"
         android:text="-----------------"
+        android:layout_weight="1"
         android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="18sp" />
