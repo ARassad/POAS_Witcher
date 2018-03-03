@@ -200,7 +200,7 @@ public class GetAdvertsRequest extends TokenServerRequest < ArrayList<Advert>> {
                     java.util.Date update_time = new java.util.Date(contract.last_update * 1000);
                     Advert.AdvertStatus st = Advert.AdvertStatus.fromInt(contract.status);
                     Location loc = locsList.getById(contract.id_task_located);
-                    Advert advert = new Advert(contract.id, contract.header, contract.text, null, loc, contract.bounty, contract.id_client, "", null, contract.id_witcher, "", st, update_time, null);
+                    Advert advert = new Advert(contract.id, contract.header, contract.text, null, loc, contract.bounty, contract.id_client, "",null, null, contract.id_witcher, "", st, update_time, null);
                     adverts.set(Integer.parseInt(key_contract.getKey()), advert );
                 }
             }
