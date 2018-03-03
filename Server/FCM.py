@@ -24,6 +24,6 @@ def send_firebase_push(cursor, title, body, id_profile):
         json = json.loads(urlopen(request).read().decode())
         print(json)
     else:
-        cursor.execute('insert into Push_Message(id_profile, title, body) values({}, {}, {})'
+        cursor.execute("insert into Push_Message(id_profile, title, body) values({}, N'{}', N'{}')"
                        .format(id_profile, title, body))
         print('push to queue')
