@@ -98,7 +98,7 @@ def refuse_contract(cursor, params):
 
 
     status = Object()
-    cursor.execute("update Contract set id_witcher=null status=0 where id={}"
+    cursor.execute("update Contract set id_witcher=null, status=0 where id={}"
                    .format(params[Advert.IDpost]))
     status.status = Status.Ok.value
     status.message = EventWitcher.Success.value
