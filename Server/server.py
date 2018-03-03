@@ -1,5 +1,6 @@
 from Server.ConnectDB import connect_database
 from Server.Auth import authorization
+from Server.Auth import set_token
 from Server.Registration import registration
 from Server.Registration import check_phone
 from Server.Get_List_Contracts import get_list_contracts
@@ -47,6 +48,7 @@ api_methods_post[ApiMethod.SelectWitcherInContract.value] = select_witcher
 api_methods_post[ApiMethod.AnswerWitcherInContract.value] = answer_witcher
 api_methods_post[ApiMethod.RefuseContract.value] = refuse_contract
 api_methods_post[ApiMethod.CheckPhone.value] = check_phone
+api_methods_post[ApiMethod.SetToken.value] = set_token
 api_methods_get[ApiMethod.GetAdvert.value] = get_advert
 api_methods_get[ApiMethod.GetWitcherDesiredContract.value] = get_profile_desired_contract
 api_methods_get[ApiMethod.DeleteAdvert.value] = delete_advert

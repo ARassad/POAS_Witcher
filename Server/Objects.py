@@ -30,6 +30,7 @@ class ApiMethod(Enum):
     ContractComplited = "ContractComplited"
     ExitProfile = "ExitProfile"
     CheckPhone = "CheckPhone"
+    SetToken = "SetToken"
 
 
 class Comment(Enum):

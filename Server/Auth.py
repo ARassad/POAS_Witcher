@@ -54,3 +54,14 @@ def authorization(cursor, params):
         status.message = EventAuth.PasswordIncorrect.value
 
     return status.toJSON()
+
+
+def set_token(cursor, params):
+    cursor.execute("select id from Profile where id_authorization_info=(select id from Authorization_info \
+                    where phone_number='{}')".format(params["phone_number"]))
+    id_prof = cursor.fetchone()[0]
+    cursor.execute("insert into Token_Table(token, last_update, id_profile) values('{}', {}, {})"
+                   .format(params[User.Token.value], int(time.time()), id_prof))
+    status = Object()
+    status.status = Status.Ok.value
+    return status.toJSON()
