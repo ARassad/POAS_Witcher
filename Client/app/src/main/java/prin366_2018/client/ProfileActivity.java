@@ -78,6 +78,14 @@ public class ProfileActivity extends AppCompatActivity
     static final private int RESULT_OK = 1;
     static final private int SAVE_DATA = 2;
 
+    @Override
+    public void onHeaderClick(long advert_id) {
+        Intent intent = new Intent(ProfileActivity.this, AdvertActivity.class);
+        intent.putExtra("advertId", advert_id);
+        startActivity(intent);
+
+    }
+
     class onGetProfile extends DefaultServerAnswerHandler<Profile> {
 
         public onGetProfile(Context context) {
@@ -99,7 +107,7 @@ public class ProfileActivity extends AppCompatActivity
             DateFormat df = DateFormat.getDateInstance(DateFormat.DEFAULT, local);
             ArrayList<AdvertCard> history = answ.getHistory();
             for (AdvertCard historyElem : history){
-                setTableRow(df.format(historyElem.getLastStatusUpdate()), historyElem.getAdvertHeader(), historyElem.getStatus().toRuString());
+                setTableRow(df.format(historyElem.getLastStatusUpdate()), historyElem.getAdvertHeader(), historyElem.getStatus().toRuString(), historyElem.getAdvertId());
             }
         }
     }
@@ -246,10 +254,10 @@ public class ProfileActivity extends AppCompatActivity
         ft.commit();
     }
 
-    private void setTableRow(String date, String title, String status) {
+    private void setTableRow(String date, String title, String status, long advId) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
-        TableRowStoryAdvertFragment newRow = new TableRowStoryAdvertFragment(date, title, status);
+        TableRowStoryAdvertFragment newRow = new TableRowStoryAdvertFragment(date, title, status, advId);
         ft.add(R.id.table_advert_story, newRow);
         ft.commit();
     }
@@ -316,6 +324,4 @@ public class ProfileActivity extends AppCompatActivity
         });
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {}
 }
