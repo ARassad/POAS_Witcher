@@ -89,10 +89,12 @@ public class Advert implements ICommented {
     //Profile author;
     private long id_author;
     private String authorName;
+    private Bitmap authorPhoto;
     public long getAuthorId(){
         return id_author;
     }
     public String getAuthorName() {return authorName; }
+    public Bitmap getAuthorPhoto() {return authorPhoto; }
 
     private LinkedList<Long> idSubscribedWitchersList;
     public ArrayList<Long> getIdSubscribedWitchersList(){
@@ -196,7 +198,7 @@ public class Advert implements ICommented {
     }
 
     public Advert(long id, String name, String info, LinkedList<Bitmap> images, Location location, int reward,
-                  long id_author, String authorName,LinkedList<Long> idSubscribedWitchersList,
+                  long id_author, String authorName, Bitmap authorPhoto ,LinkedList<Long> idSubscribedWitchersList,
                   Long id_executor, String executorName ,AdvertStatus status,
                   Date dateOfCreate, CommentsContainer comments) {
 
@@ -208,6 +210,7 @@ public class Advert implements ICommented {
         this.reward = reward;
         this.id_author = id_author;
         this.authorName = authorName;
+        this.authorPhoto = authorPhoto;
         this.idSubscribedWitchersList = idSubscribedWitchersList;
         this.id_executor = id_executor;
         this.executorName = executorName;
@@ -220,7 +223,7 @@ public class Advert implements ICommented {
     @Override
     public Object clone(){
         
-        return new Advert(id, name, info, images, location, reward, id_author, authorName,idSubscribedWitchersList,
+        return new Advert(id, name, info, images, location, reward, id_author, authorName,authorPhoto,idSubscribedWitchersList,
             id_executor,executorName ,status, dateOfCreate, comments);
         
     }

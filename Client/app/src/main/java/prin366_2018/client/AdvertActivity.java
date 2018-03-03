@@ -173,6 +173,12 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
                 getDesiredRequest.getDesired(answ.getId(), new onGetDesiredList(AdvertActivity.this));
             }
 
+            Bitmap authPhoto = answ.getAuthorPhoto();
+            if (authPhoto != null){
+                authPhoto = Bitmap.createScaledBitmap(authPhoto, btnProfileImage.getWidth(),btnProfileImage.getHeight(), false);
+                btnProfileImage.setImageBitmap(authPhoto);
+            }
+
             if (LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER){
                 getDesiredRequest.getDesired(answ.getId(), new onGetDesiredList(AdvertActivity.this));
             }
@@ -291,6 +297,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
     private TextView headerView, descriptionView, authorNameView, rewardView, locationView, executorNameView;
     private TextView newCommentView;
     private Button buttonRespond, buttonResponders, buttonAcceptAnsw, buttonDiscardAnsw, buttonDiscard, buttonComplete;
+    private ImageButton btnProfileImage;
 
     private void connectViews(){
         headerView          = findViewById(R.id.text_title_advert);
@@ -411,7 +418,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         setButton((Button)findViewById(R.id.button_comments), findViewById(R.id.comments_list));
         setButton((Button)findViewById(R.id.button_responders), findViewById((R.id.list_responders)));
 
-        ImageButton btnProfileImage = findViewById(R.id.btn_profile_image);
+        btnProfileImage = findViewById(R.id.btn_profile_image);
         btnProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

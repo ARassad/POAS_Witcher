@@ -53,6 +53,7 @@ public class GetAdvertRequest extends TokenServerRequest<Advert> {
             public class ClientJson {
                 public long id;
                 public String name;
+                public String photo;
             }
 
             public ClientJson client;
@@ -97,8 +98,9 @@ public class GetAdvertRequest extends TokenServerRequest<Advert> {
                 }
             }
 
+            Bitmap authorPhoto = ImageConvert.fromBase64Str(client.photo);
             Advert advert = new Advert(object.id, object.header, object.text, imgs, new Location(object.kingdom, object.town),
-                    object.bounty, client.id, client.name,null/*other method*/,witcher== null ? null : witcher.id, witcher== null ? null :witcher.name, Advert.AdvertStatus.fromInt(object.status),
+                    object.bounty, client.id, client.name, authorPhoto,null/*other method*/,witcher== null ? null : witcher.id, witcher== null ? null :witcher.name, Advert.AdvertStatus.fromInt(object.status),
                     dateOfLastUpdate, null/*other method*/);
             return advert;
         }
