@@ -29,16 +29,14 @@ def select_witcher(cursor, params):
     if row is not None:
         cursor.execute("select id from Witcher where id_profile={}".format(params[Witcher.IDpost.value]))
         id_witcher = cursor.fetchone()[0]
-        cursor.execute("update Contract set id_witcher={} where id={}"
+        cursor.execute("update Contract set id_witcher={}, status=1 where id={}"
                        .format(id_witcher, params[Advert.IDpost]))
 
         cursor.execute("select header from Contract where id={}".format(params[Advert.IDpost]))
         cont = cursor.fetchone()[0]
         title = 'Вы выбраны для выполнения контракта!'
         body = 'Контракт ' + cont
-        cursor.execute("select id_profile from Witcher where id={}".format(params[Witcher.IDpost.value]))
-        id_sender = cursor.fetchone()[0]
-        send_firebase_push(cursor, body, title, id_sender)
+        send_firebase_push(cursor, body, title, params[Witcher.IDpost.value])
 
         status.status = Status.Ok.value
         status.message = EventWitcher.Success.value
@@ -100,7 +98,7 @@ def refuse_contract(cursor, params):
 
 
     status = Object()
-    cursor.execute("update Contract set id_witcher=null status=0 where id={}"
+    cursor.execute("update Contract set id_witcher=null, status=0 where id={}"
                    .format(params[Advert.IDpost]))
     status.status = Status.Ok.value
     status.message = EventWitcher.Success.value

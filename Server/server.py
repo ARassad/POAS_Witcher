@@ -75,7 +75,9 @@ class HttpServer(BaseHTTPRequestHandler):
         is_ok, stat = security_requests(mymethod, dct)
         if is_ok:
             cursor, connect = connect_database()
-            self.wfile.write(str.encode(api_methods_get[mymethod](cursor, dct)))
+            value = api_methods_get[mymethod](cursor, dct)
+            self.wfile.write(str.encode(value))
+            print(value)
             cursor.close()
             connect.close()
         else:
@@ -95,7 +97,9 @@ class HttpServer(BaseHTTPRequestHandler):
         is_ok, stat = security_requests(mymethod, dct, 0)
         if is_ok:
             cursor, connect = connect_database()
-            self.wfile.write(str.encode(api_methods_post[mymethod](cursor, dct)))
+            value = api_methods_post[mymethod](cursor, dct)
+            self.wfile.write(str.encode(value))
+            print(value)
             cursor.close()
             connect.close()
         else:
