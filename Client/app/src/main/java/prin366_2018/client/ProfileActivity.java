@@ -199,7 +199,7 @@ public class ProfileActivity extends AppCompatActivity
 
         //Вот здесь я пишу код (Андрей)
         //profileRequest.getProfile(9, new onGetProfile(ProfileActivity.this));
-        long profileId = getIntent().getLongExtra("profileId", LoginRequest.getLoggedUserId());
+        final long profileId = getIntent().getLongExtra("profileId", LoginRequest.getLoggedUserId());
         profileRequest.getProfile(profileId, new onGetProfile(ProfileActivity.this));
         getCommentsRequest.getProfileComments(profileId, new onGetComments(ProfileActivity.this));
 
@@ -226,7 +226,7 @@ public class ProfileActivity extends AppCompatActivity
                                 text,
                                 formatForDateNow.format(new Date()));
 
-                        addComment.getLoggedProfile(text, new onAddComment(ProfileActivity.this));
+                        addComment.addCommentProfile(text, profileId, new onAddComment(ProfileActivity.this));
                     }
 
                 }
