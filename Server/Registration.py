@@ -59,3 +59,15 @@ def registration(cursor, params):
         status.message = EventRegistration.LoginExist.value
 
     return status.toJSON()
+
+
+def check_phone(cursor, params):
+    cursor.execute("select id from Authorization_info where phone_number='{}'".format(params["phone_number"]))
+    row = cursor.fetchone()
+    status = Object()
+    if row is None:
+        status.status = Status.Ok.value
+    else:
+        status.status = Status.Error.value
+
+    return status.toJSON()

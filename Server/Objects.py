@@ -29,6 +29,7 @@ class ApiMethod(Enum):
     GetContractWitcher = "GetContractWitcher"
     ContractComplited = "ContractComplited"
     ExitProfile = "ExitProfile"
+    CheckPhone = "CheckPhone"
 
 
 class Comment(Enum):

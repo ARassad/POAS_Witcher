@@ -103,7 +103,10 @@ paramsRequests = {
                                         'type_req': 1},
 
     ApiMethod.ExitProfile.value: {'params': {'token': 'token'}, 'min_params': 1, 'count': 1,
-                                  'type_req': 1}}
+                                  'type_req': 1},
+
+    ApiMethod.CheckPhone.value: {'params': {'phone_number': 'phone_number'}, 'min_params': 1, 'count': 1,
+                                 'type_req': 0}}
 
 
 def security_requests(method, params, isget=1):
