@@ -128,9 +128,9 @@ def update_profile(cursor, params):
 
 
 def write_comment_profile(cursor, params):
-    cursor.execute("select id_profile from Token_Table where token='{}'".format(params[User.Token.value]))
-    id_sender = cursor.fetchone()[0]
-    cursor.execute("select id_list_comments from Profile where id={}".format(id_sender))
+    #  cursor.execute("select id_profile from Token_Table where token='{}'".format(params[User.Token.value]))
+    #  id_sender = cursor.fetchone()[0]
+    cursor.execute("select id_list_comments from Profile where id={}".format(params["id"]))
     id_lcomment = cursor.fetchone()[0]
 
     cursor.execute("insert into Comment (id_list_comment, text, create_date) values({}, N'{}', {})"
