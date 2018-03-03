@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.media.Image;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -18,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -409,6 +411,15 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         setButton((Button)findViewById(R.id.button_comments), findViewById(R.id.comments_list));
         setButton((Button)findViewById(R.id.button_responders), findViewById((R.id.list_responders)));
 
+        ImageButton btnProfileImage = findViewById(R.id.btn_profile_image);
+        btnProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toProfile = new Intent(AdvertActivity.this, ProfileActivity.class);
+                toProfile.putExtra("profileId", advert.getAuthorId());
+                startActivity(toProfile);
+            }
+        });
 
         typeface = Typeface.createFromAsset(getAssets(), "fonts/fa-solid-900.ttf");
 
