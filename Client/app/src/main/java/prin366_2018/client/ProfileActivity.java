@@ -302,7 +302,11 @@ public class ProfileActivity extends AppCompatActivity
 
         int id = item.getItemId();
 
-        if (id == R.id.nav_advert) {
+        if (id == R.id.nav_profile && author_id != LoginRequest.getLoggedUserId()) {
+            Intent intent = new Intent(ProfileActivity.this, ProfileActivity.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.nav_advert) {
             Intent intent = new Intent(ProfileActivity.this, AdvertListActivity.class);
             startActivity(intent);
         }
