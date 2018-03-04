@@ -107,8 +107,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         setContentView(R.layout.activity_login);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        if (mAuth != null) {
-            // TODO: Отправить серверу запрос о выходе из профиля
+        if (mAuth.getCurrentUser() != null) {
+            // TODO: Запросить профиль через токен и перейти в ProfileActivity
             mAuth.signOut();
         }
 
