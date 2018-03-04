@@ -40,8 +40,6 @@ public class TableRowStoryAdvertFragment extends Fragment {
         this.advert_id = advert_id;
     }
 
-    Button buttonHeader;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -50,8 +48,7 @@ public class TableRowStoryAdvertFragment extends Fragment {
         view.findViewById(R.id.frag).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), AdvertActivity.class);
-                startActivity(intent);
+                mListener.onHeaderClick(advert_id);
             }
         });
         ((TextView)view.findViewById(R.id.tablerow_title)).setText(title);
