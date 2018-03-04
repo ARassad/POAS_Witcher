@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,6 +33,7 @@ import java.util.LinkedList;
 
 import ServerExchange.Advert;
 import ServerExchange.Comment;
+import ServerExchange.ImageConvert;
 import ServerExchange.Location;
 import ServerExchange.Profile;
 import ServerExchange.ProfilePart;
@@ -302,6 +304,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
     private TextView newCommentView;
     private Button buttonRespond, buttonResponders, buttonAcceptAnsw, buttonDiscardAnsw, buttonDiscard, buttonComplete;
     private ImageButton btnProfileImage;
+    private ImageView[] photos = new ImageView[10];
 
     private void connectViews(){
         headerView          = findViewById(R.id.text_title_advert);
@@ -318,6 +321,16 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         buttonComplete      = findViewById(R.id.button_set_completed);
 
         buttonRespond       = findViewById(R.id.button_respond);
+        photos[0] = (ImageView)findViewById(R.id.image1);
+        photos[1] = (ImageView)findViewById(R.id.image2);
+        photos[2] = (ImageView)findViewById(R.id.image3);
+        photos[3] = (ImageView)findViewById(R.id.image4);
+        photos[4] = (ImageView)findViewById(R.id.image5);
+        photos[5] = (ImageView)findViewById(R.id.image6);
+        photos[6] = (ImageView)findViewById(R.id.image7);
+        photos[7] = (ImageView)findViewById(R.id.image8);
+        photos[8] = (ImageView)findViewById(R.id.image9);
+        photos[9] = (ImageView)findViewById(R.id.image10);
     }
 
     private void setOnClickButtons(){
@@ -462,7 +475,6 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         }
 
 
-
         Button buttonSendComment = (Button)findViewById(R.id.imagebutton_send_comment);
         buttonSendComment.setTypeface(typeface);
         buttonSendComment.setText("\uf1d8");
@@ -526,6 +538,12 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
                 String c = intent.getStringExtra("city");
                 if (k!= null && c!= null)
                 locationView.setText( new Location(k,c).toString());
+
+                String[] bms = intent.getStringArrayExtra("bitmaps");
+                if (bms != null) {
+                    for (int i = 0; i < bms.length; ++i)
+                        photos[i].setImageBitmap(ImageConvert.fromBase64Str(bms[i]));
+                }
             }
         }
     }
