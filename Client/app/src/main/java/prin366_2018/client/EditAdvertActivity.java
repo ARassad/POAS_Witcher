@@ -267,8 +267,6 @@ public class EditAdvertActivity extends AppCompatActivity {
                     );
                 }
 
-                goBack();
-
             }
         });
     }
@@ -304,8 +302,10 @@ public class EditAdvertActivity extends AppCompatActivity {
         intent.putExtra("bounty",       cost.getText().toString());
         intent.putExtra("kingdom",      (String)kingdom.getSelectedItem());
         intent.putExtra("city",         (String) city.getSelectedItem());
-        intent.putExtra("bitmaps",      BitmapsToBundle(bitmaps));
 
+        if (bitmaps != null) {
+            intent.putExtra("bitmaps", BitmapsToBundle(bitmaps));
+        }
         setResult(RESULT_OK, intent);
         finish();
     }
