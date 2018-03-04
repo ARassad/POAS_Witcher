@@ -10,7 +10,14 @@ class ParamRequests(Enum):
     Min = "min_params"
     Count = "count"
     TypeRequest = "type_req"
-	
+
+
+# params - допустимые параметры в запросе
+# min_params - минимальное количество параметров, допустимое для запросов
+# count - количество параметров в запросе
+# type - тип запроса, 1 - get, 0 - post
+
+
 paramsRequests = {
     ApiMethod.GetTowns.value: {'params': {'token': 'token'}, 'min_params': 1, 'count': 1, 'type_req': 1},
 
