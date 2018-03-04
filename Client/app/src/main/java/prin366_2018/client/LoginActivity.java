@@ -37,9 +37,12 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.util.ArrayList;
 import java.util.List;
 
+import ServerExchange.Location;
 import ServerExchange.LocationsList;
 import ServerExchange.Profile;
 import ServerExchange.ServerRequests.AuthorizationRequest;
+import ServerExchange.ServerRequests.GetProfileRequest;
+import ServerExchange.ServerRequests.LoginRequest;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
 import ServerExchange.ServerRequests.ServerRequest;
@@ -105,14 +108,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        onAppStart();
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
             // TODO: Запросить профиль через токен и перейти в ProfileActivity
-            mAuth.signOut();
+            new GetProfileRequest().getLoggedProfile(new DefaultServerAnswerHandler<Profile>(LoginActivity.this) {
+                @Override
+                public void handle(Profile answ) {
+                    LoginRequest.setLoggedProfile(answ);
+                    LocationsList.refillFromServer();
+                    Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+                    startActivity(intent);
+
+                }
+            });
+            //mAuth.signOut();
         }
 
-        onAppStart();
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 

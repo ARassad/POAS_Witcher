@@ -18,9 +18,15 @@ public abstract class LoginRequest<AnswerType> extends ServerRequest<AnswerType>
     static private Long loggedUserId = null;
     static public Long getLoggedUserId() { return loggedUserId.longValue();}
 
+
     static private Profile.ProfileType loggedUserType;
     static public Profile.ProfileType getLoggedUserType(){
         return loggedUserType;
+    }
+
+    static public void setLoggedProfile(Profile profile){
+        loggedUserType = profile.getType();
+        loggedUserId = profile.getId();
     }
 
     private static String phone_number = null;

@@ -24,7 +24,7 @@ public class GetProfileRequest extends TokenServerRequest<Profile> {
 	
 	private String GET_PROFILE_METHOD_NAME = "GetProfile";
 
-    private long id;
+    private Long id = null;
 
     public GetProfileRequest(String address) {super(address);}
     public GetProfileRequest() {super();}
@@ -33,8 +33,10 @@ public class GetProfileRequest extends TokenServerRequest<Profile> {
     protected ServerMethod getMethod() {
 
         HashMap<String, Object> params = new HashMap<>();
-        params.put("id",this.id);
-
+        if (id != null) {
+            params.put("id", this.id);
+            id = null;
+        }
         return new ServerMethod(GET_PROFILE_METHOD_NAME, params);
     }
 
@@ -95,6 +97,6 @@ public class GetProfileRequest extends TokenServerRequest<Profile> {
     }
 
     public void getLoggedProfile(IServerAnswerHandler onGetProfileHandler){
-        getProfile( LoginRequest.getLoggedUserId(), onGetProfileHandler);
+        startRequest(onGetProfileHandler);
     }
 }
