@@ -36,6 +36,7 @@ import java.util.function.Function;
 import ServerExchange.Advert;
 import ServerExchange.LocationsList;
 import ServerExchange.Profile;
+import ServerExchange.ServerRequests.ExitProfileRequest;
 import ServerExchange.ServerRequests.GetAdvertsRequest;
 import ServerExchange.ServerRequests.LoginRequest;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
@@ -201,12 +202,12 @@ public class AdvertListActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LocationsList.refillFromServer();
         setContentView(R.layout.activity_advert_list);
 
         ((TextView)findViewById(R.id.window_title)).setText("Объявления");
         ((TextView)findViewById(R.id.window_title)).setTextSize(14);
 
-        LocationsList.refillFromServer();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -407,6 +408,12 @@ public class AdvertListActivity extends AppCompatActivity
             startActivity(intent);
         }
         else if (id == R.id.nav_exit) {
+            new ExitProfileRequest().exit(new DefaultServerAnswerHandler<Boolean>(AdvertListActivity.this) {
+                @Override
+                public void handle(Boolean answ) {
+                }
+            });
+
             Intent intent = new Intent(AdvertListActivity.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);

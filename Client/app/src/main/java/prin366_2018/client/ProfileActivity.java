@@ -43,6 +43,7 @@ import ServerExchange.Comment;
 import ServerExchange.ImageConvert;
 import ServerExchange.Profile;
 import ServerExchange.ServerRequests.AddCommentProfileRequest;
+import ServerExchange.ServerRequests.ExitProfileRequest;
 import ServerExchange.ServerRequests.GetCommentsRequest;
 import ServerExchange.ServerRequests.GetProfileRequest;
 import ServerExchange.ServerRequests.LoginRequest;
@@ -312,6 +313,12 @@ public class ProfileActivity extends AppCompatActivity
         else if (id == R.id.nav_exit) {
             // TODO: Добавить пере Firebase запрос к серверу на выход из профиля
             // TODO: ExitProfile: token
+            new ExitProfileRequest().exit(new DefaultServerAnswerHandler<Boolean>(ProfileActivity.this) {
+                @Override
+                public void handle(Boolean answ) {
+                }
+            });
+
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

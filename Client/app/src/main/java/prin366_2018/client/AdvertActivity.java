@@ -40,6 +40,7 @@ import ServerExchange.ProfilePart;
 import ServerExchange.ServerRequests.AddCommentContractRequest;
 import ServerExchange.ServerRequests.AddWitcherInContractRequest;
 import ServerExchange.ServerRequests.AnswerWitcherInContractRequest;
+import ServerExchange.ServerRequests.ExitProfileRequest;
 import ServerExchange.ServerRequests.GetAdvertRequest;
 import ServerExchange.ServerRequests.GetCommentsRequest;
 import ServerExchange.ServerRequests.GetWitcherDesiredContractRequest;
@@ -594,6 +595,11 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         else if (id == R.id.nav_exit) {
             // TODO: Добавить пере Firebase запрос к серверу на выход из профиля
             // TODO: ExitProfile: token
+            new ExitProfileRequest().exit(new DefaultServerAnswerHandler<Boolean>(AdvertActivity.this) {
+                @Override
+                public void handle(Boolean answ) {
+                }
+            });
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(AdvertActivity.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

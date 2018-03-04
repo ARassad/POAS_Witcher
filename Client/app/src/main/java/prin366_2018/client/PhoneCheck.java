@@ -24,6 +24,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
 
+import ServerExchange.LocationsList;
 import ServerExchange.ServerRequests.CheckPhoneRequest;
 import ServerExchange.ServerRequests.LoginRequest;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
@@ -181,6 +182,7 @@ public class PhoneCheck  extends AppCompatActivity implements View.OnClickListen
                                 @Override
                                 public void handle(Boolean answ) {
                                     if (answ == true){
+                                        LocationsList.refillFromServer();
                                         Intent intent = new Intent(PhoneCheck.this, ProfileActivity.class);
                                         startActivity(intent);
                                     } else if (answ == false){

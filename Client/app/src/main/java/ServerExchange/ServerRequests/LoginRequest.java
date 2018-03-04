@@ -17,10 +17,12 @@ public abstract class LoginRequest<AnswerType> extends ServerRequest<AnswerType>
 
     static private Long loggedUserId = null;
     static public Long getLoggedUserId() { return loggedUserId.longValue();}
+
     static private Profile.ProfileType loggedUserType;
     static public Profile.ProfileType getLoggedUserType(){
         return loggedUserType;
     }
+
     private static String phone_number = null;
     public static String getPhoneNumber() { return phone_number; }
 
