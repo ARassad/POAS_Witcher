@@ -23,6 +23,7 @@ def registration(cursor, params):
         status.status = Status.Ok.value
         status.message = EventRegistration.SuccessRegistration.value
 
+        # TODO: добавить запрос номера телефона
         cursor.execute("insert into Authorization_info (login, password) values('{}', '{}')"
                        .format(params[User.Login.value], params[User.Password.value])
                        )

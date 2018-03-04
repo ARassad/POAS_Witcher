@@ -253,7 +253,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 @Override
                 public void handle(Boolean answ) {
                     if (answ!= null && answ == true){
-                        startActivity( new Intent(LoginActivity.this, ProfileActivity.class));
+                        startActivity(new Intent(LoginActivity.this, PhoneCheck.class));
                     }
                 }
 

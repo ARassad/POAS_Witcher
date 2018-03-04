@@ -26,11 +26,13 @@ def authorization(cursor, params):
         id_auth = row[0]
         status.message = EventAuth.SuccessAuthorizaion.value
         status.status = Status.Ok.value
-        tok = params[User.Login.value] + str(time.time())
-        obj.token = md5(tok.encode('utf-8')).hexdigest()
+        #tok = params[User.Login.value] + str(time.time())
+        #obj.token = md5(tok.encode('utf-8')).hexdigest()
 
-        cursor.execute("select id from Profile where id_authorization_info={}".format(id_auth))
-        obj.id_profile = cursor.fetchone()[0]
+        cursor.execute("select id, phone_number from Profile where id_authorization_info={}".format(id_auth))
+        row = cursor.fetchone()
+        obj.id_profile = row[0]
+        obj.phone_number = row[1]
         cursor.execute("insert into Token_Table (token, last_update, id_profile) values('{}', {}, {})"
                        .format(obj.token, int(time.time()), obj.id_profile))
 
