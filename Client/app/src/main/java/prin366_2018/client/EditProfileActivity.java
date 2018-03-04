@@ -58,12 +58,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
     //TODO: Протестить
-    private class onImageEdited extends DefaultServerAnswerHandler<Boolean> {
+    private class onProfileEdited extends DefaultServerAnswerHandler<Boolean> {
 
         boolean isEnded = false;
         boolean isOk = true;
 
-        public onImageEdited(Context context) {
+        public onProfileEdited(Context context) {
             super(context);
         }
 
@@ -77,18 +77,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 intent.putExtra("photo", ImageConvert.toBase64Str(bitmap));
             setResult(RESULT_OK, intent);
             finish();
-        }
-
-        @Override
-        public void errorHandle(String errorMessage) {
-
-            super.errorHandle(errorMessage);
-        }
-
-        @Override
-        public void exceptionHandle(Exception excp) {
-
-            super.exceptionHandle(excp);
         }
     }
     UpdateProfileRequest saveRequest = new UpdateProfileRequest();
@@ -122,7 +110,7 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //ШОТО ПРОИСХОДИТ ПРИ НАЖАТИИ НА КНОПКУ "СОХРАНИТЬ"
-                onImageEdited oie = new onImageEdited(EditProfileActivity.this);
+                onProfileEdited oie = new onProfileEdited(EditProfileActivity.this);
                 String newName = name.getText().toString();
                 String newAboutMe = aboutMe.getText().toString();
 
@@ -130,8 +118,6 @@ public class EditProfileActivity extends AppCompatActivity {
                                             newAboutMe.equals(oldAboutMe) ? null : newAboutMe,
                                             isPhotoChanged  && bitmap != null ? bitmap : null, //TODO: Сделать получение картинки с виджета, а то криво
                                             oie);
-
-                oie.handle(true);
             }
         });
 
