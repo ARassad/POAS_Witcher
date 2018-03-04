@@ -33,11 +33,14 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.TreeSet;
 
+import ServerExchange.ImageConvert;
 import ServerExchange.LocationsList;
 import ServerExchange.ServerRequests.CreateAdvertRequest;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
 import ServerExchange.ServerRequests.UpdateAdvertRequest;
 import ServerExchange.ServerRequests.UpdateProfileRequest;
+
+import static ServerExchange.ImageConvert.toBase64Str;
 
 public class EditAdvertActivity extends AppCompatActivity {
 
@@ -73,7 +76,8 @@ public class EditAdvertActivity extends AppCompatActivity {
                     }
                     try {
                         for (int i = 0; i < selectedImage.getItemCount() && i < 10; ++i) {
-                            bitmaps.add(MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage.getItemAt(i).getUri()));
+                            Uri uri = selectedImage.getItemAt(i).getUri();
+                            bitmaps.add(MediaStore.Images.Media.getBitmap(getContentResolver(), uri));
                             Bitmap bm = Bitmap.createScaledBitmap(bitmaps.getLast(), 100, 100, false);
                             photos[i].setImageBitmap(bm);
                         }
@@ -263,6 +267,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                     );
                 }
 
+                goBack();
 
             }
         });
@@ -284,6 +289,14 @@ public class EditAdvertActivity extends AppCompatActivity {
         });
     }
 
+    private String[] BitmapsToBundle(LinkedList<Bitmap> b) {
+        String[] stringBmps = new String[10];
+        for (int i = 0; i < b.size(); ++i) {
+            stringBmps[i] = ImageConvert.toBase64Str(b.get(i));
+        }
+        return stringBmps;
+    }
+
     private void goBack(){
         Intent intent = new Intent();
         intent.putExtra("header",       title.getText().toString());
@@ -291,6 +304,8 @@ public class EditAdvertActivity extends AppCompatActivity {
         intent.putExtra("bounty",       cost.getText().toString());
         intent.putExtra("kingdom",      (String)kingdom.getSelectedItem());
         intent.putExtra("city",         (String) city.getSelectedItem());
+        intent.putExtra("bitmaps",      BitmapsToBundle(bitmaps));
+
         setResult(RESULT_OK, intent);
         finish();
     }
