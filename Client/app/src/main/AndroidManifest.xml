@@ -53,6 +53,11 @@
             android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboard|orientation|screenSize">
         </activity>
+        <activity
+            android:name=".PhoneCheck"
+            android:windowSoftInputMode="stateHidden"
+            android:configChanges="keyboard|orientation|screenSize">
+        </activity>
 
         <service
             android:name=".MyFirebaseMessagingService"
