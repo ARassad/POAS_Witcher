@@ -1,6 +1,7 @@
 package prin366_2018.client;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -23,7 +24,9 @@ import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
 
+import ServerExchange.ServerRequests.CheckPhoneRequest;
 import ServerExchange.ServerRequests.LoginRequest;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
 
 /**
  * Created by Mikhail on 27.02.2018.
@@ -173,8 +176,19 @@ public class PhoneCheck  extends AppCompatActivity implements View.OnClickListen
 
                             FirebaseUser user = task.getResult().getUser();
                             // [START_EXCLUDE]
-                            Intent intent = new Intent(PhoneCheck.this, ProfileActivity.class);
-                            startActivity(intent);
+                            new CheckPhoneRequest().check(new DefaultServerAnswerHandler<Boolean>(PhoneCheck.this) {
+                                @Override
+                                public void handle(Boolean answ) {
+                                    if (answ == true){
+                                        Intent intent = new Intent(PhoneCheck.this, ProfileActivity.class);
+                                        startActivity(intent);
+                                    } else if (answ == false){
+                                        dlgAlert.setMessage("Такое невозможно -\\_//- \n PhonecCheck186");
+                                        dlgAlert.create().show();
+                                    }
+                                }
+                            });
+
                             // [END_EXCLUDE]
                         } else {
                             // Sign in failed, display a message and update the UI

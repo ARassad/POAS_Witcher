@@ -259,8 +259,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 public void handle(Boolean answ) {
                     if (answ!= null && answ == true){
                         //TODO: Переход на Phonecheck - пока не работает, т.к. не у всех аккаунтов есть номера
-                        //startActivity(new Intent(LoginActivity.this, PhoneCheck.class));
-                        startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                        startActivity(new Intent(LoginActivity.this, PhoneCheck.class));
+                        //startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
                     }
                 }
 
