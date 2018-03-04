@@ -253,7 +253,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            LocationsList.refillFromServer();
+            //LocationsList.refillFromServer();
             new AuthorizationRequest().login(email, password, FirebaseInstanceId.getInstance().getToken(), new DefaultServerAnswerHandler<Boolean>(LoginActivity.this) {
                 @Override
                 public void handle(Boolean answ) {
@@ -261,7 +261,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         //TODO: Переход на Phonecheck - пока не работает, т.к. не у всех аккаунтов есть номера
                         startActivity(new Intent(LoginActivity.this, PhoneCheck.class));
                         //startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                    } else if (answ == false){
+                        dlgAlert.setMessage("Неверный логин или пароль. Боюсь сейчас вам надо перезайти");
+                        dlgAlert.create().show();
                     }
+
+                    showProgress(false);
                 }
 
                 @Override
