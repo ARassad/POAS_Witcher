@@ -249,57 +249,35 @@
                         android:background="@drawable/frame_button">
                     </Button>
 
-                    <LinearLayout
-                        android:id="@id/images_advert"
+                    <HorizontalScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content">
 
-                        <ImageView
-                            android:id="@+id/image_1"
-                            android:layout_width="match_parent"
-                            android:layout_height="100dp"
-                            app:srcCompat="@android:drawable/ic_menu_camera"/>
+                        <LinearLayout
+                            android:id="@id/images_advert"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
 
-                        <TableLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:stretchColumns="*">
+                            <ImageView
+                                android:id="@+id/image_1"
+                                android:layout_width="200dp"
+                                android:layout_height="100dp"
+                                app:srcCompat="@android:drawable/ic_menu_camera"/>
 
-                            <ProgressBar
-                                style="?android:attr/progressBarStyleLarge"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="8dp"
-                                android:visibility="gone" />
+                            <ImageView
+                                android:id="@+id/image_2"
+                                android:layout_width="200dp"
+                                android:layout_height="100dp"
+                                app:srcCompat="@android:drawable/ic_menu_camera"/>
 
-                            <TableRow
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center">
+                            <ImageView
+                                android:id="@+id/image_3"
+                                android:layout_width="200dp"
+                                android:layout_height="100dp"
+                                app:srcCompat="@android:drawable/ic_menu_camera"/>
+                        </LinearLayout>
+                    </HorizontalScrollView>
 
-                                <ImageView
-                                    android:id="@+id/image_2"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="100dp"
-                                    app:srcCompat="@android:drawable/ic_menu_camera"/>
-
-                                <ImageView
-                                    android:id="@+id/image_3"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="100dp"
-                                    app:srcCompat="@android:drawable/ic_menu_camera"/>
-
-                                <ImageView
-                                    android:id="@+id/image_4"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="100dp"
-                                    app:srcCompat="@android:drawable/ic_menu_camera"/>
-
-                            </TableRow>
-
-                        </TableLayout>
-                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
