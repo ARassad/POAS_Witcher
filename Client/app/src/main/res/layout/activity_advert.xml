@@ -259,21 +259,62 @@
                             android:layout_height="wrap_content">
 
                             <ImageView
-                                android:id="@+id/image_1"
-                                android:layout_width="200dp"
-                                android:layout_height="100dp"
+                                android:id="@+id/image1"
+                                android:layout_width="150dp"
+                                android:layout_height="150dp"
                                 app:srcCompat="@android:drawable/ic_menu_camera"/>
 
                             <ImageView
-                                android:id="@+id/image_2"
-                                android:layout_width="200dp"
-                                android:layout_height="100dp"
+                                android:id="@+id/image2"
+                                android:layout_width="150dp"
+                                android:layout_height="150dp"
                                 app:srcCompat="@android:drawable/ic_menu_camera"/>
 
                             <ImageView
-                                android:id="@+id/image_3"
-                                android:layout_width="200dp"
-                                android:layout_height="100dp"
+                                android:id="@+id/image3"
+                                android:layout_width="150dp"
+                                android:layout_height="150dp"
+                                app:srcCompat="@android:drawable/ic_menu_camera"/>
+
+                            <ImageView
+                                android:id="@+id/image4"
+                                android:layout_width="150dp"
+                                android:layout_height="150dp"
+                                app:srcCompat="@android:drawable/ic_menu_camera"/>
+
+                            <ImageView
+                                android:id="@+id/image5"
+                                android:layout_width="150dp"
+                                android:layout_height="150dp"
+                                app:srcCompat="@android:drawable/ic_menu_camera"/>
+
+                            <ImageView
+                                android:id="@+id/image6"
+                                android:layout_width="150dp"
+                                android:layout_height="150dp"
+                                app:srcCompat="@android:drawable/ic_menu_camera"/>
+                            <ImageView
+                                android:id="@+id/image7"
+                                android:layout_width="150dp"
+                                android:layout_height="150dp"
+                                app:srcCompat="@android:drawable/ic_menu_camera"/>
+
+                            <ImageView
+                                android:id="@+id/image8"
+                                android:layout_width="150dp"
+                                android:layout_height="150dp"
+                                app:srcCompat="@android:drawable/ic_menu_camera"/>
+
+                            <ImageView
+                                android:id="@+id/image9"
+                                android:layout_width="150dp"
+                                android:layout_height="150dp"
+                                app:srcCompat="@android:drawable/ic_menu_camera"/>
+
+                            <ImageView
+                                android:id="@+id/image10"
+                                android:layout_width="150dp"
+                                android:layout_height="150dp"
                                 app:srcCompat="@android:drawable/ic_menu_camera"/>
                         </LinearLayout>
                     </HorizontalScrollView>

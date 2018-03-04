@@ -1,8 +1,16 @@
 package prin366_2018.client;
 
+import android.app.Activity;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Parcelable;
+import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Pair;
@@ -11,13 +19,17 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.internal.bind.MapTypeAdapterFactory;
 
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.TreeSet;
 
@@ -29,17 +41,48 @@ import ServerExchange.ServerRequests.UpdateProfileRequest;
 
 public class EditAdvertActivity extends AppCompatActivity {
 
+    static final int GALLERY_REQUEST = 2;
+    Boolean isPhotoChanged = false;
+
     private TextView title, description, cost;
     private Spinner kingdom, city;
-
 
     private int selectedKingdomIndex;
     private int selectedCityIndex;
     private long[] locsIds;
     private long locId;
 
+    ImageView[] photos = new ImageView[10];
     UpdateAdvertRequest updateRequest = new UpdateAdvertRequest();
     CreateAdvertRequest createRequest = new CreateAdvertRequest();
+
+    LinkedList<Bitmap> bitmaps;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        //ImageButton imageView = (ImageButton) findViewById(R.id.image);
+
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case GALLERY_REQUEST:
+                    isPhotoChanged = true;
+                    ClipData selectedImage = null;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                        selectedImage = imageReturnedIntent.getClipData();
+                    }
+                    try {
+                        for (int i = 0; i < selectedImage.getItemCount(); ++i) {
+                            bitmaps.add(MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage.getItemAt(i).getUri()));
+                            Bitmap bm = Bitmap.createScaledBitmap(bitmaps.getLast(), 100, 100, false);
+                            photos[i].setImageBitmap(bm);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+            }
+        }
+    }
 
     private class onCreateAdvert extends DefaultServerAnswerHandler<Boolean>{
 
@@ -95,6 +138,17 @@ public class EditAdvertActivity extends AppCompatActivity {
         //{"Не указано"};
 
         getFromBeforeActivity();
+
+                photos[0] = (ImageView)findViewById(R.id.image1);
+                photos[1] = (ImageView)findViewById(R.id.image2);
+                photos[2] = (ImageView)findViewById(R.id.image3);
+                photos[3] = (ImageView)findViewById(R.id.image4);
+                photos[4] = (ImageView)findViewById(R.id.image5);
+                photos[5] = (ImageView)findViewById(R.id.image6);
+                photos[6] = (ImageView)findViewById(R.id.image7);
+                photos[7] = (ImageView)findViewById(R.id.image8);
+                photos[8] = (ImageView)findViewById(R.id.image9);
+                photos[9] = (ImageView)findViewById(R.id.image10);
 
         kingdom = ((Spinner)findViewById(R.id.spinner_edit_kingdom));
         String[] kingdoms = new String[0];
@@ -182,6 +236,8 @@ public class EditAdvertActivity extends AppCompatActivity {
         final int oldCostVal = bountyVal;
         final long oldLockId = locId;
 
+        setImage(R.id.get_photos);
+
         Button buttonPublic = (Button)findViewById(R.id.button_public);
         buttonPublic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,6 +264,22 @@ public class EditAdvertActivity extends AppCompatActivity {
                 }
 
 
+            }
+        });
+    }
+
+    private void setImage(final int imageId) {
+        ((Button)findViewById(imageId)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //ШОТО ПРОИСХОДИТ ПРИ НАЖАТИИ НА КНОПКУ ФОТОЧКИ
+
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+
+                startActivityForResult(intent, GALLERY_REQUEST);
             }
         });
     }
