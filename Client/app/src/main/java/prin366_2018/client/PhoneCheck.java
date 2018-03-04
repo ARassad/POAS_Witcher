@@ -188,12 +188,6 @@ public class PhoneCheck  extends AppCompatActivity implements View.OnClickListen
                                         dlgAlert.create().show();
                                     }
                                 }
-
-                                @Override
-                                public void errorHandle(String errorMessage){
-                                    String a;
-                                    //Ничего не выводим, т.к. обработали в стандратной ситуации
-                                }
                             });
 
                             // [END_EXCLUDE]

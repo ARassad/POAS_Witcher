@@ -106,7 +106,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        FirebaseAuth.getInstance().signOut();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        if (mAuth != null) {
+            // TODO: Отправить серверу запрос о выходе из профиля
+            mAuth.signOut();
+        }
 
         onAppStart();
         // Set up the login form.
