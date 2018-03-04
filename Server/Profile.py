@@ -146,7 +146,7 @@ def exit_profile(cursor, params):
     status = Object()
     status.status = Status.Ok.value
     cursor.execute("select id_profile from Token_Table where token='{}'".format(params[User.Token.value]))
-    row = cursor.fecthone()
+    row = cursor.fetchone()
     if row is not None:
         id_profile = row[0]
         cursor.execute("delete Token_Table where id_profile={}".format(id_profile))
