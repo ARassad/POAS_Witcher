@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import ServerExchange.Advert;
 import ServerExchange.ServerRequests.SelectExecutorRequest;
 
 import static android.graphics.Typeface.createFromAsset;
@@ -24,15 +25,17 @@ public class ResponderFragment extends Fragment {
 
     private String respond, icon;
     private long id_witcher;
+    private Advert.AdvertStatus advertStatus;
 
     public ResponderFragment() {
         // Required empty public constructor
     }
 
     @SuppressLint("ValidFragment")
-    public ResponderFragment(String respond, long id_witcher){
+    public ResponderFragment(String respond, long id_witcher, Advert.AdvertStatus advertStatus){
         this.id_witcher = id_witcher;
         this.respond = respond;
+        this.advertStatus = advertStatus;
     }
 
 
@@ -45,6 +48,9 @@ public class ResponderFragment extends Fragment {
         ((TextView)view.findViewById(R.id.id_respond)).setText(String.valueOf(id_witcher));
 
         Button setExecutorButton = view.findViewById(R.id.button_set_executor);
+        if (Advert.AdvertStatus.FREE != this.advertStatus){
+            setExecutorButton.setEnabled(false);
+        }
         setExecutorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

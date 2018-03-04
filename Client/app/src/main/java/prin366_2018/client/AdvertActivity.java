@@ -233,7 +233,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
             if (LoginRequest.getLoggedUserType() == Profile.ProfileType.CUSTOMER){
 
                 for (ProfilePart profile : answ){
-                    setNewResponder(profile.getName(), profile.getId());
+                    setNewResponder(profile.getName(), profile.getId(), advert.getStatus());
                 }
             }
 
@@ -543,10 +543,10 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         });
     }
 
-    private void setNewResponder(String witcher, long id) {
+    private void setNewResponder(String witcher, long id, Advert.AdvertStatus status) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
-        ResponderFragment respond = new ResponderFragment(witcher, id);
+        ResponderFragment respond = new ResponderFragment(witcher, id, status);
         ft.add(R.id.list_responders, respond);
         ft.commit();
     }
