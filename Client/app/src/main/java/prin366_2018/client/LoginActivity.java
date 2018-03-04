@@ -29,6 +29,8 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -108,10 +110,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+        // Set up the login form.
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mPasswordView = (EditText) findViewById(R.id.password);
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
+
+
+
         onAppStart();
+
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
+            showProgress(true);//Включили спиннер
             // TODO: Запросить профиль через токен и перейти в ProfileActivity
             new GetProfileRequest().getLoggedProfile(new DefaultServerAnswerHandler<Profile>(LoginActivity.this) {
                 @Override
@@ -120,18 +134,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     LocationsList.refillFromServer();
                     Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
                     startActivity(intent);
-
+                    showProgress(false);//Выключили спиннер
                 }
             });
             //mAuth.signOut();
         }
 
-        // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
         populateAutoComplete();
 
-        mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -145,7 +156,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -162,8 +172,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
 
 
         Intent intent = getIntent();
@@ -177,6 +185,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if ( oldPassword != null && isPasswordValid(oldPassword))
                 mPasswordView.setText(oldPassword);
         }
+
     }
 
     private void populateAutoComplete() {
