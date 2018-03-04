@@ -84,7 +84,6 @@ public class ProfileActivity extends AppCompatActivity
         Intent intent = new Intent(ProfileActivity.this, AdvertActivity.class);
         intent.putExtra("advertId", advert_id);
         startActivity(intent);
-
     }
 
     class onGetProfile extends DefaultServerAnswerHandler<Profile> {

@@ -130,6 +130,8 @@ public class EditProfileActivity extends AppCompatActivity {
                                             newAboutMe.equals(oldAboutMe) ? null : newAboutMe,
                                             isPhotoChanged  && bitmap != null ? bitmap : null, //TODO: Сделать получение картинки с виджета, а то криво
                                             oie);
+
+                oie.handle(true);
             }
         });
 
