@@ -12,10 +12,10 @@ class ParamRequests(Enum):
     TypeRequest = "type_req"
 
 
-# params - допустимые параметры в запросе
-# min_params - минимальное количество параметров, допустимое для запросов
-# count - количество параметров в запросе
-# type - тип запроса, 1 - get, 0 - post
+# params - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+# min_params - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+# count - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+# type - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, 1 - get, 0 - post
 
 
 paramsRequests = {
@@ -76,8 +76,9 @@ paramsRequests = {
                                                   'sortype': {'asc': 'asc', 'desc': 'desc'}},
                                        'min_params': 1, 'count': 6, 'type_req': 1},
 
-    ApiMethod.Registration.value: {'params': {'login': 'login', 'password': 'password', 'isWitcher': 'isWitcher'},
-                                   'min_params': 3, 'count': 3, 'type_req': 0},
+    ApiMethod.Registration.value: {'params': {'login': 'login', 'password': 'password', 'isWitcher': 'isWitcher',
+                                              'phone_number': 'phone_number'},
+                                   'min_params': 4, 'count': 4, 'type_req': 0},
 
     ApiMethod.Authorization.value: {'params': {'login': 'login', 'password': 'password', 'fcm_token': 'fcm_token'},
                                     'min_params': 3, 'count': 3, 'type_req': 0},

@@ -23,9 +23,8 @@ def registration(cursor, params):
         status.status = Status.Ok.value
         status.message = EventRegistration.SuccessRegistration.value
 
-        # TODO: добавить запрос номера телефона
-        cursor.execute("insert into Authorization_info (login, password) values('{}', '{}')"
-                       .format(params[User.Login.value], params[User.Password.value])
+        cursor.execute("insert into Authorization_info (login, password, phone_number) values('{}', '{}', '{}')"
+                       .format(params[User.Login.value], params[User.Password.value], params[User.Phone.value])
                        )
         cursor.execute("select max(id) from Authorization_info")
         row = cursor.fetchone()
