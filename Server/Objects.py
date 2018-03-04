@@ -54,6 +54,7 @@ class User(Enum):
     IsWitcher = "isWitcher"
     Token = "token"
     FCM_Token = "fcm_token"
+    Phone = "phone_number"
 
 
 class Object:
