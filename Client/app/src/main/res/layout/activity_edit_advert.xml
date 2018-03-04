@@ -73,28 +73,77 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                xmlns:android="http://schemas.android.com/apk/res/android">
 
-                <LinearLayout
-                    android:id="@+id/images_advert"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center">
-                    <ImageButton
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        app:srcCompat="@android:drawable/ic_menu_camera"/>
+                    <LinearLayout
+                        android:id="@+id/images_advert"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
-                    <ImageButton
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        app:srcCompat="@android:drawable/ic_menu_camera"/>
+                        <ImageButton
+                            android:id="@+id/image1"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            app:srcCompat="@android:drawable/ic_menu_camera" />
 
-                    <ImageButton
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        app:srcCompat="@android:drawable/ic_menu_camera"/>
-                </LinearLayout>
+                        <ImageButton
+                            android:id="@+id/image2"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            app:srcCompat="@android:drawable/ic_menu_camera" />
+
+                        <ImageButton
+                            android:id="@+id/image3"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            app:srcCompat="@android:drawable/ic_menu_camera" />
+
+                        <ImageButton
+                            android:id="@+id/image4"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            app:srcCompat="@android:drawable/ic_menu_camera" />
+
+                        <ImageButton
+                            android:id="@+id/image5"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            app:srcCompat="@android:drawable/ic_menu_camera" />
+
+                        <ImageButton
+                            android:id="@+id/image6"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            app:srcCompat="@android:drawable/ic_menu_camera" />
+
+                        <ImageButton
+                            android:id="@+id/image7"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            app:srcCompat="@android:drawable/ic_menu_camera" />
+
+                        <ImageButton
+                            android:id="@+id/image8"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            app:srcCompat="@android:drawable/ic_menu_camera" />
+
+                        <ImageButton
+                            android:id="@+id/image9"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            app:srcCompat="@android:drawable/ic_menu_camera" />
+
+                        <ImageButton
+                            android:id="@+id/image10"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            app:srcCompat="@android:drawable/ic_menu_camera" />
+
+                    </LinearLayout>
+
             </LinearLayout>
 
             <Button
