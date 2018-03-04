@@ -42,16 +42,17 @@ public class CheckPhoneRequest extends ServerRequest<Boolean> {
         return JSonAnswer.class;
     }
 
-    protected void check(String phoneNumber, IServerAnswerHandler handler){
+    public void check(String phoneNumber, IServerAnswerHandler handler){
         this.phoneNumber = phoneNumber;
         this.startRequest(handler);
     }
 
+    /*
     public void check(IServerAnswerHandler handler){
         if (firebaseAuth == null){
             firebaseAuth = FirebaseAuth.getInstance();
         }
         this.check(firebaseAuth.getCurrentUser().getPhoneNumber(), handler);
     }
-
+*/
 }

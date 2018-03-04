@@ -26,6 +26,11 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import ServerExchange.ServerRequests.CheckPhoneRequest;
+import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
 
 public class PhoneRegistration extends AppCompatActivity implements View.OnClickListener {
 
@@ -311,7 +316,7 @@ public class PhoneRegistration extends AppCompatActivity implements View.OnClick
     private boolean validatePhoneNumber() {
         String phoneNumber = mPhoneNumberField.getText().toString();
         if (TextUtils.isEmpty(phoneNumber)) {
-            mPhoneNumberField.setError("Invalid phone number.");
+            mPhoneNumberField.setError("Введите, пожалуйста, номер");
             return false;
         }
 
@@ -330,6 +335,8 @@ public class PhoneRegistration extends AppCompatActivity implements View.OnClick
         }
     }
 
+
+    String phoneNumber;
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -337,10 +344,22 @@ public class PhoneRegistration extends AppCompatActivity implements View.OnClick
                 if (!validatePhoneNumber()) {
                     return;
                 }
+                phoneNumber = "+7" + mPhoneNumberField.getText().toString();
+                new CheckPhoneRequest().check(phoneNumber, new DefaultServerAnswerHandler<Boolean>(PhoneRegistration.this) {
+                    @Override
+                    public void handle(Boolean answ) {
+                        if( answ == true)
+                            startPhoneNumberVerification(phoneNumber);
+                        else {
+                            dlgAlert.setMessage("Данный номер уже занят.");
+                            dlgAlert.create().show();
+                        }
+                    }
+                });
 
-                startPhoneNumberVerification(mPhoneNumberField.getText().toString());
                 break;
             case R.id.button_verify_phone:
+
                 String code = mVerificationField.getText().toString();
                 if (TextUtils.isEmpty(code)) {
                     mVerificationField.setError("Cannot be empty.");

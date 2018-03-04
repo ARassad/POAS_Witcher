@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import ServerExchange.ServerRequests.CheckPhoneRequest;
 import ServerExchange.ServerRequests.LoginRequest;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
+import ServerExchange.ServerRequests.SetTokenRequest;
 
 /**
  * Created by Mikhail on 27.02.2018.
@@ -176,16 +177,22 @@ public class PhoneCheck  extends AppCompatActivity implements View.OnClickListen
 
                             FirebaseUser user = task.getResult().getUser();
                             // [START_EXCLUDE]
-                            new CheckPhoneRequest().check(new DefaultServerAnswerHandler<Boolean>(PhoneCheck.this) {
+                            new SetTokenRequest().set(new DefaultServerAnswerHandler<Boolean>(PhoneCheck.this) {
                                 @Override
                                 public void handle(Boolean answ) {
                                     if (answ == true){
                                         Intent intent = new Intent(PhoneCheck.this, ProfileActivity.class);
                                         startActivity(intent);
                                     } else if (answ == false){
-                                        dlgAlert.setMessage("Такое невозможно -\\_//- \n PhonecCheck186");
+                                        dlgAlert.setMessage("Такое невозможно -\\_//- \n PhoneCheck186");
                                         dlgAlert.create().show();
                                     }
+                                }
+
+                                @Override
+                                public void errorHandle(String errorMessage){
+                                    String a;
+                                    //Ничего не выводим, т.к. обработали в стандратной ситуации
                                 }
                             });
 
