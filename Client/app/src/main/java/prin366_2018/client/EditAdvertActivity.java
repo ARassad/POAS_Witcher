@@ -72,7 +72,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                         selectedImage = imageReturnedIntent.getClipData();
                     }
                     try {
-                        for (int i = 0; i < selectedImage.getItemCount(); ++i) {
+                        for (int i = 0; i < selectedImage.getItemCount() && i < 10; ++i) {
                             bitmaps.add(MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage.getItemAt(i).getUri()));
                             Bitmap bm = Bitmap.createScaledBitmap(bitmaps.getLast(), 100, 100, false);
                             photos[i].setImageBitmap(bm);
