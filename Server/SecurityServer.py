@@ -47,7 +47,7 @@ paramsRequests = {
 
     ApiMethod.GetAdvert.value: {'params': {'token': 'token', 'id': 'id'}, 'min_params': 2, 'count': 2, 'type_req': 1},
 
-    ApiMethod.GetProfile.value: {'params': {'token': 'token', 'id': 'id'}, 'min_params': 2, 'count': 2, 'type_req': 1},
+    ApiMethod.GetProfile.value: {'params': {'token': 'token', 'id': 'id'}, 'min_params': 1, 'count': 2, 'type_req': 1},
 
     ApiMethod.DeleteAdvert.value: {'params': {'token': 'token', 'id': 'id'}, 'min_params': 2, 'count': 2, 'type_req': 1},
 

@@ -17,14 +17,24 @@ class Profile(Enum):
 
 
 def get_profile(cursor, params):
-    cursor.execute(
-        "select a.id, a.name, a.about, b.photo from Profile as a left \
-          join Photo as b on a.id_photo = b.id where a.id={}".format(params[Profile.ID.value]))
-    row = cursor.fetchone()
-
     status = Object()
     obj = Object()
     status.status = Status.Error.value
+
+    id_profile = params.get(Profile.ID.value, None)
+
+    if id_profile is None:
+        cursor.execute("select id_profile from Token_Table where token='{}'".format(params[User.Token.value]))
+        row = cursor.fetchone()
+        if row is None:
+            return status.toJSON()
+        else:
+            id_profile = row[0]
+
+    cursor.execute(
+        "select a.id, a.name, a.about, b.photo from Profile as a left \
+          join Photo as b on a.id_photo = b.id where a.id={}".format(id_profile))
+    row = cursor.fetchone()
 
     if row is not None:
         status.status = Status.Ok.value
