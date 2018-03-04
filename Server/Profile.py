@@ -145,7 +145,7 @@ def write_comment_profile(cursor, params):
 def exit_profile(cursor, params):
     status = Object()
     status.status = Status.Ok.value
-    cursor.execute("select id_profile from Token_Table where token={}".format(params[User.Token.value]))
+    cursor.execute("select id_profile from Token_Table where token='{}'".format(params[User.Token.value]))
     row = cursor.fecthone()
     if row is not None:
         id_profile = row[0]
