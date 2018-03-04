@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ServerExchange.LocationsList;
+import ServerExchange.Profile;
 import ServerExchange.ServerRequests.AuthorizationRequest;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
@@ -87,6 +88,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             //ServerRequest.setDefaultAddress("192.168.1.3");
             //ip Хоста Миши
             ServerRequest.setDefaultAddress("212.237.54.117");
+            //ServerRequest.setDefaultAddress("172.16.2.171:8888");
+            //ServerRequest.setDefaultAddress("212.237.54.117:8888");
             //ServerRequest.setDefaultAddress( params.getString("server_address", "localhost"));
 
             if (!params.contains("server_address")) {
@@ -247,13 +250,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-
             LocationsList.refillFromServer();
             new AuthorizationRequest().login(email, password, FirebaseInstanceId.getInstance().getToken(), new DefaultServerAnswerHandler<Boolean>(LoginActivity.this) {
                 @Override
                 public void handle(Boolean answ) {
                     if (answ!= null && answ == true){
-                        startActivity(new Intent(LoginActivity.this, PhoneCheck.class));
+                        //TODO: Переход на Phonecheck - пока не работает, т.к. не у всех аккаунтов есть номера
+                        //startActivity(new Intent(LoginActivity.this, PhoneCheck.class));
+                        startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
                     }
                 }
 

@@ -21,11 +21,14 @@ public abstract class LoginRequest<AnswerType> extends ServerRequest<AnswerType>
     static public Profile.ProfileType getLoggedUserType(){
         return loggedUserType;
     }
+    private static String phone_number = null;
+    public static String getPhoneNumber() { return phone_number; }
 
 
     abstract class LoginJsonServerAnswer extends JsonServerAnswer{
         class JsonToken{
-            public String token;
+            //public String token;
+            public String phone_number;
             public Long id_profile;
             public int type;
         }
@@ -36,9 +39,10 @@ public abstract class LoginRequest<AnswerType> extends ServerRequest<AnswerType>
 
         if (answ.isStatusOk()) {
             LoginJsonServerAnswer answ_ = (LoginJsonServerAnswer) answ;
-            TokenServerRequest.setToken(answ_.object.token);
+            //TokenServerRequest.setToken(answ_.object.token);
             loggedUserId = answ_.object.id_profile;
             loggedUserType = answ_.object.type == 0 ? Profile.ProfileType.WITCHER : Profile.ProfileType.CUSTOMER;
+            phone_number = answ_.object.phone_number;
         }
     }
 }
