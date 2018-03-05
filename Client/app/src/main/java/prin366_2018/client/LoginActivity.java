@@ -280,8 +280,8 @@ public class LoginActivity extends AppCompatActivity{
                     if (answ!= null && answ == true){
 
                         //TODO: Переход на Phonecheck - пока не работает, т.к. не у всех аккаунтов есть номера
-                        startActivity(new Intent(LoginActivity.this, PhoneCheck.class));
-                        //startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                        //startActivity(new Intent(LoginActivity.this, PhoneCheck.class));
+                        startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
                     } else if (answ == false){
                         dlgAlert.setMessage("Неверный логин или пароль. Боюсь сейчас вам надо перезайти");
                         dlgAlert.create().show();
@@ -320,7 +320,8 @@ public class LoginActivity extends AppCompatActivity{
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+        // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+        if ( false) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
