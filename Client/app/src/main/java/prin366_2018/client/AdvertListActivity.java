@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -31,8 +32,10 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import ServerExchange.Advert;
@@ -64,10 +67,10 @@ public class AdvertListActivity extends AppCompatActivity
     public void onFragmentInteraction(int fragmentId, GetAdvertsRequest.SortType sortType, GetAdvertsRequest.OrderType orderType, GetAdvertsRequest.FilterType filterType, String kingdomFilter, String cityFilter, Integer minReward, Integer maxReward) {
 
         GetAdvertsRequest getAdvertsRequest = new GetAdvertsRequest();
-        //Function getFil
 
         if (fragmentId == freeAdvertsSortingId){
             GroupAdvert groupAdvert = GroupAdvert.ALL_ADVERT;
+            spinners.get(GroupAdvert.ALL_ADVERT).show();
             Advert.AdvertStatus advertStatus = Advert.AdvertStatus.FREE;
 
             OnGetAdverts onGetAdverts = new OnGetAdverts(AdvertListActivity.this, groupAdvert);
@@ -85,11 +88,11 @@ public class AdvertListActivity extends AppCompatActivity
         else if (LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER){
             GroupAdvert groupAdvert = GroupAdvert.ALL_ADVERT;
             Advert.AdvertStatus advertStatus = Advert.AdvertStatus.FREE;
-            //if (fragmentId == freeAdvertsSortingId)         { groupAdvert = GroupAdvert.ALL_ADVERT; advertStatus = Advert.AdvertStatus.FREE;}
-            //else
+
             if (fragmentId==completedSotringId)        { groupAdvert = GroupAdvert.EXECUTED;   advertStatus = Advert.AdvertStatus.COMPLETED; }
             else if (fragmentId==subscribedSotringId)       { groupAdvert = GroupAdvert.SUBSRIBED;  advertStatus = Advert.AdvertStatus.FREE; }
 
+            spinners.get(groupAdvert).show();
 
             OnGetAdverts onGetAdverts = new OnGetAdverts(AdvertListActivity.this, groupAdvert);
             if (filterType == GetAdvertsRequest.FilterType.BY_LOCATE) {
@@ -106,12 +109,12 @@ public class AdvertListActivity extends AppCompatActivity
         else {
             GroupAdvert groupAdvert = GroupAdvert.ALL_ADVERT;
             Advert.AdvertStatus advertStatus = Advert.AdvertStatus.FREE;
-            //if (fragmentId == freeAdvertsSortingId)            { groupAdvert = GroupAdvert.ALL_ADVERT;          advertStatus = Advert.AdvertStatus.FREE;}
-            //else
-            if (fragmentId == witcherChosenSotringId)     { groupAdvert = GroupAdvert.WITCHER_CHOSEN;      advertStatus = Advert.AdvertStatus.ASSIGNED_WITCHER;}
-            else if (fragmentId==witcherNotChosenSotringId)    { groupAdvert = GroupAdvert.WITCHER_NOT_CHOSEN;  advertStatus = Advert.AdvertStatus.FREE;}
 
+            if (fragmentId == witcherChosenSotringId)       { groupAdvert = GroupAdvert.WITCHER_CHOSEN;      advertStatus = Advert.AdvertStatus.ASSIGNED_WITCHER;}
+            else if (fragmentId==witcherNotChosenSotringId) { groupAdvert = GroupAdvert.WITCHER_NOT_CHOSEN;  advertStatus = Advert.AdvertStatus.FREE;}
+            else if (fragmentId==completedSotringId)        { groupAdvert = GroupAdvert.EXECUTED;            advertStatus = Advert.AdvertStatus.COMPLETED; }
 
+            spinners.get(groupAdvert).show();
             OnGetAdverts onGetAdverts = new OnGetAdverts(AdvertListActivity.this, groupAdvert);
 
             if (filterType == GetAdvertsRequest.FilterType.BY_LOCATE) {
@@ -137,38 +140,6 @@ public class AdvertListActivity extends AppCompatActivity
         DURING, //Исполняются
         SUBSRIBED, //Подписаны
         EXECUTED; //Исполнены
-/*
-        private static Integer all, chosen, notchosen, dur, subsr, execut;
-
-        public static void init() {
-            all = R.id.all_advert;
-            chosen = R.id.adlist_witcher_chosen;
-            notchosen = R.id.adlist_witcher_not_chosen;
-            dur = R.id.adlist_during;
-            subsr = R.id.adlist_subsribed;
-            execut = R.id.adlist_executed;
-        }
-
-        public int toIdXml(){
-            switch (this) {
-                case ALL_ADVERT:
-                    return all;
-                case WITCHER_NOT_CHOSEN:
-                    return notchosen;
-                case WITCHER_CHOSEN:
-                    return chosen;
-                case DURING:
-                    return  dur;
-                case SUBSRIBED:
-                    return subsr;
-                case EXECUTED:
-                    return execut;
-                default: throw new RuntimeException("Добавил в GroupAdvert новое значение? Добавь и в метод toIdXml");
-            }
-        }
-        */
-
-
     };
     private static final int NEW_ADVERT = 2222;
 
@@ -188,6 +159,7 @@ public class AdvertListActivity extends AppCompatActivity
         @Override
         public void handle( ArrayList<Advert> answ) {
             refillAdvertsList(group, answ);
+            spinners.get(group).disable();
             /*
             for (Advert advert : answ){
                 //TODO: Возможны баги с id long  в int
@@ -197,7 +169,16 @@ public class AdvertListActivity extends AppCompatActivity
         }
     }
 
-    void updateList(GroupAdvert gr){
+
+    Map<GroupAdvert, ProgressSpinner> spinners;
+    void initSpinners(){
+        int progressBarIds[]= {R.id.all_adverts_progress, R.id.witcher_not_chosen_progress, R.id.witcher_chosen_progress, R.id.during_advert_progress, R.id.witcher_subsribed_progress, R.id.executed_progress};
+        int viewsIds[] =      {R.id.adlist_all_adverts,   R.id.adlist_witcher_not_chosen,   R.id.adlist_witcher_chosen,   R.id.adlist_during,          R.id.adlist_subsribed,           R.id.adlist_executed };
+        GroupAdvert[] groups ={GroupAdvert.ALL_ADVERT,    GroupAdvert.WITCHER_NOT_CHOSEN,   GroupAdvert.WITCHER_CHOSEN,   GroupAdvert.DURING,          GroupAdvert.SUBSRIBED,           GroupAdvert.EXECUTED};
+        spinners = new HashMap<>();
+        for (int i = 0; i < groups.length; i++){
+            spinners.put(groups[i], new ProgressSpinner(findViewById(viewsIds[i]), (ProgressBar) findViewById(progressBarIds[i])));
+        }
 
     }
 
@@ -206,6 +187,8 @@ public class AdvertListActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         LocationsList.refillFromServer();
         setContentView(R.layout.activity_advert_list);
+
+        initSpinners();
 
         ((TextView)findViewById(R.id.window_title)).setText("Объявления");
         ((TextView)findViewById(R.id.window_title)).setTextSize(14);
@@ -269,18 +252,15 @@ public class AdvertListActivity extends AppCompatActivity
         witcherNotChosenSotringId = R.id.witcher_not_chosen_adverts_sort;
         subscribedSotringId = R.id.witcher_subsribed_sort;
         completedSotringId = R.id.executed_sort;
-        SortingFragment freeAdvertsSorting  = (SortingFragment) fragmentManager.findFragmentById(freeAdvertsSortingId);
-        SortingFragment inProcessAdvertsSorting = (SortingFragment) fragmentManager.findFragmentById(witcherChosenSotringId);
-        SortingFragment completedAdvertsSorting = (SortingFragment) fragmentManager.findFragmentById(completedSotringId);
-        SortingFragment witcherNotChosen = (SortingFragment) fragmentManager.findFragmentById(witcherNotChosenSotringId);
-        SortingFragment witcherChosen = (SortingFragment) fragmentManager.findFragmentById(witcherChosenSotringId);
 
+        spinners.get(GroupAdvert.ALL_ADVERT).show();
         new GetAdvertsRequest().getFreeSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new OnGetAdverts(AdvertListActivity.this, GroupAdvert.ALL_ADVERT));
 
         //GroupAdvert.init();
 
         if ( LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER){
             OnGetAdverts onGetAdvertsFillDuring = new OnGetAdverts(AdvertListActivity.this, GroupAdvert.DURING);
+            spinners.get(GroupAdvert.DURING).show();
             new GetAdvertsRequest().getWitcherSortedBy(Advert.AdvertStatus.IN_PROCESS, GetAdvertsRequest.SortType.BY_ALPHABET, onGetAdvertsFillDuring);
         }
     }
@@ -305,8 +285,7 @@ public class AdvertListActivity extends AppCompatActivity
                 idxml = R.id.adlist_executed;
                 break;
         }
-        //((LinearLayout)findViewById(groupAdvert.toIdXml())).removeAllViews();
-        //if ( groupAdvert != GroupAdvert.DURING)
+
         deleteAdverts(idxml);
         for( Advert advert: adverts){
             setNewAdvert(idxml, advert.getName(), advert.getInfo(), advert.getKingdom(), advert.getCity(), String.valueOf(advert.getReward()), advert.getId());
@@ -329,8 +308,7 @@ public class AdvertListActivity extends AppCompatActivity
         int size = ll.getChildCount();
         View sort = ll.getChildAt(0);
         ((LinearLayout)ll).removeAllViews();
-        //if ( idXml != R.id.adlist_during || LoginRequest.getLoggedUserType() == Profile.ProfileType.CUSTOMER)
-        //    ((LinearLayout)ll).addView(sort);
+
     }
 
 
@@ -407,6 +385,7 @@ public class AdvertListActivity extends AppCompatActivity
 
         if (id == R.id.nav_profile) {
             Intent intent = new Intent(AdvertListActivity.this, ProfileActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
         }
         else if (id == R.id.nav_exit) {

@@ -77,152 +77,169 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <ProgressBar
+                    android:id="@+id/profile_progress"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_gravity="center"
+                    android:visibility="gone" />
+
                 <LinearLayout
-                    android:id="@+id/image_about_form"
+                    android:id="@+id/profile_info_form"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/image"
-                        android:layout_width="120dp"
-                        android:layout_height="160dp"
-                        android:contentDescription="@string/your_photo"
-                        app:srcCompat="@android:drawable/ic_menu_camera" />
-
                     <LinearLayout
-                        android:id="@+id/name_role_form"
+                        android:id="@+id/image_about_form"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="left"
-                        android:orientation="vertical"
-                        android:padding="10dp">
+                        android:layout_height="wrap_content">
 
-                        <TextView
-                            android:id="@+id/text_name"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginStart="5dp"
-                            android:gravity="start"
-                            android:text="@string/your_name"
-                            android:textSize="20sp" />
+                        <ImageView
+                            android:id="@+id/image"
+                            android:layout_width="120dp"
+                            android:layout_height="160dp"
+                            android:contentDescription="@string/your_photo"
+                            android:scaleType="fitXY"
+                            app:srcCompat="@android:drawable/ic_menu_camera" />
 
                         <LinearLayout
+                            android:id="@+id/name_role_form"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:gravity="bottom">
+                            android:layout_gravity="left"
+                            android:orientation="vertical"
+                            android:padding="10dp">
 
                             <TextView
-                                android:id="@+id/text_role"
+                                android:id="@+id/text_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="20dp"
-                                android:layout_marginRight="20dp"
-                                android:gravity="end"
-                                android:singleLine="true"
-                                android:text="@string/role"
-                                android:textSize="25sp"
-                                android:textStyle="bold" />
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginStart="5dp"
+                                android:gravity="start"
+                                android:text="@string/your_name"
+                                android:textSize="20sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="bottom">
+
+                                <TextView
+                                    android:id="@+id/text_role"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="20dp"
+                                    android:layout_marginRight="20dp"
+                                    android:gravity="end"
+                                    android:singleLine="true"
+                                    android:text="@string/role"
+                                    android:textSize="25sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
 
                         </LinearLayout>
-
                     </LinearLayout>
-                </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/form_about"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <Button
-                        android:id="@+id/button_about"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_gravity="start"
-                        android:text="@string/about_button"
-                        android:textSize="16sp"
-                        android:background="@drawable/frame_button">
-                    </Button>
-
-                    <TextView
-                        android:id="@+id/text_about"
+                    <LinearLayout
+                        android:id="@+id/form_about"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:textColor="#000000"
-                        android:padding="5dp"
-                        android:layout_margin="3dp"
-                        android:background="@drawable/frame_text_about"
-                        android:text="@string/about"/>
+                        android:orientation="vertical">
 
-                </LinearLayout>
+                        <Button
+                            android:id="@+id/button_about"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_gravity="start"
+                            android:text="@string/about_button"
+                            android:textSize="16sp"
+                            android:background="@drawable/frame_button">
+                        </Button>
 
-                <LinearLayout
-                    android:id="@+id/form_advert_story"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <Button
-                        android:id="@+id/button_advert_story"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_gravity="start"
-                        android:text="@string/advert_story_button"
-                        android:textSize="16sp"
-                        android:background="@drawable/frame_button">
-                    </Button>
-
-                    <TableLayout
-                        android:id="@+id/table_advert_story"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:stretchColumns="*"
-                        android:shrinkColumns="*">
-
-                        <ProgressBar
-                            style="?android:attr/progressBarStyleLarge"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            android:visibility="gone" />
-
-                        <TableRow
+                        <TextView
+                            android:id="@+id/text_about"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center">
+                            android:textSize="18sp"
+                            android:textColor="#000000"
+                            android:padding="5dp"
+                            android:layout_margin="3dp"
+                            android:background="@drawable/frame_text_about"
+                            android:text="@string/about"/>
 
-                            <TextView
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/form_advert_story"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/button_advert_story"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_gravity="start"
+                            android:text="@string/advert_story_button"
+                            android:textSize="16sp"
+                            android:background="@drawable/frame_button">
+                        </Button>
+
+                        <TableLayout
+                            android:id="@+id/table_advert_story"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:stretchColumns="*"
+                            android:shrinkColumns="*">
+
+                            <ProgressBar
+                                style="?android:attr/progressBarStyleLarge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="8dp"
+                                android:visibility="gone" />
+
+                            <TableRow
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textSize="18sp"
-                                android:textColor="#ffffff"
-                                android:textAlignment="center"
-                                android:background="@drawable/frame_table_header"
-                                android:text="@string/table_date"/>
+                                android:layout_gravity="center">
 
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textSize="18sp"
-                                android:textColor="#ffffff"
-                                android:textAlignment="center"
-                                android:background="@drawable/frame_table_header"
-                                android:text="@string/table_header"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="18sp"
+                                    android:textColor="#ffffff"
+                                    android:textAlignment="center"
+                                    android:background="@drawable/frame_table_header"
+                                    android:text="@string/table_date"/>
 
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textSize="18sp"
-                                android:textColor="#ffffff"
-                                android:textAlignment="center"
-                                android:background="@drawable/frame_table_header"
-                                android:text="@string/table_status"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="18sp"
+                                    android:textColor="#ffffff"
+                                    android:textAlignment="center"
+                                    android:background="@drawable/frame_table_header"
+                                    android:text="@string/table_header"/>
 
-                        </TableRow>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="18sp"
+                                    android:textColor="#ffffff"
+                                    android:textAlignment="center"
+                                    android:background="@drawable/frame_table_header"
+                                    android:text="@string/table_status"/>
 
-                    </TableLayout>
+                            </TableRow>
+
+                        </TableLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -240,6 +257,15 @@
                         android:text="@string/comment_button"
                         android:background="@drawable/frame_button">
                     </Button>
+
+                    <ProgressBar
+                        android:id="@+id/comments_progress"
+                        style="?android:attr/progressBarStyleLarge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="8dp"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:id="@+id/comments_list"

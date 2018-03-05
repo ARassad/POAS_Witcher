@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -176,23 +177,31 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
                     buttonRespond.setVisibility(View.VISIBLE);
                 }
             }
-            if (answ.getAuthorId() == LoginRequest.getLoggedUserId()){
+            if (answ.getAuthorId() == LoginRequest.getLoggedUserId() ||
+                    LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER){
 
-                ifCreatedByLoggedUser();
+                if (answ.getAuthorId() == LoginRequest.getLoggedUserId()) {
+                    ifCreatedByLoggedUser();
+                }
 
+                signedSpinner.show();
                 getDesiredRequest.getDesired(answ.getId(), new onGetDesiredList(AdvertActivity.this));
             }
 
             Bitmap authPhoto = answ.getAuthorPhoto();
             if (authPhoto != null){
-                authPhoto = Bitmap.createScaledBitmap(authPhoto, btnProfileImage.getWidth(),btnProfileImage.getHeight(), false);
+                try {
+                    //int btnHeight = btnProfileImage.getHeight();
+                    //int btnWidth = btnProfileImage.getWidth();
+                    //authPhoto = Bitmap.createScaledBitmap(authPhoto, btnWidth, btnHeight, false);
+                }catch (Exception e){
+                    int stopForDebug = 2;
+                }
                 btnProfileImage.setImageBitmap(authPhoto);
             }
-
-            if (LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER){
-                getDesiredRequest.getDesired(answ.getId(), new onGetDesiredList(AdvertActivity.this));
-            }
+            infoSpinner.disable();
         }
+
     }
 
     private GetCommentsRequest getCommentsRequest = new GetCommentsRequest();
@@ -210,6 +219,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
                 SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' HH:mm");
                 setNewComment(comment.getAuthorAvatar(),comment.getText(), formatForDateNow.format(comment.getDateOfCreate()));
             }
+            commentsSpinner.disable();
         }
     }
 
@@ -256,9 +266,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
                     }
                 }
             }
-
-
-
+            signedSpinner.disable();
 
         }
     }
@@ -325,6 +333,8 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         buttonComplete      = findViewById(R.id.button_set_completed);
 
         buttonRespond       = findViewById(R.id.button_respond);
+        btnProfileImage = findViewById(R.id.btn_profile_image);
+
         photos[0] = (ImageView)findViewById(R.id.image1);
         photos[1] = (ImageView)findViewById(R.id.image2);
         photos[2] = (ImageView)findViewById(R.id.image3);
@@ -444,6 +454,22 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
     private long advertId = -1;
     private Advert advert;
+    private ProgressSpinner commentsSpinner, signedSpinner, infoSpinner;
+    private void spinnersInit(){
+        View commentsView = findViewById(R.id.comments_list);
+        ProgressBar commentsProgressBar = findViewById(R.id.comments_progress);
+        commentsSpinner = new ProgressSpinner(commentsView, commentsProgressBar);
+
+        View signedListView = findViewById(R.id.list_responders);
+        ProgressBar signedProgressBar = findViewById(R.id.responders_progress);
+        signedSpinner = new ProgressSpinner(signedListView, signedProgressBar);
+
+        View fullInfoView = findViewById(R.id.advert_info_form);
+        ProgressBar infoProgressBar = findViewById(R.id.advert_info_progress);
+        infoSpinner = new ProgressSpinner(fullInfoView, infoProgressBar);
+
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -451,6 +477,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         setContentView(R.layout.activity_advert);
 
         connectViews();
+        spinnersInit();
         setOnClickButtons();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -470,7 +497,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         setButton((Button)findViewById(R.id.button_comments), findViewById(R.id.comments_list));
         setButton((Button)findViewById(R.id.button_responders), findViewById((R.id.list_responders)));
 
-        btnProfileImage = findViewById(R.id.btn_profile_image);
+
         btnProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -536,7 +563,9 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
         advertId = getIntent().getLongExtra("advertId",-1);
         if (advertId >= 0){
+            infoSpinner.show();
             getAdvertRequest.getAdvert(advertId, new onGetAdvert(AdvertActivity.this));
+            commentsSpinner.show();
             getCommentsRequest.getAdvertComments(advertId, new onGetComments(AdvertActivity.this));
         }
     }
@@ -605,10 +634,12 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
         if (id == R.id.nav_advert) {
             Intent intent = new Intent(AdvertActivity.this, AdvertListActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
             startActivity(intent);
         }
         else if (id == R.id.nav_profile) {
             Intent intent = new Intent(AdvertActivity.this, ProfileActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
         }
         else if (id == R.id.nav_exit) {

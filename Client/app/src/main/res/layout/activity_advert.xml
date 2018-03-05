@@ -70,12 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ProgressBar
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:visibility="gone" />
+
 
         <ScrollView
             android:id="@+id/scroll_form"
@@ -87,265 +82,287 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/text_title_advert"
-                    android:layout_width="match_parent"
+                <ProgressBar
+                    android:id="@+id/advert_info_progress"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:text="Заголовок"/>
+                    android:layout_marginBottom="8dp"
+                    android:visibility="gone" />
 
                 <LinearLayout
+                    android:id="@+id/advert_info_form"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageButton
-                        android:id="@+id/btn_profile_image"
-                        android:layout_width="120dp"
-                        android:layout_height="160dp"
-                        app:srcCompat="@android:drawable/ic_menu_camera"/>
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/text_title_advert"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:text="Заголовок"/>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/text_name_client"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginLeft="10dp"
-                            android:text="Заказчик"
-                            android:textSize="20sp"/>
-                        <TextView
-                            android:id="@+id/text_cost_advert"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginLeft="10dp"
-                            android:text="Награда"
-                            android:textSize="20sp"/>
-                        <TextView
-                            android:id="@+id/text_kingdom_city_advert"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginLeft="10dp"
-                            android:text="Королевство, Город"
-                            android:textSize="20sp"/>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/text_executor"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:padding="5dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:text="Исполнитель"
-                        android:textSize="20sp"/>
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <Button
-                        android:id="@+id/button_respond"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/frame_text_about"
-                        android:visibility="gone"
-                        android:text="Откликнуться"/>
-
-                    <Button
-                        android:id="@+id/button_accept_answ"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/frame_text_about"
-                        android:visibility="gone"
-                        android:text="Принять заказ"/>
-
-                    <Button
-                        android:id="@+id/button_discard_answ"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/frame_text_about"
-                        android:visibility="gone"
-                        android:text="Отказаться"/>
-
-                    <Button
-                        android:id="@+id/button_set_completed"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/frame_text_about"
-                        android:visibility="gone"
-                        android:text="Сообщить о выполнении"/>
-
-
-                    <Button
-                        android:id="@+id/button_discard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/frame_text_about"
-                        android:visibility="gone"
-                        android:text="Отказаться от ведьмака"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <Button
-                        android:id="@+id/button_description"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_gravity="start"
-                        android:text="Описание"
-                        android:textSize="16sp"
-                        android:background="@drawable/frame_button">
-                    </Button>
-
-                    <TextView
-                        android:id="@+id/text_description"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:textColor="#000000"
-                        android:padding="5dp"
-                        android:layout_margin="3dp"
-                        android:background="@drawable/frame_text_about"
-                        android:text="@string/about"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <Button
-                        android:id="@+id/button_images"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_gravity="start"
-                        android:text="Изображения"
-                        android:textSize="16sp"
-                        android:background="@drawable/frame_button">
-                    </Button>
-
-                    <HorizontalScrollView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
+                        <ImageButton
+                            android:id="@+id/btn_profile_image"
+                            android:layout_width="120dp"
+                            android:layout_height="160dp"
+                            android:background="@android:color/transparent"
+                            android:elevation="0dp"
+                            android:scaleType="fitXY"
+                            app:srcCompat="@android:drawable/ic_menu_camera" />
+
                         <LinearLayout
-                            android:id="@id/images_advert"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
 
-                            <ImageView
-                                android:id="@+id/image1"
-                                android:layout_width="150dp"
-                                android:layout_height="150dp"
-                                app:srcCompat="@android:drawable/ic_menu_camera"/>
-
-                            <ImageView
-                                android:id="@+id/image2"
-                                android:layout_width="150dp"
-                                android:layout_height="150dp"
-                                app:srcCompat="@android:drawable/ic_menu_camera"/>
-
-                            <ImageView
-                                android:id="@+id/image3"
-                                android:layout_width="150dp"
-                                android:layout_height="150dp"
-                                app:srcCompat="@android:drawable/ic_menu_camera"/>
-
-                            <ImageView
-                                android:id="@+id/image4"
-                                android:layout_width="150dp"
-                                android:layout_height="150dp"
-                                app:srcCompat="@android:drawable/ic_menu_camera"/>
-
-                            <ImageView
-                                android:id="@+id/image5"
-                                android:layout_width="150dp"
-                                android:layout_height="150dp"
-                                app:srcCompat="@android:drawable/ic_menu_camera"/>
-
-                            <ImageView
-                                android:id="@+id/image6"
-                                android:layout_width="150dp"
-                                android:layout_height="150dp"
-                                app:srcCompat="@android:drawable/ic_menu_camera"/>
-                            <ImageView
-                                android:id="@+id/image7"
-                                android:layout_width="150dp"
-                                android:layout_height="150dp"
-                                app:srcCompat="@android:drawable/ic_menu_camera"/>
-
-                            <ImageView
-                                android:id="@+id/image8"
-                                android:layout_width="150dp"
-                                android:layout_height="150dp"
-                                app:srcCompat="@android:drawable/ic_menu_camera"/>
-
-                            <ImageView
-                                android:id="@+id/image9"
-                                android:layout_width="150dp"
-                                android:layout_height="150dp"
-                                app:srcCompat="@android:drawable/ic_menu_camera"/>
-
-                            <ImageView
-                                android:id="@+id/image10"
-                                android:layout_width="150dp"
-                                android:layout_height="150dp"
-                                app:srcCompat="@android:drawable/ic_menu_camera"/>
+                            <TextView
+                                android:id="@+id/text_name_client"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginLeft="10dp"
+                                android:text="Заказчик"
+                                android:textSize="20sp"/>
+                            <TextView
+                                android:id="@+id/text_cost_advert"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginLeft="10dp"
+                                android:text="Награда"
+                                android:textSize="20sp"/>
+                            <TextView
+                                android:id="@+id/text_kingdom_city_advert"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginLeft="10dp"
+                                android:text="Королевство, Город"
+                                android:textSize="20sp"/>
                         </LinearLayout>
-                    </HorizontalScrollView>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <Button
-                        android:id="@+id/button_responders"
+                    </LinearLayout>
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_gravity="start"
-                        android:text="Откликнувшиеся"
-                        android:textSize="16sp"
-                        android:background="@drawable/frame_button">
-                    </Button>
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/text_executor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:text="Исполнитель"
+                            android:textSize="20sp"/>
+
+
+                    </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/list_responders"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
+                        <Button
+                            android:id="@+id/button_respond"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/frame_text_about"
+                            android:visibility="gone"
+                            android:text="Откликнуться"/>
+
+                        <Button
+                            android:id="@+id/button_accept_answ"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/frame_text_about"
+                            android:visibility="gone"
+                            android:text="Принять заказ"/>
+
+                        <Button
+                            android:id="@+id/button_discard_answ"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/frame_text_about"
+                            android:visibility="gone"
+                            android:text="Отказаться"/>
+
+                        <Button
+                            android:id="@+id/button_set_completed"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/frame_text_about"
+                            android:visibility="gone"
+                            android:text="Сообщить о выполнении"/>
+
+
+                        <Button
+                            android:id="@+id/button_discard"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/frame_text_about"
+                            android:visibility="gone"
+                            android:text="Отказаться от ведьмака"/>
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/button_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_gravity="start"
+                            android:text="Описание"
+                            android:textSize="16sp"
+                            android:background="@drawable/frame_button">
+                        </Button>
+
+                        <TextView
+                            android:id="@+id/text_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:textColor="#000000"
+                            android:padding="5dp"
+                            android:layout_margin="3dp"
+                            android:background="@drawable/frame_text_about"
+                            android:text="@string/about"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/button_images"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_gravity="start"
+                            android:text="Изображения"
+                            android:textSize="16sp"
+                            android:background="@drawable/frame_button">
+                        </Button>
+
+                        <HorizontalScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:id="@id/images_advert"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <ImageView
+                                    android:id="@+id/image1"
+                                    android:layout_width="150dp"
+                                    android:layout_height="150dp"
+                                    app:srcCompat="@android:drawable/ic_menu_camera"/>
+
+                                <ImageView
+                                    android:id="@+id/image2"
+                                    android:layout_width="150dp"
+                                    android:layout_height="150dp"
+                                    app:srcCompat="@android:drawable/ic_menu_camera"/>
+
+                                <ImageView
+                                    android:id="@+id/image3"
+                                    android:layout_width="150dp"
+                                    android:layout_height="150dp"
+                                    app:srcCompat="@android:drawable/ic_menu_camera"/>
+
+                                <ImageView
+                                    android:id="@+id/image4"
+                                    android:layout_width="150dp"
+                                    android:layout_height="150dp"
+                                    app:srcCompat="@android:drawable/ic_menu_camera"/>
+
+                                <ImageView
+                                    android:id="@+id/image5"
+                                    android:layout_width="150dp"
+                                    android:layout_height="150dp"
+                                    app:srcCompat="@android:drawable/ic_menu_camera"/>
+
+                                <ImageView
+                                    android:id="@+id/image6"
+                                    android:layout_width="150dp"
+                                    android:layout_height="150dp"
+                                    app:srcCompat="@android:drawable/ic_menu_camera"/>
+                                <ImageView
+                                    android:id="@+id/image7"
+                                    android:layout_width="150dp"
+                                    android:layout_height="150dp"
+                                    app:srcCompat="@android:drawable/ic_menu_camera"/>
+
+                                <ImageView
+                                    android:id="@+id/image8"
+                                    android:layout_width="150dp"
+                                    android:layout_height="150dp"
+                                    app:srcCompat="@android:drawable/ic_menu_camera"/>
+
+                                <ImageView
+                                    android:id="@+id/image9"
+                                    android:layout_width="150dp"
+                                    android:layout_height="150dp"
+                                    app:srcCompat="@android:drawable/ic_menu_camera"/>
+
+                                <ImageView
+                                    android:id="@+id/image10"
+                                    android:layout_width="150dp"
+                                    android:layout_height="150dp"
+                                    app:srcCompat="@android:drawable/ic_menu_camera"/>
+                            </LinearLayout>
+                        </HorizontalScrollView>
+
+                    </LinearLayout>
                 </LinearLayout>
 
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/button_responders"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_gravity="start"
+                            android:text="Откликнувшиеся"
+                            android:textSize="16sp"
+                            android:background="@drawable/frame_button">
+                        </Button>
+
+                        <ProgressBar
+                            android:id="@+id/responders_progress"
+                            style="?android:attr/progressBarStyleLarge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:visibility="gone" />
+
+                        <LinearLayout
+                            android:id="@+id/list_responders"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                        </LinearLayout>
+                    </LinearLayout>
                 <LinearLayout
                     android:id="@+id/form_comments"
                     android:layout_width="match_parent"
@@ -361,6 +378,14 @@
                         android:text="@string/comment_button"
                         android:background="@drawable/frame_button">
                     </Button>
+
+                    <ProgressBar
+                        android:id="@+id/comments_progress"
+                        style="?android:attr/progressBarStyleLarge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:id="@+id/comments_list"

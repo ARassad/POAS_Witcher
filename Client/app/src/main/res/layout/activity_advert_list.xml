@@ -108,6 +108,8 @@
                     android:background="@drawable/frame_button">
                 </Button>
 
+
+
                 <LinearLayout
                     android:id="@+id/form_all_advert"
                     android:visibility="visible"
@@ -122,6 +124,15 @@
                         android:layout_height="wrap_content"
                         tools:layout="@layout/fragment_sorting">
                     </fragment>
+
+                    <ProgressBar
+                        android:id="@+id/all_adverts_progress"
+                        style="?android:attr/progressBarStyleLarge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="8dp"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:id="@+id/adlist_all_adverts"
@@ -172,6 +183,15 @@
                             tools:layout="@layout/fragment_sorting">
                         </fragment>
 
+                        <ProgressBar
+                            android:id="@+id/witcher_not_chosen_progress"
+                            style="?android:attr/progressBarStyleLarge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="8dp"
+                            android:visibility="gone" />
+
                         <LinearLayout
                             android:id="@+id/adlist_witcher_not_chosen"
                             android:layout_width="match_parent"
@@ -214,6 +234,15 @@
                             tools:layout="@layout/fragment_sorting">
                         </fragment>
 
+                        <ProgressBar
+                            android:id="@+id/witcher_chosen_progress"
+                            style="?android:attr/progressBarStyleLarge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="8dp"
+                            android:visibility="gone" />
+
                         <LinearLayout
                             android:id="@+id/adlist_witcher_chosen"
                             android:layout_width="match_parent"
@@ -242,6 +271,15 @@
                         android:textSize="16sp"
                         android:background="@drawable/frame_button">
                     </Button>
+
+                    <ProgressBar
+                        android:id="@+id/during_advert_progress"
+                        style="?android:attr/progressBarStyleLarge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="8dp"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:id="@+id/adlist_during"
@@ -284,6 +322,15 @@
                             tools:layout="@layout/fragment_sorting">
                         </fragment>
 
+                        <ProgressBar
+                            android:id="@+id/witcher_subsribed_progress"
+                            style="?android:attr/progressBarStyleLarge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="8dp"
+                            android:visibility="gone" />
+
                         <LinearLayout
                             android:id="@+id/adlist_subsribed"
                             android:layout_width="match_parent"
@@ -325,6 +372,15 @@
                             android:layout_height="wrap_content"
                             tools:layout="@layout/fragment_sorting">
                         </fragment>
+
+                        <ProgressBar
+                            android:id="@+id/executed_progress"
+                            style="?android:attr/progressBarStyleLarge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="8dp"
+                            android:visibility="gone" />
 
                         <LinearLayout
                             android:id="@+id/adlist_executed"

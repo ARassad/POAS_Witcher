@@ -33,6 +33,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -115,6 +116,8 @@ public class ProfileActivity extends AppCompatActivity
             if (author_id != LoginRequest.getLoggedUserId()){
                 buttonEdit.setVisibility(View.GONE);
             }
+
+            profileProgressSpinner.disable();
         }
     }
 
@@ -151,17 +154,29 @@ public class ProfileActivity extends AppCompatActivity
                SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy '-' HH:mm");
                setNewComment(comment.getAuthorAvatar(),comment.getText(), formatForDateNow.format(comment.getDateOfCreate()));
            }
+           commentsProgressSpinner.disable();
        }
    }
 
     private GetCommentsRequest getCommentsRequest = new GetCommentsRequest();
     long profileId = -1;
     long author_id = -1;
+    ProgressSpinner profileProgressSpinner, commentsProgressSpinner;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        View profileInfoView = findViewById(R.id.profile_info_form);
+        ProgressBar profileProgressBar = findViewById(R.id.profile_progress);
+        profileProgressSpinner = new ProgressSpinner(profileInfoView, profileProgressBar);
+        profileProgressSpinner.show();
+
+        View commentsView = findViewById(R.id.comments_list);
+        ProgressBar commentsProgressBar = findViewById(R.id.comments_progress);
+        commentsProgressSpinner = new ProgressSpinner(commentsView, commentsProgressBar);
+        commentsProgressSpinner.show();
 
         name = (TextView) findViewById(R.id.text_name);
         aboutMe = (TextView) findViewById(R.id.text_about);
@@ -304,10 +319,12 @@ public class ProfileActivity extends AppCompatActivity
 
         if (id == R.id.nav_profile && author_id != LoginRequest.getLoggedUserId()) {
             Intent intent = new Intent(ProfileActivity.this, ProfileActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
         }
         else if (id == R.id.nav_advert) {
             Intent intent = new Intent(ProfileActivity.this, AdvertListActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
         }
         else if (id == R.id.nav_exit) {
