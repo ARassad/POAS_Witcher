@@ -182,11 +182,11 @@ public class EditAdvertActivity extends AppCompatActivity {
         idPhotos[7] = (R.id.image8);
         idPhotos[8] = (R.id.image9);
         idPhotos[9] = (R.id.image10);
-        for (int i = 0; i < idPhotos.length; i++){
+        for (int i = 0; i < bitmaps.size(); i++){
             photos[i] = findViewById(idPhotos[i]);
             photos[i].setImageBitmap(bitmaps.get(i));
         }
-        for (int i = 0; i < photos.length; i++){
+        for (int i = 0; i < bitmaps.size(); i++){
             photos[i].setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(final View view) {
