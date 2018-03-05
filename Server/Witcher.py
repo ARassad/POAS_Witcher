@@ -118,12 +118,15 @@ def contract_complited(cursor, params):
 
         cursor.execute('select id_client, header from Contract where id={}'.format(params[Advert.ID.value]))
         row = cursor.fetchone()
-        id_sender = row[0]
+        id_client = row[0]
         title = 'Контракт ' + row[1]
         cursor.execute("select name from Profile where id=(select id_profile from Token_Table where token='{}')"
                        .format(params[User.Token.value]))
         name = cursor.fetchone()[0]
         body = 'Ведьмак ' + name + ' выполнил выше задание!'
+        cursor.execute("select id_profile from Client where id={}".format(id_client))
+        row = cursor.fetchone()
+        id_sender = row[0]
         send_firebase_push(cursor, title, body, id_sender)
     else:
         status.status = Status.Error.value
