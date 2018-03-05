@@ -30,6 +30,8 @@ import ServerExchange.ServerRequests.LoginRequest;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.DefaultServerAnswerHandler;
 import ServerExchange.ServerRequests.SetTokenRequest;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
+
 /**
  * Created by Mikhail on 27.02.2018.
  */
@@ -177,21 +179,27 @@ public class PhoneCheck  extends AppCompatActivity implements View.OnClickListen
                             Log.d(TAG, "signInWithCredential:success");
 
                             FirebaseUser user = task.getResult().getUser();
+                            //TODO: В релизе откомментить запрос
                             // [START_EXCLUDE]
+                            /*
                             new SetTokenRequest().set(new DefaultServerAnswerHandler<Boolean>(PhoneCheck.this) {
                                 @Override
                                 public void handle(Boolean answ) {
                                     if (answ == true){
+                                    */
                                         LocationsList.refillFromServer();
                                         Intent intent = new Intent(PhoneCheck.this, ProfileActivity.class);
+                                        intent.addFlags(FLAG_ACTIVITY_CLEAR_TASK); //Подчищаем все Активити за собой;
                                         startActivity(intent);
+                                        /*
                                     } else if (answ == false){
                                         dlgAlert.setMessage("Такое невозможно -\\_//- \n PhoneCheck186");
                                         dlgAlert.create().show();
                                     }
                                 }
-                            });
 
+                            });
+                            */
                             // [END_EXCLUDE]
                         } else {
                             // Sign in failed, display a message and update the UI
