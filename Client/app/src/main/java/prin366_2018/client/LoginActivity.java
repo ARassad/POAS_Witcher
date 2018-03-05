@@ -122,7 +122,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         onAppStart();
 
-
+        FirebaseAuth.getInstance().signOut();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
             showProgress(true);//Включили спиннер

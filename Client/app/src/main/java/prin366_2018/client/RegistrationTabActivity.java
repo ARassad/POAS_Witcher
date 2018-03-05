@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import ServerExchange.LocationsList;
@@ -169,6 +170,7 @@ public class RegistrationTabActivity extends AppCompatActivity {
                 @Override
                 public void handle(Boolean answ) {
                     if (answ!= null && answ == true){
+                        FirebaseAuth.getInstance().signOut();
                         showProgress(true);
                         Intent intent = new Intent(RegistrationTabActivity.this, LoginActivity.class);
 
