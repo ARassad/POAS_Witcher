@@ -27,6 +27,8 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -414,6 +416,7 @@ public class AdvertListActivity extends AppCompatActivity
                 }
             });
 
+            FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(AdvertListActivity.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);

@@ -25,13 +25,13 @@ public abstract class DefaultServerAnswerHandler<AnswerType> implements IServerA
 
     public void errorHandle(String errorMessage){
 
-        dlgAlert.setMessage(errorMessage);
-        dlgAlert.create().show();
+        //dlgAlert.setMessage(errorMessage);
+        //dlgAlert.create().show();
 
     }
 
     public void exceptionHandle(Exception excp){
-        dlgAlert.setMessage(excp.getMessage());
-        dlgAlert.create().show();
+        //dlgAlert.setMessage(excp.getMessage());
+        //dlgAlert.create().show();
     }
 }
