@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 import ServerExchange.ImageConvert;
 import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
@@ -25,7 +26,7 @@ public class CreateAdvertRequest extends TokenServerRequest<Boolean> {
     private String text;
     private String header;
     private int bounty;
-    private LinkedList<String> photos;
+    private List<String> photos;
 
     public CreateAdvertRequest(String serverAddress) {
         super(serverAddress);
@@ -62,7 +63,7 @@ public class CreateAdvertRequest extends TokenServerRequest<Boolean> {
         }
     }
 
-    public void createAdvert(String header, String text, int bounty, long id_task_located,  ArrayList<Bitmap> photos, IServerAnswerHandler onCreateAdvertHandler)  {
+    public void createAdvert(String header, String text, int bounty, long id_task_located, List<Bitmap> photos, IServerAnswerHandler onCreateAdvertHandler)  {
         this.id_task_located = id_task_located;
         this.text = text;
         this.header = header;

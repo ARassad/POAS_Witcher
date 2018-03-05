@@ -1,15 +1,24 @@
 package prin366_2018.client;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -45,7 +54,7 @@ import static ServerExchange.ImageConvert.toBase64Str;
 public class EditAdvertActivity extends AppCompatActivity {
 
     static final int GALLERY_REQUEST = 2;
-    Boolean isPhotoChanged = false;
+    private Boolean isPhotoChanged = false;
 
     private TextView title, description, cost;
     private Spinner kingdom, city;
@@ -55,11 +64,17 @@ public class EditAdvertActivity extends AppCompatActivity {
     private long[] locsIds;
     private long locId;
 
-    ImageView[] photos = new ImageView[10];
-    UpdateAdvertRequest updateRequest = new UpdateAdvertRequest();
-    CreateAdvertRequest createRequest = new CreateAdvertRequest();
+    private ImageButton[] photos = new ImageButton[10];
+    private UpdateAdvertRequest updateRequest = new UpdateAdvertRequest();
+    private CreateAdvertRequest createRequest = new CreateAdvertRequest();
 
-    LinkedList<Bitmap> bitmaps;
+    private LinkedList<Bitmap> bitmaps = new LinkedList<Bitmap>();
+
+    private LinkedList<Bitmap> bitmapsToDel = new LinkedList<>();
+
+    private final int maxPhotosCount = 10;
+    private int[] idPhotos = new int[maxPhotosCount];
+    private boolean isThisPhotoChanged[] = new boolean[maxPhotosCount];
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
@@ -70,19 +85,22 @@ public class EditAdvertActivity extends AppCompatActivity {
             switch (requestCode) {
                 case GALLERY_REQUEST:
                     isPhotoChanged = true;
-                    ClipData selectedImage = null;
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                        selectedImage = imageReturnedIntent.getClipData();
-                    }
-                    try {
-                        for (int i = 0; i < selectedImage.getItemCount() && i < 10; ++i) {
-                            Uri uri = selectedImage.getItemAt(i).getUri();
-                            bitmaps.add(MediaStore.Images.Media.getBitmap(getContentResolver(), uri));
-                            Bitmap bm = Bitmap.createScaledBitmap(bitmaps.getLast(), 100, 100, false);
-                            photos[i].setImageBitmap(bm);
+                        ClipData selectedImage = imageReturnedIntent.getClipData();
+                        try {
+                            for (int i = 0; i < selectedImage.getItemCount() && i < 10; ++i) {
+                                Uri uri = selectedImage.getItemAt(i).getUri();
+                                bitmaps.add(MediaStore.Images.Media.getBitmap(getContentResolver(), uri));
+                                isThisPhotoChanged[bitmaps.size()-1] = true;
+                                Bitmap bm = Bitmap.createScaledBitmap(bitmaps.getLast(), 100, 100, false);
+                                photos[i].setImageBitmap(bm);
+                            }
+                        } catch (IOException e) {
+                            AlertDialog.Builder dlg = new AlertDialog.Builder(EditAdvertActivity.this);
+                            dlg.setTitle("Упс! У вас ошибочка!");
+                            dlg.setMessage(e.getMessage());
+                            dlg.create().show();
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
             }
         }
@@ -123,6 +141,7 @@ public class EditAdvertActivity extends AppCompatActivity {
     private String headerVal = "";
     private String descriptionVal = "";
     private long advertId = -1;
+
     private void getFromBeforeActivity(){
         Intent intent = getIntent();
         kingdomVal = intent.getStringExtra("kingdom");
@@ -131,6 +150,13 @@ public class EditAdvertActivity extends AppCompatActivity {
         headerVal = intent.getStringExtra("header");
         descriptionVal = intent.getStringExtra("description");
         advertId = intent.getLongExtra("advertId", -1);
+        for (int i = 0; i < maxPhotosCount; i++) {
+            byte[] bs = intent.getByteArrayExtra("photo"+String.valueOf(i));
+            if (bs != null) {
+                bitmaps.add(BitmapFactory.decodeByteArray(bs, 0, bs.length));
+                isThisPhotoChanged[i] = false;
+            }
+        }
     }
 
     @Override
@@ -138,21 +164,69 @@ public class EditAdvertActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_advert);
 
-        final LocationsList locsList =LocationsList.getInstance();
+        final LocationsList locsList = LocationsList.getInstance();
         //{"Не указано"};
 
         getFromBeforeActivity();
 
-                photos[0] = (ImageView)findViewById(R.id.image1);
-                photos[1] = (ImageView)findViewById(R.id.image2);
-                photos[2] = (ImageView)findViewById(R.id.image3);
-                photos[3] = (ImageView)findViewById(R.id.image4);
-                photos[4] = (ImageView)findViewById(R.id.image5);
-                photos[5] = (ImageView)findViewById(R.id.image6);
-                photos[6] = (ImageView)findViewById(R.id.image7);
-                photos[7] = (ImageView)findViewById(R.id.image8);
-                photos[8] = (ImageView)findViewById(R.id.image9);
-                photos[9] = (ImageView)findViewById(R.id.image10);
+        for (int i = 0; i < isThisPhotoChanged.length; i++){
+            isThisPhotoChanged[i] = false;
+        }
+        idPhotos[0] = (R.id.image1);
+        idPhotos[1] = (R.id.image2);
+        idPhotos[2] = (R.id.image3);
+        idPhotos[3] = (R.id.image4);
+        idPhotos[4] = (R.id.image5);
+        idPhotos[5] = (R.id.image6);
+        idPhotos[6] = (R.id.image7);
+        idPhotos[7] = (R.id.image8);
+        idPhotos[8] = (R.id.image9);
+        idPhotos[9] = (R.id.image10);
+        for (int i = 0; i < idPhotos.length; i++){
+            photos[i] = findViewById(idPhotos[i]);
+            photos[i].setImageBitmap(bitmaps.get(i));
+        }
+        for (int i = 0; i < photos.length; i++){
+            photos[i].setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(final View view) {
+                    final View view_ = view;
+                    AlertDialog.Builder dlg = new AlertDialog.Builder(EditAdvertActivity.this);
+                    dlg.setTitle("Подтверждение");
+                    dlg.setMessage("Удалить?");
+                    dlg.setCancelable(true);
+                    dlg.setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int iDontKnowWhatIsIt) {
+                            int order = 0;
+                            int myId = view_.getId();
+                            for ( order = 0; order < idPhotos.length; order++) {
+                                if (myId == idPhotos[order]){
+                                    break;
+                                }
+                            }
+
+                            //for ( int i = idPhotos.length-1-1; i >= order; i++){
+                            //    bitmaps.set(i, bitmaps.get(i+1));
+                            //}
+                            if (!isThisPhotoChanged[order]) {
+                                bitmapsToDel.addLast(bitmaps.get(order));
+                            }
+                            bitmaps.remove(order);
+                            //bitmaps.addLast();
+                            for ( int i = order; i < bitmaps.size(); i++){
+                                photos[i].setImageBitmap(bitmaps.get(i));
+                            }
+                            isThisPhotoChanged[bitmaps.size()] = false;
+                            photos[bitmaps.size()].setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_camera));
+
+                        }
+                    });
+                    dlg.create().show();
+                    return true;
+                }
+            });
+        }
 
         kingdom = ((Spinner)findViewById(R.id.spinner_edit_kingdom));
         String[] kingdoms = new String[0];
@@ -240,39 +314,7 @@ public class EditAdvertActivity extends AppCompatActivity {
         final int oldCostVal = bountyVal;
         final long oldLockId = locId;
 
-        setImage(R.id.get_photos);
-
-        Button buttonPublic = (Button)findViewById(R.id.button_public);
-        buttonPublic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Публикация объявления
-                String newTitleVal = title.getText().toString();
-                String newDescriptionVal = description.getText().toString();
-                int newCostVal = Integer.parseInt(cost.getText().toString());
-                long newLocId = locId;
-
-                if (getIntent().getBooleanExtra("isCreate", false)){
-                      createRequest.createAdvert(newTitleVal, newDescriptionVal, newCostVal, locId, null, new onCreateAdvert(EditAdvertActivity.this));
-                } else {
-                    //TODO: add and delete photos
-                    updateRequest.updateAdvert( advertId,
-                                ! newTitleVal.equals(oldTitleVal) ? newTitleVal : null,
-                                ! newDescriptionVal.equals(oldDescriptionValue) ? newDescriptionVal : null,
-                                oldLockId != newLocId ? newLocId : null,
-                                oldCostVal != newCostVal ? newCostVal : null,
-                                new LinkedList<Bitmap>(),
-                                new LinkedList<Bitmap>(),
-                                new onUpdateAdvert(EditAdvertActivity.this)
-                    );
-                }
-
-            }
-        });
-    }
-
-    private void setImage(final int imageId) {
-        ((Button)findViewById(imageId)).setOnClickListener(new View.OnClickListener() {
+        ((Button)findViewById(R.id.get_photos)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //ШОТО ПРОИСХОДИТ ПРИ НАЖАТИИ НА КНОПКУ ФОТОЧКИ
@@ -285,7 +327,44 @@ public class EditAdvertActivity extends AppCompatActivity {
                 startActivityForResult(intent, GALLERY_REQUEST);
             }
         });
+
+
+        Button buttonPublic = (Button)findViewById(R.id.button_public);
+        buttonPublic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Публикация объявления
+                String newTitleVal = title.getText().toString();
+                String newDescriptionVal = description.getText().toString();
+                int newCostVal = Integer.parseInt(cost.getText().toString());
+                long newLocId = locId;
+
+                if (getIntent().getBooleanExtra("isCreate", false)){
+                      createRequest.createAdvert(newTitleVal, newDescriptionVal, newCostVal, locId, bitmaps, new onCreateAdvert(EditAdvertActivity.this));
+                } else {
+                    //TODO: add and delete photos
+                    LinkedList<Bitmap> addBitmaps = new LinkedList<>();
+                    for (int i = 0; i < bitmaps.size(); i++){
+                        if (isThisPhotoChanged[i]) {
+                            addBitmaps.addLast(bitmaps.get(i));
+                        }
+                    }
+                    updateRequest.updateAdvert( advertId,
+                                ! newTitleVal.equals(oldTitleVal) ? newTitleVal : null,
+                                ! newDescriptionVal.equals(oldDescriptionValue) ? newDescriptionVal : null,
+                                oldLockId != newLocId ? newLocId : null,
+                                oldCostVal != newCostVal ? newCostVal : null,
+                                addBitmaps,
+                                bitmapsToDel,
+                                new onUpdateAdvert(EditAdvertActivity.this)
+                    );
+                }
+
+            }
+        });
     }
+
+
 
     private String[] BitmapsToBundle(LinkedList<Bitmap> b) {
         String[] stringBmps = new String[10];

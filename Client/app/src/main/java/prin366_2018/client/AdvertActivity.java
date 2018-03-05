@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.Image;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -25,6 +26,8 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -405,6 +408,22 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
                 intent.putExtra("header", advert.getName());
                 intent.putExtra("description", advert.getInfo());
                 intent.putExtra("advertId", advert.getId());
+
+                byte[][] bytes = new byte[photos.length][];
+                for (int i = 0; i < photos.length; ++i) {
+                    Bitmap bmp = ((BitmapDrawable)photos[i].getDrawable()).getBitmap();
+                    int size = bmp.getRowBytes() * bmp.getHeight();
+                    ByteBuffer buf = ByteBuffer.allocate(size);
+                    bmp.copyPixelsToBuffer(buf);
+                    try {
+                        buf.get(bytes[i], 0, size);
+                    } catch (BufferUnderflowException e) {
+                        // always happens
+                    }
+                }
+                for (int i = 0; i < bytes.length; i++){
+                    intent.putExtra("photo"+String.valueOf(i), bytes[i]);
+                }
                 startActivityForResult(intent, SAVE_DATA);
             }
         });
