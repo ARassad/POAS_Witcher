@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import ServerExchange.ServerRequests.ServerAnswerHandlers.IServerAnswerHandler;
+import prin366_2018.client.PhoneRegistration;
 
 /**
  * Created by Dryush on 13.02.2018.
@@ -197,8 +198,15 @@ public abstract class ServerRequest <AnswerType> {
             if (serverAnswer == null){
                 throw new Exception("Простите, сервер отказывается нам отвечать. Мы обязательно уговорим его! Простите нас за неудобства!");
             }
-            JsonAnswerHandler(serverAnswer);
             isErrorInServerRequest = ! serverAnswer.isStatusOk();
+
+            if (isErrorInServerRequest) {
+                urlConnection.disconnect();
+                return null;
+            }
+
+
+            JsonAnswerHandler(serverAnswer);
             errorMessage = serverAnswer.message;
             urlConnection.disconnect();
 
@@ -259,23 +267,21 @@ public abstract class ServerRequest <AnswerType> {
 
         @Override
         protected void onPostExecute(Void p){
-            if (excp != null){
-                handler.exceptionHandle(excp);
-                excp = null;
-            } else {
-                if (handler != null) {
-                    if (isErrorInServerRequest) {
-                        handler.errorHandle(errorMessage);
-                        errorMessage = null;
-                        isErrorInServerRequest = false;
-                    }
+
+            if (handler != null){
+                if(excp != null){
+                    handler.exceptionHandle(excp);
+                    excp = null;
+                } else if (isErrorInServerRequest) {
+                    handler.errorHandle(errorMessage);
+                    errorMessage = null;
+                    isErrorInServerRequest = false;
+                } else {
                     handler.handle(answer);
                     answer = null;
                 }
             }
         }
-
-
     }
     
     
