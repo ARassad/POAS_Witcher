@@ -41,9 +41,8 @@ public class Advert implements ICommented {
     public final static int MAX_IMAGES = 10;
     private LinkedList <Bitmap> images;
     public ArrayList<Bitmap> getImages(){
-
         ArrayList<Bitmap> imgs = new ArrayList<>();
-        for (Bitmap img : imgs) {
+        for (Bitmap img : this.images) {
             imgs.add( (Bitmap) img.copy(img.getConfig(), false) );
         }
         return imgs;

@@ -169,7 +169,7 @@ public class EditAdvertActivity extends AppCompatActivity {
         for (int i = 0; i < maxPhotosCount; i++) {
             byte[] bs = intent.getByteArrayExtra("photo"+String.valueOf(i));
             if (bs != null) {
-                bitmaps.add(BitmapFactory.decodeByteArray(bs, 0, bs.length));
+                bitmaps.addLast(BitmapFactory.decodeByteArray(bs, 0, bs.length));
                 isThisPhotoChanged[i] = false;
             }
         }

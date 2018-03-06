@@ -67,12 +67,16 @@ public class GetAdvertRequest extends TokenServerRequest<Advert> {
                 public long last_update;
                 public long last_update_status;
 
+
+                public class PhotoJson{
+                    public String photo;
+                }
                 public class PhotosJson {
                     public long count;
-                    public HashMap<String,String> photo;
+                    public HashMap<String,PhotoJson> photo;
                 }
 
-                public PhotosJson photoContact;
+                public PhotosJson photoContract;
                 public int status;
                 public String text;
                 public String town;
@@ -92,9 +96,9 @@ public class GetAdvertRequest extends TokenServerRequest<Advert> {
             java.util.Date dateOfLastUpdate = new java.util.Date(object.last_update * 1000);
 
             LinkedList<Bitmap> imgs = new LinkedList<>();
-            if (object.photoContact != null) {
-                for (Map.Entry<String, String> phEntry : object.photoContact.photo.entrySet()) {
-                    imgs.addLast(ImageConvert.fromBase64Str(phEntry.getValue()));
+            if (object.photoContract != null) {
+                for (Map.Entry<String, AdvertJson.PhotoJson> phEntry : object.photoContract.photo.entrySet()) {
+                    imgs.addLast(ImageConvert.fromBase64Str(phEntry.getValue().photo));
                 }
             }
 

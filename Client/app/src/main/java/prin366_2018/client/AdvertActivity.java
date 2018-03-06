@@ -1,6 +1,7 @@
 package prin366_2018.client;
 
 import android.app.AlertDialog;
+import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,13 +28,16 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import ServerExchange.Advert;
 import ServerExchange.Comment;
@@ -198,6 +202,14 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
                     int stopForDebug = 2;
                 }
                 btnProfileImage.setImageBitmap(authPhoto);
+            }
+            List<Bitmap> imgs = answ.getImages();
+            if (imgs != null){
+                Iterator<Bitmap> iImg = imgs.iterator();
+                for (int i = 0; i < imgs.size() && i < photos.length && iImg.hasNext(); i++){
+                    photos[i].setImageBitmap(iImg.next());
+                    photos[i].setVisibility(View.VISIBLE);
+                }
             }
 
             infoSpinner.disable();
@@ -425,20 +437,21 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
                 intent.putExtra("description", advert.getInfo());
                 intent.putExtra("advertId", advert.getId());
 
-                byte[][] bytes = new byte[photos.length][];
-                for (int i = 0; i < photos.length; ++i) {
-                    Bitmap bmp = ((BitmapDrawable)photos[i].getDrawable()).getBitmap();
-                    int size = bmp.getRowBytes() * bmp.getHeight();
-                    ByteBuffer buf = ByteBuffer.allocate(size);
-                    bmp.copyPixelsToBuffer(buf);
-                    try {
-                        buf.get(bytes[i], 0, size);
-                    } catch (BufferUnderflowException e) {
-                        // always happens
-                    }
+                ArrayList<Bitmap> imgs = advert.getImages();
+                LinkedList<byte[]> bytes = new LinkedList<>();
+
+
+
+                for (Bitmap btm: imgs) {
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    double mashtab = (double)Math.max(btm.getHeight(), btm.getWidth()) / 100.0;
+                    btm = Bitmap.createScaledBitmap(btm, (int)(btm.getWidth()/mashtab), (int)(btm.getHeight()/mashtab),false);
+                    btm.compress(Bitmap.CompressFormat.PNG, 100, bos);
+                    bytes.addLast( bos.toByteArray());
                 }
-                for (int i = 0; i < bytes.length; i++){
-                    intent.putExtra("photo"+String.valueOf(i), bytes[i]);
+                int i = 0;
+                for (byte[] bs : bytes){
+                    intent.putExtra("photo"+String.valueOf(i++), bs);
                 }
                 startActivityForResult(intent, SAVE_DATA);
             }

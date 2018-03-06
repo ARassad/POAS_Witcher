@@ -201,13 +201,13 @@ public abstract class ServerRequest <AnswerType> {
             isErrorInServerRequest = ! serverAnswer.isStatusOk();
 
             if (isErrorInServerRequest) {
+                errorMessage = serverAnswer.message;
                 urlConnection.disconnect();
                 return null;
             }
 
 
             JsonAnswerHandler(serverAnswer);
-            errorMessage = serverAnswer.message;
             urlConnection.disconnect();
 
             return (AnswerType) serverAnswer.convert();
