@@ -39,6 +39,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.TreeSet;
 
@@ -83,25 +85,39 @@ public class EditAdvertActivity extends AppCompatActivity {
 
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
-                case GALLERY_REQUEST:
+                case GALLERY_REQUEST: {
+                    AlertDialog.Builder dlg = new AlertDialog.Builder(EditAdvertActivity.this);
                     isPhotoChanged = true;
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
                         ClipData selectedImage = imageReturnedIntent.getClipData();
+
                         try {
-                            for (int i = 0; i < selectedImage.getItemCount() && i < 10; ++i) {
-                                Uri uri = selectedImage.getItemAt(i).getUri();
-                                bitmaps.add(MediaStore.Images.Media.getBitmap(getContentResolver(), uri));
-                                isThisPhotoChanged[bitmaps.size()-1] = true;
-                                Bitmap bm = Bitmap.createScaledBitmap(bitmaps.getLast(), 100, 100, false);
-                                photos[i].setImageBitmap(bm);
+                            int maxPossible =  maxPhotosCount - bitmaps.size();
+                            if (selectedImage.getItemCount() > maxPossible){
+                                dlg.setTitle("Многовато будет").setMessage("К сожалению, можно выбрать только до 10 изображений").create().show();
                             }
-                        } catch (IOException e) {
-                            AlertDialog.Builder dlg = new AlertDialog.Builder(EditAdvertActivity.this);
+                            for (int i = 0; i < selectedImage.getItemCount() && i < maxPossible; ++i) {
+                                Uri uri = selectedImage.getItemAt(i).getUri();
+                                Bitmap bm = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                                int maxSize = Math.max( bm.getWidth(), bm.getHeight());
+                                double mashtab = ((double)maxSize) / 500.0;
+                                if (mashtab > 1){
+                                    bm = Bitmap.createScaledBitmap(bm, (int)(bm.getWidth()/mashtab), (int)(bm.getHeight()/mashtab),false);
+                                }
+                                bitmaps.addLast(bm);
+                                isThisPhotoChanged[bitmaps.size() - 1] = true;
+                                //Bitmap bm = Bitmap.createScaledBitmap(bitmaps.getLast(), 100, 100, false);
+                                photos[bitmaps.size()-1 ].setImageBitmap(bitmaps.getLast());
+                                photos[bitmaps.size()-1 ].setVisibility(View.VISIBLE);
+                            }
+                        } catch (Exception e) {
+
                             dlg.setTitle("Упс! У вас ошибочка!");
                             dlg.setMessage(e.getMessage());
                             dlg.create().show();
                         }
                     }
+                }
             }
         }
     }
@@ -182,48 +198,55 @@ public class EditAdvertActivity extends AppCompatActivity {
         idPhotos[7] = (R.id.image8);
         idPhotos[8] = (R.id.image9);
         idPhotos[9] = (R.id.image10);
-        for (int i = 0; i < bitmaps.size(); i++){
+
+        for (int i = 0; i < idPhotos.length; i++){
             photos[i] = findViewById(idPhotos[i]);
-            photos[i].setImageBitmap(bitmaps.get(i));
+            photos[i].setVisibility(View.GONE);
         }
+
         for (int i = 0; i < bitmaps.size(); i++){
+            photos[i].setImageBitmap(bitmaps.get(i));
+            photos[i].setVisibility(View.VISIBLE);
+        }
+
+        for (int i = 0; i < photos.length; i++){
+
             photos[i].setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(final View view) {
-                    final View view_ = view;
-                    AlertDialog.Builder dlg = new AlertDialog.Builder(EditAdvertActivity.this);
-                    dlg.setTitle("Подтверждение");
-                    dlg.setMessage("Удалить?");
-                    dlg.setCancelable(true);
-                    dlg.setPositiveButton("Да", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int iDontKnowWhatIsIt) {
-                            int order = 0;
-                            int myId = view_.getId();
-                            for ( order = 0; order < idPhotos.length; order++) {
-                                if (myId == idPhotos[order]){
-                                    break;
-                                }
+                final View view_ = view;
+                AlertDialog.Builder dlg = new AlertDialog.Builder(EditAdvertActivity.this);
+                dlg.setTitle("Подтверждение");
+                dlg.setMessage("Удалить?");
+                dlg.setCancelable(true);
+                dlg.setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int iDontKnowWhatIsIt) {
+                        int order = 0;
+                        int myId = view_.getId();
+                        for ( order = 0; order < idPhotos.length; order++) {
+                            if (myId == idPhotos[order]){
+                                break;
                             }
-
-                            //for ( int i = idPhotos.length-1-1; i >= order; i++){
-                            //    bitmaps.set(i, bitmaps.get(i+1));
-                            //}
-                            if (!isThisPhotoChanged[order]) {
-                                bitmapsToDel.addLast(bitmaps.get(order));
-                            }
-                            bitmaps.remove(order);
-                            //bitmaps.addLast();
-                            for ( int i = order; i < bitmaps.size(); i++){
-                                photos[i].setImageBitmap(bitmaps.get(i));
-                            }
-                            isThisPhotoChanged[bitmaps.size()] = false;
-                            photos[bitmaps.size()].setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_camera));
-
                         }
-                    });
-                    dlg.create().show();
-                    return true;
+
+                        if (!isThisPhotoChanged[order]) {
+                            bitmapsToDel.addLast(bitmaps.get(order));
+                        }
+                        bitmaps.remove(order);
+                        //bitmaps.addLast();
+                        for ( int i = order; i < bitmaps.size(); i++){
+                            photos[i].setImageBitmap(bitmaps.get(i));
+                        }
+                        isThisPhotoChanged[bitmaps.size()] = false;
+                        photos[bitmaps.size()].setVisibility(View.GONE);
+                        photos[bitmaps.size()].setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_camera));
+
+
+                    }
+                });
+                dlg.create().show();
+                return true;
                 }
             });
         }
@@ -322,7 +345,7 @@ public class EditAdvertActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setAction(Intent.ACTION_PICK);
 
                 startActivityForResult(intent, GALLERY_REQUEST);
             }
