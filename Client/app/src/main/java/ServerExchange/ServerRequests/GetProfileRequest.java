@@ -73,7 +73,7 @@ public class GetProfileRequest extends TokenServerRequest<Profile> {
         @Override
         public Profile convert() {
             LinkedList<AdvertCard> advertCards = new LinkedList<>();
-            if ( object.history.contract != null) {
+            if (  object.history!= null && object.history.contract != null) {
                 for (Map.Entry<String, JsonObj.HistoryContractJson> contrEn : object.history.contract.entrySet()) {
                     JsonObj.HistoryContractJson contr = contrEn.getValue();
 
