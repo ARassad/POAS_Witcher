@@ -118,18 +118,29 @@ public class LoginActivity extends AppCompatActivity{
 
         onAppStart();
 
+        //Разлогиниться
+
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
         if (mAuth.getCurrentUser() != null) {
             showProgress(true);//Включили спиннер
             // TODO: Запросить профиль через токен и перейти в ProfileActivity
             new GetProfileRequest().getLoggedProfile(new DefaultServerAnswerHandler<Profile>(LoginActivity.this) {
                 @Override
                 public void handle(Profile answ) {
+
                     LoginRequest.setLoggedProfile(answ);
                     LocationsList.refillFromServer();
                     Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
+                    showProgress(false);//Выключили спиннер
+                }
+
+                @Override
+                public void errorHandle(String msg){
+                    super.errorHandle(msg);
+                    FirebaseAuth.getInstance().signOut();
                     showProgress(false);//Выключили спиннер
                 }
             });
@@ -280,8 +291,8 @@ public class LoginActivity extends AppCompatActivity{
                     if (answ!= null && answ == true){
 
                         //TODO: Переход на Phonecheck - пока не работает, т.к. не у всех аккаунтов есть номера
-                        //startActivity(new Intent(LoginActivity.this, PhoneCheck.class));
-                        startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                        startActivity(new Intent(LoginActivity.this, PhoneCheck.class));
+                        //startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
                     } else if (answ == false){
                         dlgAlert.setMessage("Неверный логин или пароль. Боюсь сейчас вам надо перезайти");
                         dlgAlert.create().show();
