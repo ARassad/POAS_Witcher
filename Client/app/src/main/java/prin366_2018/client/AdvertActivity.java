@@ -199,7 +199,9 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
                 }
                 btnProfileImage.setImageBitmap(authPhoto);
             }
+
             infoSpinner.disable();
+            buttonEdit.setEnabled(true);
         }
 
     }
@@ -315,6 +317,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
     private TextView headerView, descriptionView, authorNameView, rewardView, locationView, executorNameView;
     private TextView newCommentView;
     private Button buttonRespond, buttonResponders, buttonAcceptAnsw, buttonDiscardAnsw, buttonDiscard, buttonComplete;
+    private Button buttonEdit;
     private ImageButton btnProfileImage;
     private ImageView[] photos = new ImageView[10];
 
@@ -333,7 +336,10 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         buttonComplete      = findViewById(R.id.button_set_completed);
 
         buttonRespond       = findViewById(R.id.button_respond);
+
         btnProfileImage = findViewById(R.id.btn_profile_image);
+        buttonEdit = (Button)findViewById(R.id.button_edit);
+
 
         photos[0] = (ImageView)findViewById(R.id.image1);
         photos[1] = (ImageView)findViewById(R.id.image2);
@@ -404,8 +410,8 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
     private Typeface typeface;
 
     private void ifCreatedByLoggedUser(){
-        Button buttonEdit = (Button)findViewById(R.id.button_edit);
         buttonEdit.setTypeface(typeface);
+        buttonEdit.setEnabled(false);
         buttonEdit.setText("\uf044");
         buttonEdit.setOnClickListener(new View.OnClickListener() {
             @Override

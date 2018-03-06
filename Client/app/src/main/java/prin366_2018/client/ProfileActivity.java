@@ -118,6 +118,7 @@ public class ProfileActivity extends AppCompatActivity
             }
 
             profileProgressSpinner.disable();
+            buttonEdit.setEnabled(true);
         }
     }
 
@@ -204,6 +205,7 @@ public class ProfileActivity extends AppCompatActivity
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/fa-solid-900.ttf");
 
         buttonEdit = (Button)findViewById(R.id.button_edit);
+        buttonEdit.setEnabled(false);
         buttonEdit.setTypeface(typeface);
         buttonEdit.setText("\uf044");
         buttonEdit.setOnClickListener(new View.OnClickListener() {
@@ -222,7 +224,6 @@ public class ProfileActivity extends AppCompatActivity
 
 
         //Вот здесь я пишу код (Андрей)
-        //profileRequest.getProfile(9, new onGetProfile(ProfileActivity.this));
         profileId = getIntent().getLongExtra("profileId", LoginRequest.getLoggedUserId());
         profileRequest.getProfile(profileId, new onGetProfile(ProfileActivity.this));
         getCommentsRequest.getProfileComments(profileId, new onGetComments(ProfileActivity.this));
