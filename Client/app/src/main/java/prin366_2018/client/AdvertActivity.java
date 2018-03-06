@@ -463,8 +463,26 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: show message box
-                removeAdvertRequest.removeAdvert(advertId, new onRemoveAdvertAnswer(AdvertActivity.this));
+                new AlertDialog.Builder(AdvertActivity.this)
+                        .setTitle("Удаление объявления")
+                        .setMessage("Вы уверены?")
+                        .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                removeAdvertRequest.removeAdvert(advertId, new onRemoveAdvertAnswer(AdvertActivity.this));
+                            }
+                        })
+                        .setNegativeButton("Я передумал", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Ничегошеньки
+                            }
+                        })
+                        .setCancelable(true)
+                        .create().show();
+
+
             }
         });
 
