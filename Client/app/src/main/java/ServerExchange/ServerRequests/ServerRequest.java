@@ -194,6 +194,9 @@ public abstract class ServerRequest <AnswerType> {
 
             //Thread.sleep(1000);
             JsonServerAnswer serverAnswer = gson.fromJson(br, JsonServerAnswerClass);
+            if (serverAnswer == null){
+                throw new Exception("Простите, сервер отказывается нам отвечать. Мы обязательно уговорим его! Простите нас за неудобства!");
+            }
             JsonAnswerHandler(serverAnswer);
             isErrorInServerRequest = ! serverAnswer.isStatusOk();
             errorMessage = serverAnswer.message;
