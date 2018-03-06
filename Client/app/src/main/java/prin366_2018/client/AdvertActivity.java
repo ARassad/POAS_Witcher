@@ -149,7 +149,9 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
                 locationView.setText(answ.getLocation().toString());
             }
             if (answ.getExecutorId() != null) {
-                executorNameView.setText(answ.getExecutorName());
+                executorNameButton.setText(answ.getExecutorName());
+                executorNameButton.setEnabled(true);
+                //executorNameButton.setVisibility(View.VISIBLE);
 
                 if (answ.getExecutorId() == LoginRequest.getLoggedUserId()){
                     if (answ.getStatus() == Advert.AdvertStatus.ASSIGNED_WITCHER){
@@ -175,7 +177,8 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
                 }
             }
             else {
-                executorNameView.setText("не выбран");
+                executorNameButton.setText("не выбран");
+                executorNameButton.setEnabled(false);
 
                 if (LoginRequest.getLoggedUserType() == Profile.ProfileType.WITCHER) {
                     buttonRespond.setVisibility(View.VISIBLE);
@@ -326,9 +329,9 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
     }
 
 
-    private TextView headerView, descriptionView, authorNameView, rewardView, locationView, executorNameView;
+    private TextView headerView, descriptionView, authorNameView, rewardView, locationView;
     private TextView newCommentView;
-    private Button buttonRespond, buttonResponders, buttonAcceptAnsw, buttonDiscardAnsw, buttonDiscard, buttonComplete;
+    private Button buttonRespond, buttonResponders, buttonAcceptAnsw, buttonDiscardAnsw, buttonDiscard, buttonComplete, executorNameButton;
     private Button buttonEdit;
     private ImageButton btnProfileImage;
     private ImageView[] photos = new ImageView[10];
@@ -339,9 +342,9 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         authorNameView      = findViewById(R.id.text_name_client);
         rewardView          = findViewById(R.id.text_cost_advert);
         locationView        = findViewById(R.id.text_kingdom_city_advert);
-        executorNameView    = findViewById(R.id.text_executor);
         newCommentView      = findViewById(R.id.input_comment);
 
+        executorNameButton  = findViewById(R.id.executor_button);
         buttonAcceptAnsw    = findViewById(R.id.button_accept_answ);
         buttonDiscardAnsw   = findViewById(R.id.button_discard_answ);
         buttonDiscard       = findViewById(R.id.button_discard);
@@ -415,6 +418,15 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
                 addWitcherInContractRequest.addWitcherInContract(advertId, new onAddWitcherInContractAnswer(AdvertActivity.this));
                 buttonRespond.setEnabled(false);
                 buttonRespond.setText("Вы откликнулись");
+            }
+        });
+
+        executorNameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra("profileId", advert.getExecutorId());
+                startActivity(intent);
             }
         });
     }
