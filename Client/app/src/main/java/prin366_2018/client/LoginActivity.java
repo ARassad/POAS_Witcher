@@ -132,6 +132,8 @@ public class LoginActivity extends AppCompatActivity{
                     LoginRequest.setLoggedProfile(answ);
                     LocationsList.refillFromServer();
                     Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+                    //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     showProgress(false);//Выключили спиннер
@@ -139,7 +141,8 @@ public class LoginActivity extends AppCompatActivity{
 
                 @Override
                 public void errorHandle(String msg){
-                    super.errorHandle(msg);
+                    if (msg != null && !msg.equals(""))
+                        super.errorHandle(msg);
                     FirebaseAuth.getInstance().signOut();
                     showProgress(false);//Выключили спиннер
                 }

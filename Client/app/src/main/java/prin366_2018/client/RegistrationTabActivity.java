@@ -174,6 +174,10 @@ public class RegistrationTabActivity extends AppCompatActivity {
                         showProgress(true);
                         Intent intent = new Intent(RegistrationTabActivity.this, LoginActivity.class);
 
+
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//Подчищаем окна с регистрацией, чтоб к ним нельзя было вернуться через кнопку "назад"
+
                         intent.putExtra("email", login);
                         intent.putExtra("password", password);
 

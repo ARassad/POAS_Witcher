@@ -189,7 +189,10 @@ public class PhoneCheck  extends AppCompatActivity implements View.OnClickListen
 
                                         LocationsList.refillFromServer();
                                         Intent intent = new Intent(PhoneCheck.this, ProfileActivity.class);
-                                        intent.addFlags(FLAG_ACTIVITY_CLEAR_TASK); //Подчищаем все Активити за собой;
+
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); //Подчищаем все Активити за собой
+
                                         startActivity(intent);
 
                                     } else if (answ == false){
