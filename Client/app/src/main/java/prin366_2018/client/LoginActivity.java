@@ -296,8 +296,6 @@ public class LoginActivity extends AppCompatActivity{
                         //TODO: Переход на Phonecheck - пока не работает, т.к. не у всех аккаунтов есть номера
                         startActivity(new Intent(LoginActivity.this, PhoneCheck.class));
                         //startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
-                    } else if (answ == false){
-                        getDialog("Неверный логин или пароль. Боюсь сейчас вам надо перезайти").show();
                     }
 
                     showProgress(false);
@@ -305,7 +303,8 @@ public class LoginActivity extends AppCompatActivity{
 
                 @Override
                 public void errorHandle(String message){
-
+                    getDialog("Неверный логин или пароль. Попробуйте ещё раз!").show();
+                    showProgress(false);
                 }
             });
             //mAuthTask = new UserLoginTask(email, password);
