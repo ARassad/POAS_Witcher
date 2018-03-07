@@ -262,6 +262,13 @@ public class SortingFragment extends Fragment {
 
     LocationsList locationsList;
 
+    public void enable(){
+        buttonSearch.setEnabled(true);
+    }
+
+    public void disable(){
+        buttonSearch.setEnabled(false);
+    }
 
     int fragmentId;
     @Override
@@ -295,6 +302,7 @@ public class SortingFragment extends Fragment {
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                disable();
                 mListener.onFragmentInteraction(fragmentId,sortType, orderType, filterType, kingdomFilter, cityFilter, minBountyFilter, maxBountyFilter);
             }
         });

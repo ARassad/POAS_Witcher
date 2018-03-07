@@ -1,6 +1,8 @@
 package prin366_2018.client;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentContainer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -74,7 +76,7 @@ public class AdvertListActivity extends AppCompatActivity
             spinners.get(GroupAdvert.ALL_ADVERT).show();
             Advert.AdvertStatus advertStatus = Advert.AdvertStatus.FREE;
 
-            OnGetAdverts onGetAdverts = new OnGetAdverts(AdvertListActivity.this, groupAdvert);
+            OnGetAdverts onGetAdverts = new OnGetAdverts(AdvertListActivity.this, groupAdvert, fragmentId);
             if (filterType == GetAdvertsRequest.FilterType.BY_LOCATE) {
                 getAdvertsRequest.getFreeFilteredByLocation( filterType, sortType, orderType, kingdomFilter, cityFilter, onGetAdverts);
             } else if (filterType == GetAdvertsRequest.FilterType.BY_REWARD) {
@@ -95,7 +97,7 @@ public class AdvertListActivity extends AppCompatActivity
 
             spinners.get(groupAdvert).show();
 
-            OnGetAdverts onGetAdverts = new OnGetAdverts(AdvertListActivity.this, groupAdvert);
+            OnGetAdverts onGetAdverts = new OnGetAdverts(AdvertListActivity.this, groupAdvert, fragmentId);
             if (filterType == GetAdvertsRequest.FilterType.BY_LOCATE) {
                 getAdvertsRequest.getWitcherFilteredByLocation(advertStatus, filterType, sortType, orderType, kingdomFilter, cityFilter, onGetAdverts);
             } else if (filterType == GetAdvertsRequest.FilterType.BY_REWARD) {
@@ -116,7 +118,7 @@ public class AdvertListActivity extends AppCompatActivity
             else if (fragmentId==completedSotringId)        { groupAdvert = GroupAdvert.EXECUTED;            advertStatus = Advert.AdvertStatus.COMPLETED; }
 
             spinners.get(groupAdvert).show();
-            OnGetAdverts onGetAdverts = new OnGetAdverts(AdvertListActivity.this, groupAdvert);
+            OnGetAdverts onGetAdverts = new OnGetAdverts(AdvertListActivity.this, groupAdvert, fragmentId);
 
             if (filterType == GetAdvertsRequest.FilterType.BY_LOCATE) {
                 getAdvertsRequest.getClientFilteredByLocation(advertStatus, filterType, sortType, orderType, kingdomFilter, cityFilter, onGetAdverts);
@@ -152,15 +154,28 @@ public class AdvertListActivity extends AppCompatActivity
         }
 
         private GroupAdvert group;
-        public OnGetAdverts(Activity context, GroupAdvert group){
+        private Integer fragmentId = null;
+
+        public OnGetAdverts(Activity context, GroupAdvert group) {
             super(context);
             this.group = group;
         }
+
+        public OnGetAdverts(Activity context, GroupAdvert group, int fragmentId){
+            this(context, group);
+            this.fragmentId = fragmentId;
+        }
+
+
 
         @Override
         public void handle( ArrayList<Advert> answ) {
             refillAdvertsList(group, answ);
             spinners.get(group).disable();
+            if ( fragmentId != null) {
+                ((SortingFragment) getSupportFragmentManager().findFragmentById(fragmentId)).enable();
+            }
+            //((SortingFragment)(Fragment)findViewById(this.fragmentId)).enable();
             /*
             for (Advert advert : answ){
                 //TODO: Возможны баги с id long  в int
@@ -255,7 +270,7 @@ public class AdvertListActivity extends AppCompatActivity
         completedSotringId = R.id.executed_sort;
 
         spinners.get(GroupAdvert.ALL_ADVERT).show();
-        new GetAdvertsRequest().getFreeSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new OnGetAdverts(AdvertListActivity.this, GroupAdvert.ALL_ADVERT));
+        new GetAdvertsRequest().getFreeSortedBy(GetAdvertsRequest.SortType.BY_ALPHABET, new OnGetAdverts(AdvertListActivity.this, GroupAdvert.ALL_ADVERT, freeAdvertsSortingId));
 
         //GroupAdvert.init();
 
