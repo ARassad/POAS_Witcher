@@ -2,6 +2,7 @@ package ServerExchange.ServerRequests.ServerAnswerHandlers;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 
 import java.io.EOFException;
@@ -13,30 +14,33 @@ import java.lang.ref.WeakReference;
 
 public abstract class DefaultServerAnswerHandler<AnswerType> implements IServerAnswerHandler<AnswerType> {
 
-    protected Context context = null;
-    protected AlertDialog.Builder dlgAlert  = null;
     protected WeakReference<Activity> weakActivity;
 
     public DefaultServerAnswerHandler(Activity context){
-        this.context = context;
         weakActivity = new WeakReference<Activity>(context);
-        dlgAlert  = new AlertDialog.Builder(context);
+    }
+
+    protected AlertDialog getDialog(String message){
+        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(weakActivity.get());
+
         dlgAlert.setTitle("Упс, у нас ошибочка");
         dlgAlert.setCancelable(true);
+        dlgAlert.setMessage(message);
+        return dlgAlert.create();
     }
 
     public abstract void handle(AnswerType answ) throws Exception;
 
     public void errorHandle(String errorMessage){
-
-        dlgAlert.setMessage(errorMessage);
-        dlgAlert.create().show();
-
+        if (weakActivity != null && !weakActivity.get().isFinishing()){
+            getDialog("Сервер ругается:\n" + errorMessage).show();
+        }
     }
 
     public void exceptionHandle(Exception excp){
-        dlgAlert.setMessage(excp.getMessage());
-        dlgAlert.create().show();
+        if (weakActivity != null && !weakActivity.get().isFinishing()) {
+            getDialog(excp.getMessage()).show();
+        }
     }
 
     @Override
@@ -45,10 +49,9 @@ public abstract class DefaultServerAnswerHandler<AnswerType> implements IServerA
             try{
                 handle(answ);
             } catch (Exception e){
-                dlgAlert.setMessage("Ошибка при обработке запроса в " +
-                        this.getClass().getName() +"\n" +
-                        e.getMessage());
-                dlgAlert.create().show();
+                getDialog("Ошибка при обработке запроса в " +
+                            this.getClass().getName() +"\n" +
+                            e.getMessage()).show();
             }
         }
     }
