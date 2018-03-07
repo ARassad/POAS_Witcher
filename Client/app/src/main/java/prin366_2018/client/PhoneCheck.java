@@ -196,8 +196,7 @@ public class PhoneCheck  extends AppCompatActivity implements View.OnClickListen
                                         startActivity(intent);
 
                                     } else if (answ == false){
-                                        dlgAlert.setMessage("Такое невозможно -\\_//- \n PhoneCheck186");
-                                        dlgAlert.create().show();
+                                        getDialog("Такое невозможно -\\_//- \n PhoneCheck186").show();
                                     }
                                 }
 

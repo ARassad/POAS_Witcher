@@ -297,8 +297,7 @@ public class LoginActivity extends AppCompatActivity{
                         startActivity(new Intent(LoginActivity.this, PhoneCheck.class));
                         //startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
                     } else if (answ == false){
-                        dlgAlert.setMessage("Неверный логин или пароль. Боюсь сейчас вам надо перезайти");
-                        dlgAlert.create().show();
+                        getDialog("Неверный логин или пароль. Боюсь сейчас вам надо перезайти").show();
                     }
 
                     showProgress(false);

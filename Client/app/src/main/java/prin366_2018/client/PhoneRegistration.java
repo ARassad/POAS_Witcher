@@ -351,8 +351,7 @@ public class PhoneRegistration extends AppCompatActivity implements View.OnClick
                         if( answ == true)
                             startPhoneNumberVerification(phoneNumber);
                         else {
-                            dlgAlert.setMessage("Данный номер уже занят.");
-                            dlgAlert.create().show();
+                            getDialog("Данный номер уже занят.").show();
                         }
                     }
                     @Override
