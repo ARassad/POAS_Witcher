@@ -348,15 +348,14 @@ public class PhoneRegistration extends AppCompatActivity implements View.OnClick
                 new CheckPhoneRequest().check(phoneNumber, new DefaultServerAnswerHandler<Boolean>(PhoneRegistration.this) {
                     @Override
                     public void handle(Boolean answ) {
-                        if( answ == true)
+                        if (answ == true) {
                             startPhoneNumberVerification(phoneNumber);
-                        else {
-                            getDialog("Данный номер уже занят.").show();
                         }
                     }
                     @Override
                     public void errorHandle(String errorMessage){
-                        String a;
+
+                        getDialog("Данный номер уже занят.").show();
                         //Ничего не выводим, т.к. обработали в стандратной ситуации
                     }
                 });
