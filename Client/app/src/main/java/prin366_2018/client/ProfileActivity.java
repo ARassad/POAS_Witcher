@@ -98,9 +98,6 @@ public class ProfileActivity extends AppCompatActivity
         @Override
         public void handle(Profile answ) throws Exception {
 
-            if (true){
-                throw new Exception("тестовый эксепшен");
-            }
             author_id = answ.getId();
             name.setText(answ.getName() != null ? answ.getName() : "NoName");
 
