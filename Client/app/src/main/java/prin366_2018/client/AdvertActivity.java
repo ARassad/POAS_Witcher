@@ -1,5 +1,6 @@
 package prin366_2018.client;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
@@ -111,7 +112,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
 
     private class onBooleanAnswer extends DefaultServerAnswerHandler<Boolean> {
-        public onBooleanAnswer(Context context) {
+        public onBooleanAnswer(Activity context) {
             super(context);
         }
 
@@ -124,7 +125,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
     private class onGetAdvert extends DefaultServerAnswerHandler<Advert>{
 
-        public onGetAdvert(Context context) {
+        public onGetAdvert(Activity context) {
             super(context);
         }
 
@@ -224,7 +225,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
     private GetCommentsRequest getCommentsRequest = new GetCommentsRequest();
     private class onGetComments extends DefaultServerAnswerHandler<LinkedList<Comment>>{
 
-        public onGetComments(Context context) {
+        public onGetComments(Activity context) {
             super(context);
         }
 
@@ -243,7 +244,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
     private AddCommentContractRequest addCommentsRequest = new AddCommentContractRequest();
     private class onAddComment extends DefaultServerAnswerHandler<Boolean>{
 
-        public onAddComment(Context context) {
+        public onAddComment(Activity context) {
             super(context);
         }
 
@@ -256,7 +257,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
     private GetWitcherDesiredContractRequest getDesiredRequest = new GetWitcherDesiredContractRequest();
     private class onGetDesiredList extends DefaultServerAnswerHandler<ArrayList<ProfilePart>> {
 
-        public onGetDesiredList(Context context) {
+        public onGetDesiredList(Activity context) {
             super(context);
         }
 
@@ -293,7 +294,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
 
     private AddWitcherInContractRequest addWitcherInContractRequest = new AddWitcherInContractRequest();
     private class onAddWitcherInContractAnswer extends DefaultServerAnswerHandler<Boolean>{
-        public onAddWitcherInContractAnswer(Context context) {super(context);}
+        public onAddWitcherInContractAnswer(Activity context) {super(context);}
 
         @Override
         public void handle (Boolean answ){
@@ -304,7 +305,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
     private RemoveAdvertRequest removeAdvertRequest = new RemoveAdvertRequest();
     private class onRemoveAdvertAnswer extends DefaultServerAnswerHandler<Boolean>{
 
-        public onRemoveAdvertAnswer(Context context) {
+        public onRemoveAdvertAnswer(Activity context) {
             super(context);
         }
 
@@ -318,7 +319,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
     private RefuseContractRequest refuseContractRequest = new RefuseContractRequest();
     private class onRefuseAnswer extends DefaultServerAnswerHandler<Boolean>{
 
-        public onRefuseAnswer(Context context) {
+        public onRefuseAnswer(Activity context) {
             super(context);
         }
 

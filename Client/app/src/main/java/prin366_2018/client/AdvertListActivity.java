@@ -1,5 +1,6 @@
 package prin366_2018.client;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -146,12 +147,12 @@ public class AdvertListActivity extends AppCompatActivity
 
     class OnGetAdverts extends DefaultServerAnswerHandler <ArrayList<Advert>> {
 
-        public OnGetAdverts(Context context) {
+        public OnGetAdverts(Activity context) {
             super(context);
         }
 
         private GroupAdvert group;
-        public OnGetAdverts(Context context, GroupAdvert group){
+        public OnGetAdverts(Activity context, GroupAdvert group){
             super(context);
             this.group = group;
         }

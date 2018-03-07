@@ -63,7 +63,7 @@ public class EditProfileActivity extends AppCompatActivity {
         boolean isEnded = false;
         boolean isOk = true;
 
-        public onProfileEdited(Context context) {
+        public onProfileEdited(Activity context) {
             super(context);
         }
 

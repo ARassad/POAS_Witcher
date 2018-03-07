@@ -277,7 +277,7 @@ public abstract class ServerRequest <AnswerType> {
                     errorMessage = null;
                     isErrorInServerRequest = false;
                 } else {
-                    handler.handle(answer);
+                    handler.fullAnswerHandle(answer);
                     answer = null;
                 }
             }

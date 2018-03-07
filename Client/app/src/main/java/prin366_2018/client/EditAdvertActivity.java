@@ -124,7 +124,7 @@ public class EditAdvertActivity extends AppCompatActivity {
 
     private class onCreateAdvert extends DefaultServerAnswerHandler<Boolean>{
 
-        public onCreateAdvert(Context context) {
+        public onCreateAdvert(Activity context) {
             super(context);
         }
 
@@ -138,7 +138,7 @@ public class EditAdvertActivity extends AppCompatActivity {
 
     private class onUpdateAdvert extends DefaultServerAnswerHandler<Boolean>{
 
-        public onUpdateAdvert(Context context) {
+        public onUpdateAdvert(Activity context) {
             super(context);
         }
 

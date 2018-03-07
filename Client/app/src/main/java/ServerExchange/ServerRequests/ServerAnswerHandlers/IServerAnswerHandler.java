@@ -17,7 +17,7 @@ public interface IServerAnswerHandler<AnswerType>{
      * @param answ - ответ, который придёт с сервера
      *
      */
-    void handle(AnswerType answ);
+    void handle(AnswerType answ) throws Exception;
 
 
     /**
@@ -34,4 +34,12 @@ public interface IServerAnswerHandler<AnswerType>{
      * @param excp
      */
     void exceptionHandle(Exception excp);
+
+    /**
+     * Теперь, именно этот метод будет вызываться при обработке запроса
+     * Использовать для обёртки handle для проверок ответа и возможности его записать
+     *
+     * @param answ
+     */
+    void fullAnswerHandle(AnswerType answ);
 }

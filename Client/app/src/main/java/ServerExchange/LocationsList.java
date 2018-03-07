@@ -66,6 +66,11 @@ public class LocationsList {
         public void exceptionHandle(Exception excp) {
             //TODO: Добавить обработчик ошибок
         }
+
+        @Override
+        public void fullAnswerHandle(TreeMap<String, TreeSet<City>> answ) {
+            handle(answ);
+        }
     }
 
     static Filler filler = new Filler();

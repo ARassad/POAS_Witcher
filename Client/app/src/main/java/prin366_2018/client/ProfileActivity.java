@@ -1,6 +1,7 @@
 package prin366_2018.client;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -90,13 +91,16 @@ public class ProfileActivity extends AppCompatActivity
 
     class onGetProfile extends DefaultServerAnswerHandler<Profile> {
 
-        public onGetProfile(Context context) {
+        public onGetProfile(Activity context) {
             super(context);
         }
 
         @Override
-        public void handle(Profile answ) {
+        public void handle(Profile answ) throws Exception {
 
+            if (true){
+                throw new Exception("тестовый эксепшен");
+            }
             author_id = answ.getId();
             name.setText(answ.getName() != null ? answ.getName() : "NoName");
 
@@ -128,7 +132,7 @@ public class ProfileActivity extends AppCompatActivity
 
     private class onAddComment extends DefaultServerAnswerHandler<Boolean>{
 
-       public onAddComment(Context context) {
+       public onAddComment(Activity context) {
            super(context);
        }
 
@@ -143,7 +147,7 @@ public class ProfileActivity extends AppCompatActivity
 
     private class onGetComments extends DefaultServerAnswerHandler<LinkedList<Comment>>{
 
-        public onGetComments(Context context) {
+        public onGetComments(Activity context) {
              super(context);
         }
 
