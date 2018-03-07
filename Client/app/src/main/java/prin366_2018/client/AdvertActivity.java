@@ -424,7 +424,7 @@ public class AdvertActivity extends AppCompatActivity implements NavigationView.
         executorNameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
+                Intent intent = new Intent(AdvertActivity.this, ProfileActivity.class);
                 intent.putExtra("profileId", advert.getExecutorId());
                 startActivity(intent);
             }
